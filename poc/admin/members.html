@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestione Soci | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","surface-dim":"#dadada","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}] }
+      }}
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin space-y-gutter">
+    <header class="flex items-center justify-between">
+      <div>
+        <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Gestione Soci</h2>
+        <div class="h-1 w-24 bg-secondary mt-xs"></div>
+      </div>
+      <button onclick="openModal()" class="bg-primary-container text-on-primary-container font-label-bold px-md py-sm flex items-center gap-xs hover:brightness-95 transition-all border-b-4 border-primary">
+        <span class="material-symbols-outlined text-sm">person_add</span> Nuovo Socio
+      </button>
+    </header>
+
+    <!-- Search + stats bar -->
+    <div class="flex items-center gap-md">
+      <div class="relative flex-1 max-w-sm">
+        <input id="search" type="text" placeholder="Cerca socio..." oninput="renderTable()"
+          class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm pl-10 transition-all"/>
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+      </div>
+      <select id="filter-level" onchange="renderTable()"
+        class="bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+        <option value="">Tutti i livelli</option>
+        <option value="beginner">Principiante</option>
+        <option value="intermediate">Intermedio</option>
+        <option value="advanced">Avanzato</option>
+      </select>
+      <p id="count-label" class="font-label-bold text-on-surface-variant text-sm whitespace-nowrap"></p>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-inverse-surface text-primary-fixed">
+          <tr>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Socio</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Email</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Città</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Livello</th>
+            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">KM Mese</th>
+            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">KM Anno</th>
+            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">Iscritto</th>
+            <th class="px-md py-sm"></th>
+          </tr>
+        </thead>
+        <tbody id="members-tbody" class="divide-y divide-outline-variant"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-md hidden">
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-lg">
+      <div class="border-t-4 border-primary p-md border-b border-outline-variant flex items-center justify-between">
+        <h3 id="modal-title" class="font-headline-md">Nuovo Socio</h3>
+        <button onclick="closeModal()" class="text-on-surface-variant hover:text-secondary transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="member-form" class="p-md space-y-md">
+        <input type="hidden" id="f-id"/>
+        <div class="grid grid-cols-2 gap-md">
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nome Completo *</label>
+            <input id="f-name" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Mario Rossi"/>
+          </div>
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Email *</label>
+            <input id="f-email" required type="email" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="mario@muli.it"/>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-md">
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Password *</label>
+            <input id="f-password" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="muli2024"/>
+          </div>
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Città</label>
+            <input id="f-city" type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Ancona"/>
+          </div>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Livello</label>
+          <select id="f-level" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+            <option value="beginner">Principiante</option>
+            <option value="intermediate">Intermedio</option>
+            <option value="advanced">Avanzato</option>
+          </select>
+        </div>
+        <div class="flex gap-sm pt-md border-t border-outline-variant">
+          <button type="submit" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">
+            SALVA
+          </button>
+          <button type="button" onclick="closeModal()" class="flex-1 border-2 border-outline font-label-bold py-sm hover:bg-surface-container transition-all">
+            ANNULLA
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    initStorage();
+    Auth.require('admin');
+    document.getElementById('sidebar-mount').outerHTML = renderAdminSidebar('members');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Gestione Soci');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    function renderTable() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const levelFilter = document.getElementById('filter-level').value;
+      const members = DB.getMembers().filter(m => {
+        const matchSearch = !query || m.name.toLowerCase().includes(query) || m.email.toLowerCase().includes(query) || m.city.toLowerCase().includes(query);
+        const matchLevel = !levelFilter || m.level === levelFilter;
+        return matchSearch && matchLevel;
+      }).sort((a, b) => a.name.localeCompare(b.name));
+
+      document.getElementById('count-label').textContent = members.length + ' soci';
+      document.getElementById('members-tbody').innerHTML = members.map(m => `
+        <tr class="hover:bg-surface-container transition-colors">
+          <td class="px-md py-sm">
+            <div class="flex items-center gap-sm">
+              <div class="w-8 h-8 rounded-full ${avatarBg(m.id)} flex items-center justify-center text-xs font-label-bold flex-shrink-0">${initials(m.name)}</div>
+              <span class="font-label-bold">${m.name}</span>
+            </div>
+          </td>
+          <td class="px-md py-sm text-sm text-on-surface-variant">${m.email}</td>
+          <td class="px-md py-sm text-sm">${m.city}</td>
+          <td class="px-md py-sm"><span class="px-xs py-0.5 text-xs font-label-bold rounded-full ${levelBadge(m.level)}">${levelLabel(m.level)}</span></td>
+          <td class="px-md py-sm text-right font-bold text-primary">${m.km_month} km</td>
+          <td class="px-md py-sm text-right text-sm">${m.km_year} km</td>
+          <td class="px-md py-sm text-right text-sm text-on-surface-variant">${formatDate(m.joinDate)}</td>
+          <td class="px-md py-sm text-right">
+            <div class="flex items-center justify-end gap-xs">
+              <button onclick="editMember(${m.id})" class="p-xs text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">edit</span></button>
+              <button onclick="deleteMember(${m.id}, '${m.name}')" class="p-xs text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+            </div>
+          </td>
+        </tr>`).join('') || `<tr><td colspan="8" class="px-md py-lg text-center text-on-surface-variant">Nessun socio trovato.</td></tr>`;
+    }
+
+    function openModal(member) {
+      document.getElementById('modal-title').textContent = member ? 'Modifica Socio' : 'Nuovo Socio';
+      document.getElementById('f-id').value = member?.id || '';
+      document.getElementById('f-name').value = member?.name || '';
+      document.getElementById('f-email').value = member?.email || '';
+      document.getElementById('f-password').value = member?.password || 'muli2024';
+      document.getElementById('f-city').value = member?.city || '';
+      document.getElementById('f-level').value = member?.level || 'beginner';
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('member-form').reset();
+    }
+
+    function editMember(id) {
+      openModal(DB.getMember(id));
+    }
+
+    function deleteMember(id, name) {
+      if (!confirm(`Eliminare il socio "${name}"?`)) return;
+      DB.deleteMember(id);
+      toast('Socio eliminato');
+      renderTable();
+    }
+
+    document.getElementById('member-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('f-id').value;
+      const data = {
+        name: document.getElementById('f-name').value,
+        email: document.getElementById('f-email').value,
+        password: document.getElementById('f-password').value,
+        city: document.getElementById('f-city').value,
+        level: document.getElementById('f-level').value,
+      };
+      if (id) {
+        DB.updateMember(id, data);
+        toast('Socio aggiornato');
+      } else {
+        DB.addMember(data);
+        toast('Socio aggiunto!');
+      }
+      closeModal();
+      renderTable();
+    });
+
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    renderTable();
+  </script>
+</body>
+</html>

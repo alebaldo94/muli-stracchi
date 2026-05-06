@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","on-tertiary":"#ffffff","tertiary-fixed":"#e5e2e1","surface-variant":"#e2e2e2","on-primary":"#ffffff","primary":"#705d00","surface-dim":"#dadada","inverse-on-surface":"#f1f1f1","on-surface":"#1a1c1c","tertiary":"#5f5e5e","primary-fixed":"#ffe16d","primary-fixed-dim":"#e9c400","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"],"headline-lg":["Lexend"],"body-lg":["Inter"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"1.2","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}] }
+      }}
+    }
+  </script>
+  <style>
+    .asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.05; }
+    .skew-btn { transform: skewX(-10deg); }
+    .skew-btn > * { transform: skewX(10deg); }
+  </style>
+</head>
+<body class="bg-inverse-surface min-h-screen flex items-center justify-center font-body-md relative overflow-hidden">
+  <div class="asphalt-texture fixed inset-0 pointer-events-none"></div>
+
+  <!-- Chevron background accent -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="chevron" width="60" height="40" patternUnits="userSpaceOnUse"><polyline points="0,20 15,0 30,20 45,0 60,20" fill="none" stroke="#ffd700" stroke-width="2"/><polyline points="0,40 15,20 30,40 45,20 60,40" fill="none" stroke="#ffd700" stroke-width="2"/></pattern></defs><rect width="100%" height="100%" fill="url(#chevron)"/></svg>
+  </div>
+
+  <div class="relative z-10 w-full max-w-md px-md">
+    <!-- Logo -->
+    <div class="text-center mb-xl">
+      <h1 class="text-headline-xl font-headline-xl text-primary-fixed uppercase italic leading-none">I Muli Stracchi</h1>
+      <p class="text-tertiary-fixed-dim font-label-bold tracking-widest uppercase mt-sm">Endurance &amp; Grit</p>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-surface-container-lowest border-2 border-white/10 shadow-2xl p-lg">
+      <div class="border-t-4 border-primary-container -mt-lg mb-lg -mx-lg px-lg pt-lg">
+        <h2 class="font-headline-md text-on-surface">Accedi al portale</h2>
+        <p class="text-on-surface-variant text-sm mt-xs">Inserisci le tue credenziali per continuare.</p>
+      </div>
+
+      <form id="login-form" class="space-y-md">
+        <div class="space-y-xs">
+          <label class="font-label-bold text-on-surface-variant uppercase text-xs">Email</label>
+          <input id="email" type="email" placeholder="nome@muli.it"
+            class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-body-md transition-all"/>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold text-on-surface-variant uppercase text-xs">Password</label>
+          <input id="password" type="password" placeholder="••••••••"
+            class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-body-md transition-all"/>
+        </div>
+        <p id="error-msg" class="text-red-600 text-sm font-label-bold hidden">Credenziali errate. Riprova.</p>
+        <button type="submit" class="w-full bg-primary-container text-on-primary-container font-headline-md py-md flex items-center justify-center gap-md border-b-4 border-primary hover:brightness-95 active:scale-95 transition-all skew-btn">
+          <span>ENTRA</span><span class="material-symbols-outlined">arrow_forward</span>
+        </button>
+      </form>
+
+      <!-- Quick login hints -->
+      <div class="mt-lg pt-md border-t border-outline-variant">
+        <p class="text-on-surface-variant text-xs font-label-bold uppercase mb-sm">Accesso rapido (demo)</p>
+        <div class="grid grid-cols-2 gap-sm">
+          <button onclick="quickLogin('mario.rossi@muli.it','muli2024')"
+            class="border-2 border-outline-variant py-sm px-md text-sm font-label-bold hover:bg-surface-container transition-colors text-left">
+            <span class="text-on-surface-variant uppercase text-xs block">Socio</span>
+            <span class="text-on-surface">Mario Rossi</span>
+          </button>
+          <button onclick="quickLogin('admin@muli.it','admin2024')"
+            class="border-2 border-secondary py-sm px-md text-sm font-label-bold hover:bg-red-50 transition-colors text-left">
+            <span class="text-secondary uppercase text-xs block">Admin</span>
+            <span class="text-on-surface">Pannello Admin</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-tertiary-fixed-dim text-xs mt-lg font-label-bold">© 2026 I Muli Stracchi ASD</p>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    initStorage();
+    // Redirect if already logged in
+    const existing = Auth.current();
+    if (existing) window.location.href = existing.role === 'admin' ? 'admin/index.html' : 'dashboard.html';
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      doLogin(document.getElementById('email').value, document.getElementById('password').value);
+    });
+
+    function doLogin(email, password) {
+      const user = Auth.login(email.trim(), password.trim());
+      if (!user) {
+        document.getElementById('error-msg').classList.remove('hidden');
+        return;
+      }
+      window.location.href = user.role === 'admin' ? 'admin/index.html' : 'dashboard.html';
+    }
+
+    function quickLogin(email, password) {
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = password;
+      doLogin(email, password);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","secondary-container":"#e41f16","on-secondary":"#ffffff","on-secondary-container":"#fffbff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","surface-dim":"#dadada","inverse-on-surface":"#f1f1f1","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","primary-fixed-dim":"#e9c400","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5","tertiary-container":"#dcd9d9","outline-variant":"#d0c6ab" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"],"headline-lg":["Lexend"],"body-lg":["Inter"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}],"headline-lg":["32px",{"lineHeight":"1.2","fontWeight":"700"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}] }
+      }}
+    }
+  </script>
+  <style>
+    .asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.05; }
+    .racing-stripe-yellow { border-top: 4px solid #ffd700; }
+    .racing-stripe-charcoal { border-top: 4px solid #2f3131; }
+    .racing-stripe-red { border-top: 4px solid #bc0003; }
+    .skew-btn { transform: skewX(-10deg); }
+    .skew-btn > * { transform: skewX(10deg); }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div class="fixed inset-0 asphalt-texture pointer-events-none z-0"></div>
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin relative z-10 grid grid-cols-12 gap-gutter">
+    <!-- Left column -->
+    <div class="col-span-12 lg:col-span-8 space-y-gutter">
+
+      <!-- Hero Event -->
+      <section id="hero-event" class="relative h-[380px] rounded-xl overflow-hidden shadow-sm group">
+        <div class="absolute inset-0 bg-gradient-to-br from-inverse-surface to-gray-700 flex items-center justify-center">
+          <span class="material-symbols-outlined text-9xl text-white/20">directions_bike</span>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-on-background/90 via-on-background/40 to-transparent"></div>
+        <div id="hero-content" class="absolute bottom-0 left-0 p-lg w-full flex justify-between items-end"></div>
+      </section>
+
+      <!-- KM Stats row -->
+      <section class="grid grid-cols-3 gap-gutter">
+        <div class="bg-white rounded-lg shadow-sm racing-stripe-yellow p-md text-center">
+          <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">KM Questo Mese</p>
+          <p id="stat-km-month" class="font-headline-lg text-primary">—</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm racing-stripe-charcoal p-md text-center">
+          <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">KM Anno</p>
+          <p id="stat-km-year" class="font-headline-lg text-on-surface">—</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm racing-stripe-red p-md text-center">
+          <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">Uscite Totali</p>
+          <p id="stat-rides" class="font-headline-lg text-secondary">—</p>
+        </div>
+      </section>
+
+      <!-- Ultime uscite -->
+      <section class="bg-white rounded-lg shadow-sm racing-stripe-charcoal p-md">
+        <div class="flex items-center justify-between mb-md">
+          <h3 class="font-headline-md text-on-surface flex items-center gap-xs">
+            <span class="material-symbols-outlined text-primary">history</span> Le Mie Ultime Uscite
+          </h3>
+          <a href="km.html" class="text-primary font-label-bold hover:underline text-sm">+ Aggiungi</a>
+        </div>
+        <div id="rides-list" class="space-y-xs"></div>
+      </section>
+    </div>
+
+    <!-- Right sidebar -->
+    <aside class="col-span-12 lg:col-span-4 space-y-gutter">
+
+      <!-- Obiettivi mensili -->
+      <section class="bg-white rounded-lg shadow-sm racing-stripe-yellow p-md space-y-md">
+        <h3 class="font-headline-md text-on-surface">I Tuoi Obiettivi</h3>
+        <div class="space-y-sm">
+          <div class="flex justify-between items-end">
+            <p class="font-label-bold text-on-surface-variant uppercase text-xs">KM Mensili</p>
+            <p id="goal-pct" class="font-headline-md text-primary">—</p>
+          </div>
+          <div class="w-full bg-surface-container h-3 rounded-full overflow-hidden border border-outline-variant">
+            <div id="goal-bar" class="bg-primary h-full rounded-full transition-all" style="width:0%"></div>
+          </div>
+          <p class="text-body-md text-on-surface-variant">
+            <span id="goal-current" class="font-bold text-on-surface">—</span> / 600 km percorsi
+          </p>
+        </div>
+        <div class="pt-md border-t border-outline-variant grid grid-cols-2 gap-md">
+          <div class="text-center">
+            <p class="text-xs text-on-surface-variant font-label-bold uppercase">Posizione</p>
+            <p id="stat-rank" class="font-headline-md text-on-surface">—</p>
+          </div>
+          <div class="text-center border-l border-outline-variant">
+            <p class="text-xs text-on-surface-variant font-label-bold uppercase">Livello</p>
+            <p id="stat-level" class="font-headline-md text-on-surface">—</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Prossimi eventi -->
+      <section class="bg-white rounded-lg shadow-sm racing-stripe-charcoal p-md space-y-md">
+        <h3 class="font-headline-md text-on-surface">Prossimi Eventi</h3>
+        <div id="upcoming-events" class="space-y-xs"></div>
+        <a href="events.html" class="block w-full text-center py-xs font-label-bold text-on-surface-variant border-t border-outline-variant mt-md hover:text-primary transition-colors">
+          Vedi tutti gli eventi →
+        </a>
+      </section>
+
+      <!-- CTA iscrizione -->
+      <div class="bg-inverse-surface rounded-lg p-md text-white overflow-hidden relative">
+        <div class="absolute top-0 right-0 p-xs opacity-10">
+          <span class="material-symbols-outlined text-8xl">verified</span>
+        </div>
+        <div class="relative z-10 space-y-xs">
+          <p class="text-primary-fixed font-label-bold uppercase text-xs">Tessera 2026</p>
+          <h4 class="font-headline-md">Sei in regola?</h4>
+          <p class="text-white/70 text-sm">Rinnova la tessera associativa e mantieni tutti i vantaggi.</p>
+          <button class="mt-md bg-primary-container text-on-primary-container font-label-bold px-md py-xs rounded hover:brightness-95 transition-colors">
+            Verifica tessera
+          </button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <script src="js/app.js"></script>
+  <script>
+    initStorage();
+    const user = Auth.require();
+
+    document.getElementById('sidebar-mount').outerHTML = renderSidebar('dashboard');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Dashboard');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    function initPage() {
+      const member = DB.getMember(user.id);
+      if (!member) return;
+
+      // Stats
+      document.getElementById('stat-km-month').textContent = member.km_month + ' km';
+      document.getElementById('stat-km-year').textContent = member.km_year + ' km';
+      document.getElementById('stat-rides').textContent = member.rides_count;
+
+      // Goal bar (target 600km/mese)
+      const pct = Math.min(100, Math.round((member.km_month / 600) * 100));
+      document.getElementById('goal-pct').textContent = pct + '%';
+      document.getElementById('goal-bar').style.width = pct + '%';
+      document.getElementById('goal-current').textContent = member.km_month;
+
+      // Rank
+      const sorted = DB.getMembers().sort((a, b) => b.km_month - a.km_month);
+      const rank = sorted.findIndex(m => m.id == user.id) + 1;
+      document.getElementById('stat-rank').textContent = '#' + rank;
+      document.getElementById('stat-level').textContent = { beginner: 'Base', intermediate: 'Medio', advanced: 'Pro' }[member.level] || '—';
+
+      // Hero: prossimo evento
+      const now = new Date().toISOString().split('T')[0];
+      const upcoming = DB.getEvents().filter(e => e.date >= now).sort((a, b) => a.date.localeCompare(b.date));
+      if (upcoming.length) {
+        const ev = upcoming[0];
+        const isJoined = (ev.participants || []).includes(user.id);
+        document.getElementById('hero-content').innerHTML = `
+          <div class="space-y-xs">
+            <div class="flex items-center gap-sm mb-xs">
+              <span class="bg-primary-container text-on-primary-container font-label-bold px-md py-1 rounded uppercase text-xs">${formatDate(ev.date)}</span>
+              <span class="bg-secondary-container text-on-secondary-container font-label-bold px-md py-1 rounded uppercase text-xs">${levelLabel(ev.level)}</span>
+            </div>
+            <h2 class="font-headline-lg text-white uppercase italic">${ev.title}</h2>
+            <p class="text-white/80 font-body-md max-w-md">${ev.description}</p>
+          </div>
+          <button onclick="toggleJoin(${ev.id}, ${isJoined})" id="hero-join-btn"
+            class="bg-primary-container text-on-primary-container font-headline-md px-lg py-md rounded shadow-xl hover:brightness-95 transition-all whitespace-nowrap">
+            ${isJoined ? '✓ Iscritto' : 'Partecipa'}
+          </button>`;
+      }
+
+      // Upcoming events list (next 3)
+      const evList = upcoming.slice(0, 3);
+      document.getElementById('upcoming-events').innerHTML = evList.map(ev => {
+        const d = new Date(ev.date);
+        const day = d.toLocaleDateString('it-IT', { weekday: 'short' }).toUpperCase();
+        const num = d.getDate();
+        const isJoined = (ev.participants || []).includes(user.id);
+        return `<div class="flex gap-md p-xs rounded hover:bg-surface-container transition-colors cursor-pointer" onclick="window.location='events.html'">
+          <div class="bg-surface-container-high w-14 h-14 flex-shrink-0 flex flex-col items-center justify-center border-b-2 ${isJoined ? 'border-primary' : 'border-outline'}">
+            <span class="font-label-bold text-xs ${isJoined ? 'text-primary' : 'text-on-surface-variant'}">${day}</span>
+            <span class="font-headline-md leading-none">${num}</span>
+          </div>
+          <div>
+            <p class="font-label-bold text-on-surface text-sm">${ev.title}</p>
+            <p class="text-on-surface-variant text-xs">${ev.distance}km · ${ev.location}</p>
+          </div>
+        </div>`;
+      }).join('') || '<p class="text-on-surface-variant text-sm">Nessun evento in programma.</p>';
+
+      // Ultime uscite
+      const rides = DB.getRides(user.id).slice(-5).reverse();
+      document.getElementById('rides-list').innerHTML = rides.length
+        ? rides.map(r => `
+          <div class="flex items-center justify-between p-sm bg-surface-container-low rounded border border-outline-variant">
+            <div class="flex items-center gap-sm">
+              <span class="material-symbols-outlined text-primary">${r.source === 'strava' ? 'sync' : 'directions_bike'}</span>
+              <div>
+                <p class="font-label-bold text-on-surface text-sm">${r.title}</p>
+                <p class="text-on-surface-variant text-xs">${formatDate(r.date)}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-headline-md text-primary">${r.km}<span class="text-xs font-body-md"> km</span></p>
+              <p class="text-on-surface-variant text-xs">+${r.elevation}m</p>
+            </div>
+          </div>`).join('')
+        : '<p class="text-on-surface-variant text-sm">Nessuna uscita registrata. <a href="km.html" class="text-primary underline">Aggiungi la prima!</a></p>';
+    }
+
+    function toggleJoin(eventId, isJoined) {
+      if (isJoined) {
+        DB.leaveEvent(eventId, user.id);
+        toast('Disiscritto dall\'evento');
+      } else {
+        DB.joinEvent(eventId, user.id);
+        toast('Iscritto all\'evento!');
+      }
+      setTimeout(() => location.reload(), 800);
+    }
+
+    initPage();
+  </script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestione Eventi | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","surface-dim":"#dadada","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}] }
+      }}
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin space-y-gutter">
+    <header class="flex items-center justify-between">
+      <div>
+        <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Gestione Eventi</h2>
+        <div class="h-1 w-24 bg-secondary mt-xs"></div>
+      </div>
+      <button onclick="openModal()" class="bg-primary-container text-on-primary-container font-label-bold px-md py-sm flex items-center gap-xs hover:brightness-95 transition-all border-b-4 border-primary">
+        <span class="material-symbols-outlined text-sm">event_available</span> Nuovo Evento
+      </button>
+    </header>
+
+    <!-- Events grid -->
+    <div id="events-list" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-gutter"></div>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-md hidden">
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div class="border-t-4 border-secondary p-md border-b border-outline-variant flex items-center justify-between sticky top-0 bg-surface-container-lowest z-10">
+        <h3 id="modal-title" class="font-headline-md">Nuovo Evento</h3>
+        <button onclick="closeModal()" class="text-on-surface-variant hover:text-secondary transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form id="event-form" class="p-md space-y-md">
+        <input type="hidden" id="f-id"/>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Titolo *</label>
+          <input id="f-title" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Gran Fondo del Mulo"/>
+        </div>
+        <div class="grid grid-cols-2 gap-md">
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Data *</label>
+            <input id="f-date" required type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+          </div>
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Luogo *</label>
+            <input id="f-location" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Ancona, Marche"/>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-md">
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Distanza (km) *</label>
+            <input id="f-distance" required type="number" min="1" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="100"/>
+          </div>
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Dislivello (m)</label>
+            <input id="f-elevation" type="number" min="0" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="1500"/>
+          </div>
+          <div class="space-y-xs">
+            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Categoria *</label>
+            <select id="f-category" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+              <option value="strada">Strada</option>
+              <option value="mtb">MTB</option>
+              <option value="gravel">Gravel</option>
+            </select>
+          </div>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Livello difficoltà</label>
+          <select id="f-level" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+            <option value="easy">Facile</option>
+            <option value="intermediate">Intermedio</option>
+            <option value="advanced">Avanzato</option>
+            <option value="hard">Difficile</option>
+          </select>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Descrizione</label>
+          <textarea id="f-description" rows="3" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Descrizione dell'evento..."></textarea>
+        </div>
+        <div class="flex gap-sm pt-md border-t border-outline-variant">
+          <button type="submit" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">SALVA</button>
+          <button type="button" onclick="closeModal()" class="flex-1 border-2 border-outline font-label-bold py-sm hover:bg-surface-container transition-all">ANNULLA</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    initStorage();
+    Auth.require('admin');
+    document.getElementById('sidebar-mount').outerHTML = renderAdminSidebar('events');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Gestione Eventi');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    const now = new Date().toISOString().split('T')[0];
+
+    function renderEvents() {
+      const events = DB.getEvents().sort((a, b) => a.date.localeCompare(b.date));
+      const el = document.getElementById('events-list');
+      if (!events.length) { el.innerHTML = '<p class="col-span-full text-on-surface-variant py-xl text-center">Nessun evento. Creane uno!</p>'; return; }
+
+      el.innerHTML = events.map(ev => {
+        const isPast = ev.date < now;
+        const pCount = (ev.participants || []).length;
+        const catColors = { strada: 'border-primary', mtb: 'border-green-600', gravel: 'border-amber-600' };
+        return `<div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm overflow-hidden ${isPast ? 'opacity-60' : ''}">
+          <div class="border-t-4 ${catColors[ev.category] || 'border-outline'} p-md">
+            <div class="flex items-start justify-between gap-sm">
+              <div>
+                <div class="flex items-center gap-xs mb-xs">
+                  <span class="text-xs font-label-bold uppercase text-on-surface-variant">${categoryLabel(ev.category)}</span>
+                  <span class="text-on-surface-variant">·</span>
+                  <span class="px-xs py-0.5 text-xs font-label-bold rounded-full ${levelBadge(ev.level)}">${levelLabel(ev.level)}</span>
+                  ${isPast ? '<span class="px-xs py-0.5 text-xs font-label-bold rounded-full bg-gray-100 text-gray-600">Passato</span>' : ''}
+                </div>
+                <h3 class="font-headline-md leading-tight">${ev.title}</h3>
+              </div>
+            </div>
+            <div class="mt-sm space-y-xs text-sm">
+              <div class="flex items-center gap-xs text-on-surface-variant">
+                <span class="material-symbols-outlined text-sm">calendar_today</span> ${formatDate(ev.date)}
+              </div>
+              <div class="flex items-center gap-xs text-on-surface-variant">
+                <span class="material-symbols-outlined text-sm">location_on</span> ${ev.location}
+              </div>
+              <div class="flex gap-md">
+                <span class="font-label-bold"><span class="text-primary">${ev.distance}</span> km</span>
+                <span class="font-label-bold"><span class="text-on-surface-variant">+${ev.elevation || 0}</span> m</span>
+                <span class="font-label-bold text-on-surface-variant">${pCount} iscritti</span>
+              </div>
+            </div>
+            ${ev.description ? `<p class="text-on-surface-variant text-xs mt-sm line-clamp-2">${ev.description}</p>` : ''}
+          </div>
+          <div class="border-t border-outline-variant flex">
+            <button onclick="editEvent(${ev.id})" class="flex-1 py-sm font-label-bold text-sm flex items-center justify-center gap-xs hover:bg-surface-container transition-colors border-r border-outline-variant">
+              <span class="material-symbols-outlined text-sm">edit</span> Modifica
+            </button>
+            <button onclick="deleteEvent(${ev.id}, '${ev.title.replace(/'/g,"\\'")}' )" class="flex-1 py-sm font-label-bold text-sm flex items-center justify-center gap-xs hover:bg-red-50 hover:text-secondary transition-colors">
+              <span class="material-symbols-outlined text-sm">delete</span> Elimina
+            </button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function openModal(ev) {
+      document.getElementById('modal-title').textContent = ev ? 'Modifica Evento' : 'Nuovo Evento';
+      document.getElementById('f-id').value = ev?.id || '';
+      document.getElementById('f-title').value = ev?.title || '';
+      document.getElementById('f-date').value = ev?.date || '';
+      document.getElementById('f-location').value = ev?.location || '';
+      document.getElementById('f-distance').value = ev?.distance || '';
+      document.getElementById('f-elevation').value = ev?.elevation || '';
+      document.getElementById('f-category').value = ev?.category || 'strada';
+      document.getElementById('f-level').value = ev?.level || 'intermediate';
+      document.getElementById('f-description').value = ev?.description || '';
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('event-form').reset();
+    }
+
+    function editEvent(id) { openModal(DB.getEvent(id)); }
+
+    function deleteEvent(id, title) {
+      if (!confirm(`Eliminare l'evento "${title}"?`)) return;
+      DB.deleteEvent(id);
+      toast('Evento eliminato');
+      renderEvents();
+    }
+
+    document.getElementById('event-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const id = document.getElementById('f-id').value;
+      const data = {
+        title: document.getElementById('f-title').value,
+        date: document.getElementById('f-date').value,
+        location: document.getElementById('f-location').value,
+        distance: parseInt(document.getElementById('f-distance').value),
+        elevation: parseInt(document.getElementById('f-elevation').value) || 0,
+        category: document.getElementById('f-category').value,
+        level: document.getElementById('f-level').value,
+        description: document.getElementById('f-description').value,
+      };
+      if (id) { DB.updateEvent(id, data); toast('Evento aggiornato'); }
+      else { DB.addEvent(data); toast('Evento creato!'); }
+      closeModal();
+      renderEvents();
+    });
+
+    document.getElementById('modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    renderEvents();
+  </script>
+</body>
+</html>

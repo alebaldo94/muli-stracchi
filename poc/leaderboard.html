@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classifiche | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","surface-dim":"#dadada","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"],"body-lg":["Inter"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}] }
+      }}
+    }
+  </script>
+  <style>
+    .asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.04; }
+    .podium-1 { background: linear-gradient(135deg, #ffd700, #e9c400); }
+    .podium-2 { background: linear-gradient(135deg, #d0d0d0, #a0a0a0); }
+    .podium-3 { background: linear-gradient(135deg, #cd7f32, #a0522d); }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div class="fixed inset-0 asphalt-texture pointer-events-none z-0"></div>
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin relative z-10">
+    <header class="mb-lg">
+      <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Classifiche</h2>
+      <div class="h-1 w-24 bg-primary-container mt-xs"></div>
+    </header>
+
+    <!-- Tab selector -->
+    <div class="flex gap-xs mb-lg">
+      <button onclick="setTab('month')" data-tab="month" class="tab-btn px-lg py-sm font-label-bold uppercase border-b-4 border-primary bg-primary-container text-on-primary-container">Maggio 2026</button>
+      <button onclick="setTab('year')" data-tab="year" class="tab-btn px-lg py-sm font-label-bold uppercase border-b-4 border-transparent hover:bg-surface-container transition-colors">Anno 2026</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <!-- Podium top 3 -->
+      <div class="lg:col-span-5">
+        <div id="podium" class="space-y-md"></div>
+      </div>
+
+      <!-- Full ranking table -->
+      <div class="lg:col-span-7 bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+        <div class="border-t-4 border-primary p-md border-b border-outline-variant">
+          <h3 class="font-headline-md">Classifica Completa</h3>
+        </div>
+        <div id="ranking-table" class="divide-y divide-outline-variant"></div>
+      </div>
+    </div>
+
+    <!-- La tua posizione -->
+    <div id="my-position" class="mt-lg bg-inverse-surface text-white p-md flex items-center justify-between rounded-lg shadow-sm"></div>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <script src="js/app.js"></script>
+  <script>
+    initStorage();
+    const user = Auth.require();
+    document.getElementById('sidebar-mount').outerHTML = renderSidebar('leaderboard');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Classifiche');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    let currentTab = 'month';
+
+    function setTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const active = btn.dataset.tab === tab;
+        btn.classList.toggle('bg-primary-container', active);
+        btn.classList.toggle('text-on-primary-container', active);
+        btn.classList.toggle('border-primary', active);
+        btn.classList.toggle('border-transparent', !active);
+      });
+      renderRanking();
+    }
+
+    function renderRanking() {
+      const field = currentTab === 'month' ? 'km_month' : 'km_year';
+      const members = DB.getMembers().sort((a, b) => b[field] - a[field]);
+      const myRank = members.findIndex(m => m.id == user.id) + 1;
+      const myMember = members.find(m => m.id == user.id);
+
+      const medals = ['🥇', '🥈', '🥉'];
+      const podiumClasses = ['podium-1 text-yellow-900', 'podium-2 text-gray-800', 'podium-3 text-amber-900'];
+
+      // Podium (top 3)
+      document.getElementById('podium').innerHTML = members.slice(0, 3).map((m, i) => {
+        const isMe = m.id == user.id;
+        return `<div class="flex items-center gap-md p-md ${podiumClasses[i]} ${isMe ? 'ring-4 ring-primary' : ''} shadow-sm">
+          <div class="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center font-extrabold text-xl bg-white/30">
+            <span>${initials(m.name)}</span>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-xs">
+              <span class="text-xl">${medals[i]}</span>
+              <span class="font-headline-md">${m.name}${isMe ? ' (tu)' : ''}</span>
+            </div>
+            <p class="text-sm opacity-80">${m.city} · ${levelLabel(m.level)}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <p class="font-headline-lg leading-none">${m[field]}</p>
+            <p class="text-xs opacity-80 uppercase font-label-bold">km</p>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Full table
+      document.getElementById('ranking-table').innerHTML = members.map((m, i) => {
+        const isMe = m.id == user.id;
+        return `<div class="flex items-center gap-md px-md py-sm ${isMe ? 'bg-primary-container/20' : 'hover:bg-surface-container'} transition-colors">
+          <span class="font-headline-md text-on-surface-variant w-8 text-right flex-shrink-0">${i + 1}</span>
+          <div class="w-9 h-9 rounded-full ${avatarBg(m.id)} flex items-center justify-center font-label-bold text-xs flex-shrink-0">${initials(m.name)}</div>
+          <div class="flex-1 min-w-0">
+            <p class="font-label-bold truncate">${m.name}${isMe ? ' ★' : ''}</p>
+            <p class="text-on-surface-variant text-xs">${m.city}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <p class="font-headline-md text-primary">${m[field]}<span class="text-xs font-body-md text-on-surface-variant"> km</span></p>
+            <p class="text-xs text-on-surface-variant">${m.rides_count} uscite</p>
+          </div>
+          <span class="ml-sm px-xs py-0.5 text-xs font-label-bold uppercase rounded-full ${levelBadge(m.level)}">${levelLabel(m.level)}</span>
+        </div>`;
+      }).join('');
+
+      // My position banner
+      if (myMember) {
+        document.getElementById('my-position').innerHTML = `
+          <div class="flex items-center gap-md">
+            <div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container font-extrabold flex items-center justify-center text-lg">${initials(myMember.name)}</div>
+            <div>
+              <p class="font-label-bold text-primary-fixed text-xs uppercase">La tua posizione</p>
+              <p class="font-headline-md text-white">${myMember.name}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-primary-fixed font-label-bold text-xs uppercase">#${myRank} in classifica</p>
+            <p class="font-headline-lg text-primary-container">${myMember[field]} km</p>
+          </div>`;
+      }
+    }
+
+    renderRanking();
+  </script>
+</body>
+</html>
