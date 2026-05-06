@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Regolamento | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"],"body-lg":["Inter"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}] }
+      }}
+    }
+  </script>
+  <style>.asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.04; }</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div class="fixed inset-0 asphalt-texture pointer-events-none z-0"></div>
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin relative z-10">
+
+    <!-- Header -->
+    <div class="bg-inverse-surface p-lg rounded-xl mb-lg relative overflow-hidden">
+      <div class="absolute inset-0 opacity-5"><svg width="100%" height="100%"><defs><pattern id="ch" width="60" height="40" patternUnits="userSpaceOnUse"><polyline points="0,20 15,0 30,20 45,0 60,20" fill="none" stroke="#ffd700" stroke-width="2"/><polyline points="0,40 15,20 30,40 45,20 60,40" fill="none" stroke="#ffd700" stroke-width="2"/></pattern></defs><rect width="100%" height="100%" fill="url(#ch)"/></svg></div>
+      <div class="relative z-10">
+        <h2 class="font-headline-xl text-white uppercase italic leading-tight">Regolamento Interno</h2>
+        <p class="text-tertiary-fixed-dim font-body-lg mt-xs">Associazione Sportiva Dilettantistica — I Muli Stracchi ASD</p>
+        <p class="text-primary-fixed-dim font-label-bold text-xs uppercase tracking-widest mt-sm">Approvato dal Consiglio Direttivo — Revisione 2026</p>
+      </div>
+    </div>
+
+    <!-- Indice rapido -->
+    <div class="bg-white border-l-4 border-primary-container p-md mb-lg shadow-sm">
+      <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-sm">Indice</p>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-xs">
+        <a href="#art1" class="text-primary text-sm hover:underline font-label-bold">Art. 1 — Denominazione</a>
+        <a href="#art2" class="text-primary text-sm hover:underline font-label-bold">Art. 2 — Sede e Scopo</a>
+        <a href="#art3" class="text-primary text-sm hover:underline font-label-bold">Art. 3 — Soci</a>
+        <a href="#art4" class="text-primary text-sm hover:underline font-label-bold">Art. 4 — Quote e Tessere</a>
+        <a href="#art5" class="text-primary text-sm hover:underline font-label-bold">Art. 5 — Assicurazione</a>
+        <a href="#art6" class="text-primary text-sm hover:underline font-label-bold">Art. 6 — Diritti e Doveri</a>
+        <a href="#art7" class="text-primary text-sm hover:underline font-label-bold">Art. 7 — Uscite e Gare</a>
+        <a href="#art8" class="text-primary text-sm hover:underline font-label-bold">Art. 8 — Sicurezza</a>
+        <a href="#art9" class="text-primary text-sm hover:underline font-label-bold">Art. 9 — Organi Sociali</a>
+        <a href="#art10" class="text-primary text-sm hover:underline font-label-bold">Art. 10 — Disciplina</a>
+        <a href="#art11" class="text-primary text-sm hover:underline font-label-bold">Art. 11 — Privacy</a>
+        <a href="#art12" class="text-primary text-sm hover:underline font-label-bold">Art. 12 — Scioglimento</a>
+      </div>
+    </div>
+
+    <!-- Corpo del regolamento -->
+    <div class="max-w-4xl space-y-lg">
+
+      <section id="art1" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 1</span> Denominazione e Natura</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>L'Associazione Sportiva Dilettantistica denominata <strong>"I Muli Stracchi ASD"</strong> è un'associazione di fatto, apartitica e aconfessionale, fondata sull'aggregazione spontanea di appassionati di ciclismo nelle sue diverse discipline.</p>
+          <p>L'associazione opera nel rispetto delle norme del CONI e degli Enti di Promozione Sportiva (FCI/UISP) ai quali è affiliata, nonché della normativa vigente in materia di associazioni sportive dilettantistiche.</p>
+        </div>
+      </section>
+
+      <section id="art2" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 2</span> Sede e Scopo</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>L'associazione ha sede legale in Ancona (AN). Attività e uscite possono svolgersi su tutto il territorio nazionale.</p>
+          <p>Scopi dell'associazione:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li>Promuovere e diffondere la pratica del ciclismo in tutte le sue discipline (strada, MTB, gravel, ciclocross).</li>
+            <li>Organizzare uscite di gruppo, allenamenti collettivi, gite cicloturistiche ed eventi sportivi.</li>
+            <li>Favorire la socialità e l'amicizia tra i soci attraverso la passione per la bicicletta.</li>
+            <li>Tutelare la sicurezza dei soci durante l'attività sportiva attraverso la copertura assicurativa.</li>
+            <li>Collaborare con enti, istituzioni e associazioni per la promozione della mobilità ciclistica sostenibile.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="art3" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 3</span> Soci</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Possono essere soci tutte le persone fisiche che condividano gli scopi associativi e si impegnino a rispettare il presente regolamento. Sono previste le seguenti categorie:</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-md mt-md">
+            <div class="bg-surface-container-low p-md border-l-4 border-primary-container">
+              <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-xs">Socio Ordinario</p>
+              <p class="text-sm">Maggiorenne, partecipa alle uscite e alle attività dell'associazione. Ha diritto di voto nelle assemblee.</p>
+            </div>
+            <div class="bg-surface-container-low p-md border-l-4 border-secondary">
+              <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-xs">Socio Sostenitore</p>
+              <p class="text-sm">Contribuisce con una quota maggiorata a sostegno delle attività associative. Ha gli stessi diritti del socio ordinario.</p>
+            </div>
+            <div class="bg-surface-container-low p-md border-l-4 border-outline">
+              <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-xs">Socio Juniores</p>
+              <p class="text-sm">Minorenne con consenso genitoriale. Quota ridotta. Non ha diritto di voto.</p>
+            </div>
+          </div>
+          <p class="mt-md">L'ammissione avviene su domanda scritta indirizzata al Consiglio Direttivo, il quale delibera entro 30 giorni. La qualifica di socio si acquista con il pagamento della quota associativa annuale e il completamento del tesseramento.</p>
+        </div>
+      </section>
+
+      <section id="art4" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 4</span> Quote e Tessere</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Le quote associative annuali vengono stabilite dal Consiglio Direttivo entro il 31 ottobre di ogni anno per l'esercizio successivo. Le quote indicative per l'anno 2026 sono:</p>
+          <div class="overflow-x-auto mt-md">
+            <table class="w-full border border-outline-variant text-sm">
+              <thead class="bg-inverse-surface text-primary-fixed">
+                <tr>
+                  <th class="text-left px-md py-sm font-label-bold">Categoria</th>
+                  <th class="text-right px-md py-sm font-label-bold">Quota annuale</th>
+                  <th class="text-left px-md py-sm font-label-bold">Include</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-outline-variant">
+                <tr class="hover:bg-surface-container"><td class="px-md py-sm">Socio Ordinario</td><td class="px-md py-sm text-right font-bold text-primary">€ 50,00</td><td class="px-md py-sm text-on-surface-variant">Tessera + assicurazione FCI base</td></tr>
+                <tr class="hover:bg-surface-container"><td class="px-md py-sm">Socio Sostenitore</td><td class="px-md py-sm text-right font-bold text-primary">€ 100,00</td><td class="px-md py-sm text-on-surface-variant">Tessera + assicurazione FCI estesa</td></tr>
+                <tr class="hover:bg-surface-container"><td class="px-md py-sm">Socio Juniores</td><td class="px-md py-sm text-right font-bold text-primary">€ 30,00</td><td class="px-md py-sm text-on-surface-variant">Tessera + assicurazione</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="mt-md">La tessera associativa è valida dall'1 gennaio al 31 dicembre dell'anno di iscrizione. Il rinnovo deve avvenire entro il 28 febbraio dell'anno successivo. Il mancato rinnovo entro tale termine comporta la decadenza automatica dalla qualità di socio.</p>
+        </div>
+      </section>
+
+      <section id="art5" class="bg-white shadow-sm p-lg border-t-4 border-secondary scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-secondary text-white px-sm py-xs text-xs font-label-bold">Art. 5</span> Assicurazione</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Tutti i soci partecipanti alle attività ufficiali dell'associazione devono essere in possesso di valida copertura assicurativa per:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li><strong>Responsabilità Civile verso Terzi (RCT)</strong> — obbligatoria per tutti i soci.</li>
+            <li><strong>Infortuni</strong> — fortemente raccomandata, copre infortuni occorsi durante l'attività sportiva.</li>
+            <li><strong>Tutela Legale</strong> — inclusa nel pacchetto FCI per soci ordinari e sostenitori.</li>
+          </ul>
+          <div class="bg-red-50 border-l-4 border-secondary p-md mt-md">
+            <p class="font-label-bold text-secondary uppercase text-xs mb-xs">Attenzione</p>
+            <p class="text-sm">È <strong>vietato partecipare</strong> alle uscite e agli eventi organizzati dall'associazione senza valida copertura assicurativa. L'amministrazione verifica annualmente lo stato assicurativo di ogni socio. Chi non risulta assicurato non può essere ammesso alle attività ufficiali.</p>
+          </div>
+          <p>L'assicurazione è generalmente inclusa nel pacchetto di tesseramento FCI o UISP. I soci che si tesserano tramite l'associazione ricevono automaticamente la copertura al momento del pagamento della quota.</p>
+        </div>
+      </section>
+
+      <section id="art6" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 6</span> Diritti e Doveri dei Soci</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+            <div>
+              <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-sm">Diritti</p>
+              <ul class="list-disc pl-md space-y-xs text-sm">
+                <li>Partecipare a tutte le attività e uscite organizzate dall'associazione.</li>
+                <li>Votare nelle assemblee ordinarie e straordinarie (soci ordinari e sostenitori).</li>
+                <li>Essere eletti agli organi associativi (maggiorenni).</li>
+                <li>Usufruire delle convenzioni e degli accordi stipulati dall'associazione.</li>
+                <li>Ricevere informazioni sull'attività e sulla gestione dell'associazione.</li>
+              </ul>
+            </div>
+            <div>
+              <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-sm">Doveri</p>
+              <ul class="list-disc pl-md space-y-xs text-sm">
+                <li>Rispettare il presente regolamento e le delibere degli organi associativi.</li>
+                <li>Pagare la quota associativa annuale entro i termini stabiliti.</li>
+                <li>Mantenere un comportamento sportivo, rispettoso e corretto verso gli altri soci e terzi.</li>
+                <li>Contribuire al buon nome e all'immagine dell'associazione.</li>
+                <li>Indossare sempre il casco omologato durante le uscite ufficiali.</li>
+                <li>Comunicare tempestivamente l'indisponibilità alle uscite programmate.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="art7" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 7</span> Uscite e Gare</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Le uscite di gruppo vengono pianificate e pubblicate sulla piattaforma associativa con almeno <strong>5 giorni di anticipo</strong>. Per ogni uscita viene indicato: percorso, dislivello, livello di difficoltà, orario e punto di ritrovo.</p>
+          <p>Le uscite sono classificate per livello di difficoltà:</p>
+          <div class="grid grid-cols-3 gap-sm mt-sm">
+            <div class="bg-green-50 border border-green-200 p-sm text-center"><p class="font-label-bold text-green-800 text-xs uppercase">Base</p><p class="text-xs text-green-700 mt-xs">Fino a 50km, dislivello &lt; 500m. Per tutti i livelli.</p></div>
+            <div class="bg-yellow-50 border border-yellow-200 p-sm text-center"><p class="font-label-bold text-yellow-800 text-xs uppercase">Intermedio</p><p class="text-xs text-yellow-700 mt-xs">50–100km, 500–1500m. Buona forma fisica richiesta.</p></div>
+            <div class="bg-red-50 border border-red-200 p-sm text-center"><p class="font-label-bold text-red-800 text-xs uppercase">Avanzato / Hard</p><p class="text-xs text-red-700 mt-xs">Oltre 100km o oltre 1500m. Solo soci esperti.</p></div>
+          </div>
+          <p class="mt-sm">La partecipazione alle uscite comporta l'accettazione implicita del percorso e delle condizioni. Ogni socio è responsabile della propria preparazione fisica e dell'adeguatezza della propria bicicletta.</p>
+          <p>La partecipazione a gare esterne con i colori sociali deve essere preventivamente comunicata al Consiglio Direttivo.</p>
+        </div>
+      </section>
+
+      <section id="art8" class="bg-white shadow-sm p-lg border-t-4 border-secondary scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-secondary text-white px-sm py-xs text-xs font-label-bold">Art. 8</span> Sicurezza</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p><strong>Obblighi inderogabili</strong> durante ogni uscita ufficiale:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li>Indossare il casco omologato CE (EN 1078 o equivalente) — obbligo assoluto.</li>
+            <li>Rispettare il Codice della Strada e segnalare eventuali pericoli ai compagni.</li>
+            <li>Portare con sé documento di identità, tessera sanitaria e tessera associativa.</li>
+            <li>Avere con sé il minimo di kit di riparazione (camera d'aria, leve, pompa).</li>
+            <li>Non superare la propria capacità fisica: chi non riesce a seguire il gruppo ha il diritto di rallentare o fermarsi.</li>
+          </ul>
+          <div class="bg-yellow-50 border-l-4 border-yellow-400 p-md mt-md">
+            <p class="font-label-bold text-yellow-800 uppercase text-xs mb-xs">Procedura in caso di incidente</p>
+            <p class="text-sm text-yellow-900">1. Mettere in sicurezza la scena. 2. Chiamare il 118 se necessario. 3. Avvisare il capogruppo. 4. Non spostare il ferito salvo pericolo imminente. 5. Compilare il modulo di segnalazione incidente entro 24h dalla comunicazione all'associazione.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="art9" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 9</span> Organi Sociali</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Gli organi dell'associazione sono:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li><strong>Assemblea dei Soci</strong> — massimo organo deliberativo, si riunisce in via ordinaria entro il 30 aprile di ogni anno e in via straordinaria quando necessario.</li>
+            <li><strong>Consiglio Direttivo</strong> — composto da un minimo di 3 a un massimo di 7 membri eletti dall'Assemblea, dura in carica 2 anni.</li>
+            <li><strong>Presidente</strong> — eletto dal Consiglio Direttivo, rappresenta l'associazione verso terzi.</li>
+            <li><strong>Revisore dei Conti</strong> — facoltativo, nominato dall'Assemblea, controlla la gestione economica.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="art10" class="bg-white shadow-sm p-lg border-t-4 border-secondary scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-secondary text-white px-sm py-xs text-xs font-label-bold">Art. 10</span> Disciplina</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>I comportamenti scorretti verso altri soci, terzi o il patrimonio associativo sono passibili di sanzioni disciplinari:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li><strong>Richiamo scritto</strong> — per infrazioni lievi al regolamento.</li>
+            <li><strong>Sospensione temporanea</strong> — da 1 a 6 mesi, per comportamenti gravi o reiterati.</li>
+            <li><strong>Espulsione</strong> — definitiva, per comportamenti gravemente lesivi dell'associazione o dei soci.</li>
+          </ul>
+          <p>Le sanzioni sono deliberate dal Consiglio Direttivo sentito il socio interessato. È possibile fare ricorso all'Assemblea entro 30 giorni dalla notifica.</p>
+        </div>
+      </section>
+
+      <section id="art11" class="bg-white shadow-sm p-lg border-t-4 border-primary-container scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-primary-container text-on-primary-container px-sm py-xs text-xs font-label-bold">Art. 11</span> Privacy e Dati Personali</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>I dati personali dei soci sono trattati nel rispetto del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 196/2003. I dati raccolti (anagrafica, recapiti, dati sportivi) sono utilizzati esclusivamente per:</p>
+          <ul class="list-disc pl-lg space-y-xs">
+            <li>Gestione amministrativa dell'associazione e delle tessere.</li>
+            <li>Comunicazioni relative alle attività dell'associazione.</li>
+            <li>Adempimenti assicurativi e federali.</li>
+          </ul>
+          <p>Ogni socio ha diritto di accedere, rettificare, cancellare i propri dati inviando richiesta scritta al Consiglio Direttivo. I dati non vengono ceduti a terzi salvo obblighi di legge.</p>
+        </div>
+      </section>
+
+      <section id="art12" class="bg-white shadow-sm p-lg border-t-4 border-outline scroll-mt-20">
+        <h3 class="font-headline-md uppercase mb-md flex items-center gap-sm"><span class="bg-inverse-surface text-white px-sm py-xs text-xs font-label-bold">Art. 12</span> Scioglimento</h3>
+        <div class="text-body-md text-on-surface space-y-sm leading-relaxed">
+          <p>Lo scioglimento dell'associazione è deliberato dall'Assemblea straordinaria con il voto favorevole di almeno i 3/4 dei soci aventi diritto di voto. In caso di scioglimento, il patrimonio residuo è devoluto ad altra associazione sportiva dilettantistica avente scopi analoghi, secondo delibera dell'ultima Assemblea.</p>
+          <p class="text-on-surface-variant text-sm mt-lg border-t border-outline-variant pt-md">Approvato dal Consiglio Direttivo de "I Muli Stracchi ASD" — Ancona, gennaio 2026.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-mount"></div>
+  <script src="js/app.js"></script>
+  <script>
+    initStorage();
+    Auth.require();
+    document.getElementById('sidebar-mount').outerHTML = renderSidebar('regolamento');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Regolamento');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+  </script>
+</body>
+</html>

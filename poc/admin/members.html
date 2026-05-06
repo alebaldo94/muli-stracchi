@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestione Soci | I Muli Stracchi</title>
+  <title>Gestione Soci | I Muli Stracchi Admin</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script>
     tailwind.config = {
       theme: { extend: {
-        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","surface-dim":"#dadada","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
         borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
         spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
         fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"] },
@@ -34,35 +34,39 @@
       </button>
     </header>
 
-    <!-- Search + stats bar -->
-    <div class="flex items-center gap-md">
-      <div class="relative flex-1 max-w-sm">
-        <input id="search" type="text" placeholder="Cerca socio..." oninput="renderTable()"
-          class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm pl-10 transition-all"/>
+    <!-- Search + filter -->
+    <div class="flex items-center gap-md flex-wrap">
+      <div class="relative flex-1 min-w-48">
+        <input id="search" type="text" placeholder="Cerca nome, email, città, CF..." oninput="renderTable()"
+          class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm pl-10 transition-all text-sm"/>
         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
       </div>
-      <select id="filter-level" onchange="renderTable()"
-        class="bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+      <select id="filter-level" onchange="renderTable()" class="bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all text-sm">
         <option value="">Tutti i livelli</option>
         <option value="beginner">Principiante</option>
         <option value="intermediate">Intermedio</option>
         <option value="advanced">Avanzato</option>
+      </select>
+      <select id="filter-type" onchange="renderTable()" class="bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all text-sm">
+        <option value="">Tutti i tipi</option>
+        <option value="ordinario">Ordinario</option>
+        <option value="sostenitore">Sostenitore</option>
+        <option value="juniores">Juniores</option>
       </select>
       <p id="count-label" class="font-label-bold text-on-surface-variant text-sm whitespace-nowrap"></p>
     </div>
 
     <!-- Table -->
     <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm overflow-x-auto">
-      <table class="w-full">
+      <table class="w-full text-sm">
         <thead class="bg-inverse-surface text-primary-fixed">
           <tr>
             <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Socio</th>
-            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Email</th>
-            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Città</th>
-            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Livello</th>
-            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">KM Mese</th>
-            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">KM Anno</th>
-            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">Iscritto</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Contatti</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Tessera</th>
+            <th class="text-center px-md py-sm font-label-bold uppercase text-xs">Scadenza</th>
+            <th class="text-center px-md py-sm font-label-bold uppercase text-xs">Assicurazione</th>
+            <th class="text-right px-md py-sm font-label-bold uppercase text-xs">KM</th>
             <th class="px-md py-sm"></th>
           </tr>
         </thead>
@@ -73,52 +77,149 @@
 
   <div id="footer-mount"></div>
 
-  <!-- Modal -->
+  <!-- Modal socio (full) -->
   <div id="modal" class="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-md hidden">
-    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-lg">
-      <div class="border-t-4 border-primary p-md border-b border-outline-variant flex items-center justify-between">
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto">
+      <div class="border-t-4 border-primary p-md border-b border-outline-variant flex items-center justify-between sticky top-0 bg-surface-container-lowest z-10">
         <h3 id="modal-title" class="font-headline-md">Nuovo Socio</h3>
-        <button onclick="closeModal()" class="text-on-surface-variant hover:text-secondary transition-colors">
-          <span class="material-symbols-outlined">close</span>
-        </button>
+        <button onclick="closeModal()"><span class="material-symbols-outlined">close</span></button>
       </div>
-      <form id="member-form" class="p-md space-y-md">
+      <form id="member-form" class="p-md space-y-lg">
         <input type="hidden" id="f-id"/>
-        <div class="grid grid-cols-2 gap-md">
-          <div class="space-y-xs">
-            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nome Completo *</label>
-            <input id="f-name" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Mario Rossi"/>
+
+        <!-- Sezione: Anagrafica -->
+        <fieldset>
+          <legend class="font-label-bold uppercase text-xs text-on-surface-variant border-b border-outline-variant pb-xs mb-md w-full flex items-center gap-xs">
+            <span class="material-symbols-outlined text-sm">person</span> Anagrafica
+          </legend>
+          <div class="grid grid-cols-2 gap-md">
+            <div class="col-span-2 space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nome Completo *</label>
+              <input id="f-name" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Mario Rossi"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Data di nascita</label>
+              <input id="f-birth" type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Codice Fiscale</label>
+              <input id="f-taxcode" type="text" maxlength="16" placeholder="RSSMRA85H15A271Z" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all font-mono uppercase"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Telefono</label>
+              <input id="f-phone" type="tel" placeholder="333 123 4567" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Email *</label>
+              <input id="f-email" required type="email" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="col-span-2 space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Indirizzo</label>
+              <input id="f-address" type="text" placeholder="Via Roma 12" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Città</label>
+              <input id="f-city" type="text" placeholder="Ancona" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="grid grid-cols-2 gap-sm">
+              <div class="space-y-xs">
+                <label class="font-label-bold uppercase text-xs text-on-surface-variant">CAP</label>
+                <input id="f-cap" type="text" maxlength="5" placeholder="60121" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+              </div>
+              <div class="space-y-xs">
+                <label class="font-label-bold uppercase text-xs text-on-surface-variant">Prov.</label>
+                <input id="f-province" type="text" maxlength="2" placeholder="AN" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all uppercase"/>
+              </div>
+            </div>
           </div>
-          <div class="space-y-xs">
-            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Email *</label>
-            <input id="f-email" required type="email" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="mario@muli.it"/>
+        </fieldset>
+
+        <!-- Sezione: Tessera -->
+        <fieldset>
+          <legend class="font-label-bold uppercase text-xs text-on-surface-variant border-b border-outline-variant pb-xs mb-md w-full flex items-center gap-xs">
+            <span class="material-symbols-outlined text-sm">card_membership</span> Tessera
+          </legend>
+          <div class="grid grid-cols-2 gap-md">
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nr. Tessera</label>
+              <input id="f-membernum" type="text" placeholder="ASD-2026-XXX" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all font-mono"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Tipo tessera</label>
+              <select id="f-membertype" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+                <option value="ordinario">Ordinario</option>
+                <option value="sostenitore">Sostenitore</option>
+                <option value="juniores">Juniores</option>
+              </select>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Scadenza tessera</label>
+              <input id="f-expiry" type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Livello sportivo</label>
+              <select id="f-level" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+                <option value="beginner">Principiante</option>
+                <option value="intermediate">Intermedio</option>
+                <option value="advanced">Avanzato</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="grid grid-cols-2 gap-md">
-          <div class="space-y-xs">
-            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Password *</label>
-            <input id="f-password" required type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="muli2024"/>
+        </fieldset>
+
+        <!-- Sezione: Assicurazione -->
+        <fieldset>
+          <legend class="font-label-bold uppercase text-xs text-on-surface-variant border-b border-outline-variant pb-xs mb-md w-full flex items-center gap-xs">
+            <span class="material-symbols-outlined text-sm">verified_user</span> Assicurazione
+          </legend>
+          <div class="flex items-center gap-sm mb-md">
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="f-insurance" class="sr-only peer" onchange="toggleInsuranceFields()"/>
+              <div class="w-10 h-6 bg-gray-200 peer-checked:bg-green-500 rounded-full peer peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+            </label>
+            <span class="font-label-bold text-sm">Assicurazione attiva</span>
           </div>
-          <div class="space-y-xs">
-            <label class="font-label-bold uppercase text-xs text-on-surface-variant">Città</label>
-            <input id="f-city" type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all" placeholder="Ancona"/>
+          <div id="insurance-fields" class="grid grid-cols-3 gap-md hidden">
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Ente</label>
+              <select id="f-ins-type" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+                <option value="FCI">FCI</option>
+                <option value="UISP">UISP</option>
+                <option value="ASC">ASC</option>
+                <option value="altra">Altra</option>
+              </select>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nr. Polizza</label>
+              <input id="f-ins-num" type="text" placeholder="FCI-2026-XXXXX" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all font-mono text-sm"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Scadenza</label>
+              <input id="f-ins-exp" type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
           </div>
-        </div>
-        <div class="space-y-xs">
-          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Livello</label>
-          <select id="f-level" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
-            <option value="beginner">Principiante</option>
-            <option value="intermediate">Intermedio</option>
-            <option value="advanced">Avanzato</option>
-          </select>
-        </div>
+        </fieldset>
+
+        <!-- Sezione: Accesso e note -->
+        <fieldset>
+          <legend class="font-label-bold uppercase text-xs text-on-surface-variant border-b border-outline-variant pb-xs mb-md w-full flex items-center gap-xs">
+            <span class="material-symbols-outlined text-sm">lock</span> Accesso e Note
+          </legend>
+          <div class="grid grid-cols-2 gap-md">
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Password *</label>
+              <input id="f-password" required type="text" placeholder="muli2024" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+            </div>
+            <div class="col-span-2 space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Note interne</label>
+              <textarea id="f-notes" rows="2" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all text-sm" placeholder="Annotazioni visibili solo agli admin..."></textarea>
+            </div>
+          </div>
+        </fieldset>
+
         <div class="flex gap-sm pt-md border-t border-outline-variant">
-          <button type="submit" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">
-            SALVA
-          </button>
-          <button type="button" onclick="closeModal()" class="flex-1 border-2 border-outline font-label-bold py-sm hover:bg-surface-container transition-all">
-            ANNULLA
-          </button>
+          <button type="submit" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">SALVA SOCIO</button>
+          <button type="button" onclick="closeModal()" class="flex-1 border-2 border-outline font-label-bold py-sm hover:bg-surface-container transition-all">ANNULLA</button>
         </div>
       </form>
     </div>
@@ -134,45 +235,84 @@
 
     function renderTable() {
       const query = document.getElementById('search').value.toLowerCase();
-      const levelFilter = document.getElementById('filter-level').value;
+      const lvl = document.getElementById('filter-level').value;
+      const typ = document.getElementById('filter-type').value;
       const members = DB.getMembers().filter(m => {
-        const matchSearch = !query || m.name.toLowerCase().includes(query) || m.email.toLowerCase().includes(query) || m.city.toLowerCase().includes(query);
-        const matchLevel = !levelFilter || m.level === levelFilter;
-        return matchSearch && matchLevel;
+        const q = !query || [m.name, m.email, m.city, m.taxCode || '', m.phone || ''].join(' ').toLowerCase().includes(query);
+        return q && (!lvl || m.level === lvl) && (!typ || m.memberType === typ);
       }).sort((a, b) => a.name.localeCompare(b.name));
 
       document.getElementById('count-label').textContent = members.length + ' soci';
-      document.getElementById('members-tbody').innerHTML = members.map(m => `
-        <tr class="hover:bg-surface-container transition-colors">
+      document.getElementById('members-tbody').innerHTML = members.map(m => {
+        const ms = membershipStatus(m.membershipExpiry);
+        const is = insuranceStatus(m);
+        return `<tr class="hover:bg-surface-container transition-colors">
           <td class="px-md py-sm">
             <div class="flex items-center gap-sm">
               <div class="w-8 h-8 rounded-full ${avatarBg(m.id)} flex items-center justify-center text-xs font-label-bold flex-shrink-0">${initials(m.name)}</div>
-              <span class="font-label-bold">${m.name}</span>
+              <div>
+                <p class="font-label-bold">${m.name}</p>
+                <p class="text-on-surface-variant text-xs">${m.city}${m.province ? ' (' + m.province + ')' : ''} · ${m.birthDate ? age(m.birthDate) + ' anni' : ''}</p>
+              </div>
             </div>
           </td>
-          <td class="px-md py-sm text-sm text-on-surface-variant">${m.email}</td>
-          <td class="px-md py-sm text-sm">${m.city}</td>
-          <td class="px-md py-sm"><span class="px-xs py-0.5 text-xs font-label-bold rounded-full ${levelBadge(m.level)}">${levelLabel(m.level)}</span></td>
-          <td class="px-md py-sm text-right font-bold text-primary">${m.km_month} km</td>
-          <td class="px-md py-sm text-right text-sm">${m.km_year} km</td>
-          <td class="px-md py-sm text-right text-sm text-on-surface-variant">${formatDate(m.joinDate)}</td>
+          <td class="px-md py-sm">
+            <p class="text-xs">${m.email}</p>
+            <p class="text-on-surface-variant text-xs">${m.phone || '—'}</p>
+          </td>
+          <td class="px-md py-sm">
+            <p class="font-mono text-xs">${m.memberNumber || '—'}</p>
+            <p class="text-on-surface-variant text-xs">${memberTypeLabel(m.memberType)}</p>
+          </td>
+          <td class="px-md py-sm text-center">
+            <span class="px-xs py-0.5 text-xs font-label-bold rounded-full ${ms.color}">${ms.label}</span>
+          </td>
+          <td class="px-md py-sm text-center">
+            <span class="px-xs py-0.5 text-xs font-label-bold rounded-full ${is.ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${is.label}</span>
+          </td>
           <td class="px-md py-sm text-right">
+            <p class="font-bold text-primary">${m.km_month} <span class="text-xs font-normal text-on-surface-variant">km/mese</span></p>
+            <p class="text-xs text-on-surface-variant">${m.rides_count} uscite</p>
+          </td>
+          <td class="px-md py-sm">
             <div class="flex items-center justify-end gap-xs">
               <button onclick="editMember(${m.id})" class="p-xs text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-sm">edit</span></button>
-              <button onclick="deleteMember(${m.id}, '${m.name}')" class="p-xs text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
+              <button onclick="deleteMember(${m.id}, '${m.name.replace(/'/g,"\\'")} ')" class="p-xs text-on-surface-variant hover:text-secondary transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button>
             </div>
           </td>
-        </tr>`).join('') || `<tr><td colspan="8" class="px-md py-lg text-center text-on-surface-variant">Nessun socio trovato.</td></tr>`;
+        </tr>`;
+      }).join('') || `<tr><td colspan="7" class="px-md py-lg text-center text-on-surface-variant">Nessun socio trovato.</td></tr>`;
+    }
+
+    function toggleInsuranceFields() {
+      const on = document.getElementById('f-insurance').checked;
+      document.getElementById('insurance-fields').classList.toggle('hidden', !on);
     }
 
     function openModal(member) {
-      document.getElementById('modal-title').textContent = member ? 'Modifica Socio' : 'Nuovo Socio';
+      const isNew = !member;
+      document.getElementById('modal-title').textContent = isNew ? 'Nuovo Socio' : 'Modifica Socio';
       document.getElementById('f-id').value = member?.id || '';
       document.getElementById('f-name').value = member?.name || '';
+      document.getElementById('f-birth').value = member?.birthDate || '';
+      document.getElementById('f-taxcode').value = member?.taxCode || '';
+      document.getElementById('f-phone').value = member?.phone || '';
       document.getElementById('f-email').value = member?.email || '';
-      document.getElementById('f-password').value = member?.password || 'muli2024';
+      document.getElementById('f-address').value = member?.address || '';
       document.getElementById('f-city').value = member?.city || '';
+      document.getElementById('f-cap').value = member?.cap || '';
+      document.getElementById('f-province').value = member?.province || '';
+      document.getElementById('f-membernum').value = member?.memberNumber || '';
+      document.getElementById('f-membertype').value = member?.memberType || 'ordinario';
+      document.getElementById('f-expiry').value = member?.membershipExpiry || (new Date().getFullYear() + '-12-31');
       document.getElementById('f-level').value = member?.level || 'beginner';
+      document.getElementById('f-insurance').checked = member?.insurance || false;
+      document.getElementById('f-ins-type').value = member?.insuranceType || 'FCI';
+      document.getElementById('f-ins-num').value = member?.insuranceNumber || '';
+      document.getElementById('f-ins-exp').value = member?.insuranceExpiry || (new Date().getFullYear() + '-12-31');
+      document.getElementById('f-password').value = member?.password || 'muli2024';
+      document.getElementById('f-notes').value = member?.notes || '';
+      toggleInsuranceFields();
       document.getElementById('modal').classList.remove('hidden');
     }
 
@@ -181,12 +321,10 @@
       document.getElementById('member-form').reset();
     }
 
-    function editMember(id) {
-      openModal(DB.getMember(id));
-    }
+    function editMember(id) { openModal(DB.getMember(id)); }
 
     function deleteMember(id, name) {
-      if (!confirm(`Eliminare il socio "${name}"?`)) return;
+      if (!confirm(`Eliminare il socio "${name.trim()}"? L'operazione non è reversibile.`)) return;
       DB.deleteMember(id);
       toast('Socio eliminato');
       renderTable();
@@ -195,27 +333,35 @@
     document.getElementById('member-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const id = document.getElementById('f-id').value;
+      const insOn = document.getElementById('f-insurance').checked;
       const data = {
         name: document.getElementById('f-name').value,
+        birthDate: document.getElementById('f-birth').value || null,
+        taxCode: document.getElementById('f-taxcode').value.toUpperCase() || null,
+        phone: document.getElementById('f-phone').value || null,
         email: document.getElementById('f-email').value,
-        password: document.getElementById('f-password').value,
+        address: document.getElementById('f-address').value || null,
         city: document.getElementById('f-city').value,
+        cap: document.getElementById('f-cap').value || null,
+        province: document.getElementById('f-province').value.toUpperCase() || null,
+        memberNumber: document.getElementById('f-membernum').value || null,
+        memberType: document.getElementById('f-membertype').value,
+        membershipExpiry: document.getElementById('f-expiry').value || null,
         level: document.getElementById('f-level').value,
+        insurance: insOn,
+        insuranceType: insOn ? document.getElementById('f-ins-type').value : null,
+        insuranceNumber: insOn ? document.getElementById('f-ins-num').value : null,
+        insuranceExpiry: insOn ? document.getElementById('f-ins-exp').value : null,
+        password: document.getElementById('f-password').value,
+        notes: document.getElementById('f-notes').value,
       };
-      if (id) {
-        DB.updateMember(id, data);
-        toast('Socio aggiornato');
-      } else {
-        DB.addMember(data);
-        toast('Socio aggiunto!');
-      }
+      if (id) { DB.updateMember(id, data); toast('Socio aggiornato'); }
+      else { DB.addMember(data); toast('Socio aggiunto!'); }
       closeModal();
       renderTable();
     });
 
-    document.getElementById('modal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
+    document.getElementById('modal').addEventListener('click', e => { if (e.target === document.getElementById('modal')) closeModal(); });
 
     renderTable();
   </script>

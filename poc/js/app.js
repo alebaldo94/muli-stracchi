@@ -1,16 +1,95 @@
 'use strict';
 
+const SEED_VERSION = '2';
+
 // ── SEED DATA ────────────────────────────────────────────────────────────────
 
 const SEED_MEMBERS = [
-  { id: 1, name: "Mario Rossi", email: "mario.rossi@muli.it", password: "muli2024", city: "Ancona", level: "intermediate", joinDate: "2023-03-15", km_year: 2340, km_month: 450, rides_count: 47, role: "member" },
-  { id: 2, name: "Laura Bianchi", email: "laura.bianchi@muli.it", password: "muli2024", city: "Jesi", level: "advanced", joinDate: "2022-01-10", km_year: 4210, km_month: 620, rides_count: 89, role: "member" },
-  { id: 3, name: "Luca Ferretti", email: "luca.ferretti@muli.it", password: "muli2024", city: "Senigallia", level: "beginner", joinDate: "2024-01-20", km_year: 780, km_month: 120, rides_count: 23, role: "member" },
-  { id: 4, name: "Giulia Marchi", email: "giulia.marchi@muli.it", password: "muli2024", city: "Fabriano", level: "intermediate", joinDate: "2023-06-08", km_year: 1890, km_month: 380, rides_count: 41, role: "member" },
-  { id: 5, name: "Roberto Conti", email: "roberto.conti@muli.it", password: "muli2024", city: "Civitanova", level: "advanced", joinDate: "2021-09-22", km_year: 5670, km_month: 890, rides_count: 112, role: "member" },
-  { id: 6, name: "Sofia Romano", email: "sofia.romano@muli.it", password: "muli2024", city: "Pesaro", level: "intermediate", joinDate: "2023-09-01", km_year: 1540, km_month: 290, rides_count: 35, role: "member" },
-  { id: 7, name: "Andrea Vitali", email: "andrea.vitali@muli.it", password: "muli2024", city: "Fano", level: "advanced", joinDate: "2020-04-12", km_year: 6210, km_month: 980, rides_count: 134, role: "member" },
-  { id: 99, name: "Admin", email: "admin@muli.it", password: "admin2024", city: "", level: "", joinDate: "2020-01-01", km_year: 0, km_month: 0, rides_count: 0, role: "admin" }
+  {
+    id: 1, role: "member",
+    name: "Mario Rossi", email: "mario.rossi@muli.it", password: "muli2024",
+    birthDate: "1985-06-15", taxCode: "RSSMRA85H15A271Z", phone: "333 123 4567",
+    address: "Via Roma 12", cap: "60121", city: "Ancona", province: "AN",
+    memberNumber: "ASD-2024-001", memberType: "ordinario",
+    joinDate: "2023-03-15", membershipExpiry: "2026-12-31",
+    insurance: true, insuranceType: "FCI", insuranceExpiry: "2026-12-31", insuranceNumber: "FCI-2026-00123",
+    level: "intermediate", km_year: 2340, km_month: 450, rides_count: 47,
+    notes: ""
+  },
+  {
+    id: 2, role: "member",
+    name: "Laura Bianchi", email: "laura.bianchi@muli.it", password: "muli2024",
+    birthDate: "1990-03-22", taxCode: "BNCLRA90C62A271Y", phone: "347 987 6543",
+    address: "Via Garibaldi 45", cap: "60035", city: "Jesi", province: "AN",
+    memberNumber: "ASD-2022-008", memberType: "ordinario",
+    joinDate: "2022-01-10", membershipExpiry: "2026-12-31",
+    insurance: true, insuranceType: "FCI", insuranceExpiry: "2026-12-31", insuranceNumber: "FCI-2026-00089",
+    level: "advanced", km_year: 4210, km_month: 620, rides_count: 89,
+    notes: ""
+  },
+  {
+    id: 3, role: "member",
+    name: "Luca Ferretti", email: "luca.ferretti@muli.it", password: "muli2024",
+    birthDate: "1998-11-08", taxCode: "FRRLCU98S08A271X", phone: "320 555 6789",
+    address: "Via Mazzini 3", cap: "60019", city: "Senigallia", province: "AN",
+    memberNumber: "ASD-2024-015", memberType: "ordinario",
+    joinDate: "2024-01-20", membershipExpiry: "2026-05-20",
+    insurance: false, insuranceType: null, insuranceExpiry: null, insuranceNumber: null,
+    level: "beginner", km_year: 780, km_month: 120, rides_count: 23,
+    notes: "Prima stagione agonistica"
+  },
+  {
+    id: 4, role: "member",
+    name: "Giulia Marchi", email: "giulia.marchi@muli.it", password: "muli2024",
+    birthDate: "1993-07-30", taxCode: "MRCGLI93L70A271W", phone: "348 444 3210",
+    address: "Corso Italia 78", cap: "60044", city: "Fabriano", province: "AN",
+    memberNumber: "ASD-2023-022", memberType: "sostenitore",
+    joinDate: "2023-06-08", membershipExpiry: "2026-05-25",
+    insurance: true, insuranceType: "UISP", insuranceExpiry: "2026-12-31", insuranceNumber: "UISP-2026-00456",
+    level: "intermediate", km_year: 1890, km_month: 380, rides_count: 41,
+    notes: ""
+  },
+  {
+    id: 5, role: "member",
+    name: "Roberto Conti", email: "roberto.conti@muli.it", password: "muli2024",
+    birthDate: "1978-04-12", taxCode: "CNTRRT78D12A271V", phone: "338 777 8901",
+    address: "Via delle Querce 15", cap: "62012", city: "Civitanova M.", province: "MC",
+    memberNumber: "ASD-2021-003", memberType: "ordinario",
+    joinDate: "2021-09-22", membershipExpiry: "2026-12-31",
+    insurance: true, insuranceType: "FCI", insuranceExpiry: "2026-12-31", insuranceNumber: "FCI-2026-00067",
+    level: "advanced", km_year: 5670, km_month: 890, rides_count: 112,
+    notes: "Istruttore MTB"
+  },
+  {
+    id: 6, role: "member",
+    name: "Sofia Romano", email: "sofia.romano@muli.it", password: "muli2024",
+    birthDate: "1995-09-18", taxCode: "RMNSFO95P58A271U", phone: "366 222 3344",
+    address: "Via Leopardi 22", cap: "61121", city: "Pesaro", province: "PU",
+    memberNumber: "ASD-2023-031", memberType: "ordinario",
+    joinDate: "2023-09-01", membershipExpiry: "2026-03-01",
+    insurance: false, insuranceType: null, insuranceExpiry: null, insuranceNumber: null,
+    level: "intermediate", km_year: 1540, km_month: 290, rides_count: 35,
+    notes: "Tessera scaduta — da rinnovare"
+  },
+  {
+    id: 7, role: "member",
+    name: "Andrea Vitali", email: "andrea.vitali@muli.it", password: "muli2024",
+    birthDate: "1982-01-25", taxCode: "VTLNDR82A25A271T", phone: "329 999 8877",
+    address: "Via del Porto 5", cap: "61032", city: "Fano", province: "PU",
+    memberNumber: "ASD-2020-001", memberType: "sostenitore",
+    joinDate: "2020-04-12", membershipExpiry: "2026-12-31",
+    insurance: true, insuranceType: "FCI", insuranceExpiry: "2026-12-31", insuranceNumber: "FCI-2026-00012",
+    level: "advanced", km_year: 6210, km_month: 980, rides_count: 134,
+    notes: "Fondatore del gruppo"
+  },
+  {
+    id: 99, role: "admin",
+    name: "Admin", email: "admin@muli.it", password: "admin2024",
+    birthDate: null, taxCode: null, phone: null, address: null, cap: null, city: "", province: null,
+    memberNumber: null, memberType: null, joinDate: "2020-01-01", membershipExpiry: null,
+    insurance: false, insuranceType: null, insuranceExpiry: null, insuranceNumber: null,
+    level: "", km_year: 0, km_month: 0, rides_count: 0, notes: ""
+  }
 ];
 
 const SEED_EVENTS = [
@@ -31,11 +110,11 @@ const SEED_RIDES = [
 // ── STORAGE ──────────────────────────────────────────────────────────────────
 
 function initStorage() {
-  if (!localStorage.getItem('ms_initialized')) {
+  if (localStorage.getItem('ms_version') !== SEED_VERSION) {
     localStorage.setItem('ms_members', JSON.stringify(SEED_MEMBERS));
     localStorage.setItem('ms_events', JSON.stringify(SEED_EVENTS));
     localStorage.setItem('ms_rides', JSON.stringify(SEED_RIDES));
-    localStorage.setItem('ms_initialized', '1');
+    localStorage.setItem('ms_version', SEED_VERSION);
   }
 }
 
@@ -49,7 +128,7 @@ const DB = {
 
   addMember(data) {
     const all = this._get('ms_members');
-    const id = Math.max(0, ...all.map(m => m.id)) + 1;
+    const id = Math.max(0, ...all.map(m => m.id < 99 ? m.id : 0)) + 1;
     const m = { ...data, id, role: 'member', km_year: 0, km_month: 0, rides_count: 0, joinDate: new Date().toISOString().split('T')[0] };
     all.push(m);
     this._set('ms_members', all);
@@ -63,6 +142,19 @@ const DB = {
 
   deleteMember(id) {
     this._set('ms_members', this._get('ms_members').filter(m => m.id != id));
+  },
+
+  renewMembership(id, expiry) {
+    this.updateMember(id, { membershipExpiry: expiry });
+  },
+
+  setInsurance(id, enabled, type, expiry, number) {
+    this.updateMember(id, {
+      insurance: enabled,
+      insuranceType: enabled ? type : null,
+      insuranceExpiry: enabled ? expiry : null,
+      insuranceNumber: enabled ? number : null
+    });
   },
 
   getEvents() { return this._get('ms_events'); },
@@ -92,24 +184,18 @@ const DB = {
   addRide(userId, data) {
     const rides = this._get('ms_rides');
     const id = Math.max(0, ...rides.map(r => r.id)) + 1;
-    const r = { ...data, id, userId: Number(userId), source: 'manual' };
-    rides.push(r);
+    rides.push({ ...data, id, userId: Number(userId), source: 'manual' });
     this._set('ms_rides', rides);
     const all = this._get('ms_members').map(m => {
       if (m.id == userId) return { ...m, km_month: (m.km_month || 0) + Number(data.km), km_year: (m.km_year || 0) + Number(data.km), rides_count: (m.rides_count || 0) + 1 };
       return m;
     });
     this._set('ms_members', all);
-    return r;
   },
 
   joinEvent(eventId, userId) {
     const events = this._get('ms_events').map(e => {
-      if (e.id == eventId) {
-        const p = e.participants || [];
-        if (!p.includes(Number(userId))) p.push(Number(userId));
-        return { ...e, participants: p };
-      }
+      if (e.id == eventId) { const p = e.participants || []; if (!p.includes(Number(userId))) p.push(Number(userId)); return { ...e, participants: p }; }
       return e;
     });
     this._set('ms_events', events);
@@ -130,18 +216,11 @@ const Auth = {
   login(email, password) {
     const user = DB.getAllUsers().find(m => m.email === email && m.password === password);
     if (!user) return null;
-    const session = { id: user.id, name: user.name, email: user.email, role: user.role };
-    localStorage.setItem('ms_session', JSON.stringify(session));
+    localStorage.setItem('ms_session', JSON.stringify({ id: user.id, name: user.name, email: user.email, role: user.role }));
     return user;
   },
-  logout() {
-    localStorage.removeItem('ms_session');
-    window.location.href = _base() + 'login.html';
-  },
-  current() {
-    const s = localStorage.getItem('ms_session');
-    return s ? JSON.parse(s) : null;
-  },
+  logout() { localStorage.removeItem('ms_session'); window.location.href = _base() + 'login.html'; },
+  current() { const s = localStorage.getItem('ms_session'); return s ? JSON.parse(s) : null; },
   require(role) {
     const user = this.current();
     if (!user) { window.location.href = _base() + 'login.html'; return null; }
@@ -150,86 +229,113 @@ const Auth = {
   }
 };
 
-function _base() {
-  return window.location.pathname.includes('/admin/') ? '../' : '';
+function _base() { return window.location.pathname.includes('/admin/') ? '../' : ''; }
+
+// ── TESSERE / MEMBERSHIP HELPERS ─────────────────────────────────────────────
+
+function membershipStatus(expiryDate) {
+  if (!expiryDate) return { status: 'none', label: 'Non tesserato', color: 'bg-gray-100 text-gray-600', dot: 'bg-gray-400' };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const exp = new Date(expiryDate);
+  const diff = Math.floor((exp - today) / 86400000);
+  if (diff < 0)  return { status: 'expired',  label: 'Scaduta',          color: 'bg-red-100 text-red-700',    dot: 'bg-red-500',    days: diff };
+  if (diff <= 30) return { status: 'expiring', label: `Scade in ${diff}g`, color: 'bg-yellow-100 text-yellow-800', dot: 'bg-yellow-500', days: diff };
+  return             { status: 'valid',    label: 'Valida',           color: 'bg-green-100 text-green-700', dot: 'bg-green-500',  days: diff };
+}
+
+function insuranceStatus(member) {
+  if (!member.insurance) return { ok: false, label: 'Non assicurato', color: 'bg-red-100 text-red-700' };
+  const ms = membershipStatus(member.insuranceExpiry);
+  if (ms.status === 'expired')  return { ok: false, label: 'Assic. scaduta', color: 'bg-red-100 text-red-700' };
+  if (ms.status === 'expiring') return { ok: true,  label: `${member.insuranceType} – scade presto`, color: 'bg-yellow-100 text-yellow-800' };
+  return { ok: true, label: `${member.insuranceType} – valida`, color: 'bg-green-100 text-green-700' };
 }
 
 // ── UI HELPERS ────────────────────────────────────────────────────────────────
 
-function initials(name) {
-  return (name || '?').split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
-}
+function initials(name) { return (name || '?').split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2); }
 
 function avatarBg(id) {
-  const c = ['bg-yellow-400 text-yellow-900', 'bg-red-500 text-white', 'bg-blue-600 text-white', 'bg-green-600 text-white', 'bg-purple-500 text-white', 'bg-orange-500 text-white', 'bg-teal-500 text-white'];
+  const c = ['bg-yellow-400 text-yellow-900','bg-red-500 text-white','bg-blue-600 text-white','bg-green-600 text-white','bg-purple-500 text-white','bg-orange-500 text-white','bg-teal-500 text-white'];
   return c[id % c.length];
 }
 
 function levelBadge(level) {
-  const map = { beginner: 'bg-green-100 text-green-800', intermediate: 'bg-yellow-100 text-yellow-800', advanced: 'bg-red-100 text-red-700', hard: 'bg-red-200 text-red-900' };
-  return map[level] || 'bg-gray-100 text-gray-700';
+  return { beginner:'bg-green-100 text-green-800', intermediate:'bg-yellow-100 text-yellow-800', advanced:'bg-red-100 text-red-700', hard:'bg-red-200 text-red-900' }[level] || 'bg-gray-100 text-gray-700';
 }
 
 function levelLabel(level) {
-  return { beginner: 'Principiante', intermediate: 'Intermedio', advanced: 'Avanzato', hard: 'Difficile' }[level] || level;
+  return { beginner:'Principiante', intermediate:'Intermedio', advanced:'Avanzato', hard:'Difficile' }[level] || level;
 }
 
-function categoryLabel(cat) {
-  return { strada: 'Strada', mtb: 'MTB', gravel: 'Gravel' }[cat] || cat;
-}
+function categoryLabel(cat) { return { strada:'Strada', mtb:'MTB', gravel:'Gravel' }[cat] || cat; }
+
+function memberTypeLabel(t) { return { ordinario:'Ordinario', sostenitore:'Sostenitore', juniores:'Juniores' }[t] || t || '—'; }
 
 function formatDate(d) {
-  if (!d) return '';
-  return new Date(d).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', year: 'numeric' });
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('it-IT', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function age(birthDate) {
+  if (!birthDate) return null;
+  const today = new Date(); const b = new Date(birthDate);
+  let a = today.getFullYear() - b.getFullYear();
+  if (today.getMonth() < b.getMonth() || (today.getMonth() === b.getMonth() && today.getDate() < b.getDate())) a--;
+  return a;
 }
 
 function toast(msg, type = 'success') {
   const el = document.createElement('div');
-  el.className = `fixed top-4 right-4 z-[9999] px-6 py-3 shadow-xl font-semibold text-sm transition-all rounded ${type === 'success' ? 'bg-yellow-400 text-yellow-900 border-b-4 border-yellow-600' : 'bg-red-600 text-white border-b-4 border-red-900'}`;
+  el.className = `fixed top-4 right-4 z-[9999] px-6 py-3 shadow-xl font-semibold text-sm rounded ${type === 'success' ? 'bg-yellow-400 text-yellow-900 border-b-4 border-yellow-600' : 'bg-red-600 text-white border-b-4 border-red-900'}`;
   el.textContent = msg;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 3000);
 }
 
-// ── TAILWIND CONFIG (inline per ogni pagina) ──────────────────────────────────
-// Ogni pagina HTML deve avere questo config prima dello script src="app.js"
+// ── SIDEBARS ──────────────────────────────────────────────────────────────────
 
-// ── SIDEBAR / TOPBAR / FOOTER ─────────────────────────────────────────────────
+const TW_HEAD = `
+  <script src="https://cdn.tailwindcss.com?plugins=forms"><\/script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>`;
 
 function renderSidebar(activePage) {
   const base = _base();
   const user = Auth.current();
   const nav = [
-    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: `${base}dashboard.html` },
-    { id: 'events', icon: 'event', label: 'Events', href: `${base}events.html` },
-    { id: 'km', icon: 'directions_bike', label: 'Registra KM', href: `${base}km.html` },
-    { id: 'leaderboard', icon: 'emoji_events', label: 'Classifiche', href: `${base}leaderboard.html` },
+    { id:'dashboard',   icon:'dashboard',     label:'Dashboard',    href:`${base}dashboard.html` },
+    { id:'events',      icon:'event',         label:'Events',       href:`${base}events.html` },
+    { id:'km',          icon:'directions_bike',label:'Registra KM', href:`${base}km.html` },
+    { id:'leaderboard', icon:'emoji_events',  label:'Classifiche',  href:`${base}leaderboard.html` },
+    { id:'profile',     icon:'account_circle',label:'Il Mio Profilo',href:`${base}profile.html` },
+    { id:'regolamento', icon:'menu_book',     label:'Regolamento',  href:`${base}regolamento.html` },
   ];
   const links = nav.map(item => {
     const a = activePage === item.id;
     return `<a class="${a ? 'text-primary font-bold border-r-4 border-primary bg-surface-container-high' : 'text-on-surface-variant font-medium hover:bg-surface-container'} px-md py-sm flex items-center gap-xs transition-all duration-200" href="${item.href}">
-      <span class="material-symbols-outlined">${item.icon}</span>
-      <span class="font-label-bold">${item.label}</span>
+      <span class="material-symbols-outlined text-xl">${item.icon}</span>
+      <span class="font-label-bold text-sm">${item.label}</span>
     </a>`;
   }).join('');
   const adminLink = user?.role === 'admin'
-    ? `<a class="text-on-surface-variant font-medium px-md py-xs flex items-center gap-xs hover:bg-surface-container transition-all" href="${base}admin/index.html"><span class="material-symbols-outlined">admin_panel_settings</span><span class="font-label-bold">Admin</span></a>` : '';
+    ? `<a class="text-secondary font-medium px-md py-xs flex items-center gap-xs hover:bg-surface-container transition-all" href="${base}admin/index.html"><span class="material-symbols-outlined text-xl">admin_panel_settings</span><span class="font-label-bold text-sm">Admin</span></a>` : '';
 
   return `<aside class="fixed left-0 top-0 h-screen w-64 border-r-2 border-outline-variant bg-surface-container-lowest flex flex-col py-lg z-50 shadow-sm">
-    <div class="px-md mb-xl">
+    <div class="px-md mb-lg">
       <h1 class="text-headline-md font-headline-md font-extrabold uppercase italic text-primary leading-none">I Muli Stracchi</h1>
       <p class="text-on-surface-variant font-label-bold text-xs tracking-widest mt-xs uppercase">Endurance &amp; Grit</p>
     </div>
-    <nav class="flex-1 space-y-xs">${links}</nav>
-    <div class="px-md mb-md mt-lg">
-      <a href="${base}km.html" class="w-full bg-primary-container text-on-primary-container font-label-bold py-sm flex items-center justify-center gap-xs border-b-4 border-primary hover:brightness-95 transition-all uppercase tracking-tight">
-        <span class="material-symbols-outlined">add_circle</span> New Ride
+    <nav class="flex-1 space-y-xs overflow-y-auto">${links}</nav>
+    <div class="px-md mb-md mt-md">
+      <a href="${base}km.html" class="w-full bg-primary-container text-on-primary-container font-label-bold py-sm flex items-center justify-center gap-xs border-b-4 border-primary hover:brightness-95 transition-all uppercase text-xs tracking-tight">
+        <span class="material-symbols-outlined text-sm">add_circle</span> New Ride
       </a>
     </div>
-    <div class="border-t border-outline-variant pt-md space-y-xs">
+    <div class="border-t border-outline-variant pt-sm space-y-xs">
       ${adminLink}
       <button onclick="Auth.logout()" class="text-on-surface-variant font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container transition-all w-full text-left">
-        <span class="material-symbols-outlined">logout</span><span class="font-label-bold">Logout</span>
+        <span class="material-symbols-outlined text-xl">logout</span><span class="font-label-bold text-sm">Logout</span>
       </button>
     </div>
   </aside>`;
@@ -238,29 +344,30 @@ function renderSidebar(activePage) {
 function renderAdminSidebar(activePage) {
   const base = _base();
   const nav = [
-    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: `${base}admin/index.html` },
-    { id: 'members', icon: 'group', label: 'Gestione Soci', href: `${base}admin/members.html` },
-    { id: 'events', icon: 'event', label: 'Gestione Eventi', href: `${base}admin/events.html` },
+    { id:'dashboard', icon:'dashboard',        label:'Dashboard',       href:`${base}admin/index.html` },
+    { id:'members',   icon:'group',            label:'Gestione Soci',   href:`${base}admin/members.html` },
+    { id:'tessere',   icon:'card_membership',  label:'Tessere',         href:`${base}admin/tessere.html` },
+    { id:'events',    icon:'event',            label:'Gestione Eventi', href:`${base}admin/events.html` },
   ];
   const links = nav.map(item => {
     const a = activePage === item.id;
-    return `<a class="${a ? 'text-primary-fixed font-bold bg-white/20' : 'text-tertiary-fixed-dim font-medium hover:bg-white/10'} px-md py-sm flex items-center gap-xs transition-all duration-200" href="${item.href}">
-      <span class="material-symbols-outlined">${item.icon}</span>
-      <span class="font-label-bold">${item.label}</span>
+    return `<a class="${a ? 'text-primary-fixed font-bold bg-white/20 border-r-4 border-primary-container' : 'text-tertiary-fixed-dim font-medium hover:bg-white/10'} px-md py-sm flex items-center gap-xs transition-all duration-200" href="${item.href}">
+      <span class="material-symbols-outlined text-xl">${item.icon}</span>
+      <span class="font-label-bold text-sm">${item.label}</span>
     </a>`;
   }).join('');
   return `<aside class="fixed left-0 top-0 h-screen w-64 border-r-2 border-white/10 bg-inverse-surface flex flex-col py-lg z-50 shadow-xl">
-    <div class="px-md mb-xl">
+    <div class="px-md mb-lg">
       <h1 class="text-headline-md font-headline-md font-extrabold uppercase italic text-primary-fixed leading-none">I Muli Stracchi</h1>
       <p class="text-primary-fixed-dim font-label-bold text-xs tracking-widest mt-xs uppercase">Admin Panel</p>
     </div>
     <nav class="flex-1 space-y-xs">${links}</nav>
-    <div class="border-t border-white/20 pt-md space-y-xs">
+    <div class="border-t border-white/20 pt-sm space-y-xs">
       <a href="${base}dashboard.html" class="text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-white/10 transition-all">
-        <span class="material-symbols-outlined">arrow_back</span><span class="font-label-bold">Back to App</span>
+        <span class="material-symbols-outlined text-xl">arrow_back</span><span class="font-label-bold text-sm">Back to App</span>
       </a>
       <button onclick="Auth.logout()" class="text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-white/10 transition-all w-full text-left">
-        <span class="material-symbols-outlined">logout</span><span class="font-label-bold">Logout</span>
+        <span class="material-symbols-outlined text-xl">logout</span><span class="font-label-bold text-sm">Logout</span>
       </button>
     </div>
   </aside>`;
@@ -272,35 +379,23 @@ function renderTopBar(title) {
     <h2 class="font-headline-md text-on-surface">${title}</h2>
     <div class="flex items-center gap-md">
       <button class="p-xs text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
-      <div class="flex items-center gap-xs pl-md border-l border-outline-variant">
+      <a href="${_base()}profile.html" class="flex items-center gap-xs pl-md border-l border-outline-variant hover:opacity-80 transition-opacity">
         <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container font-label-bold flex items-center justify-center text-xs">${initials(user?.name)}</div>
         <span class="font-label-bold text-on-surface text-sm hidden lg:block">${user?.name?.split(' ')[0] || ''}</span>
-      </div>
+      </a>
     </div>
   </header>`;
 }
 
-function renderFooter(offset = true) {
-  return `<footer class="${offset ? 'ml-64' : ''} border-t border-outline-variant bg-inverse-surface text-primary-fixed py-lg px-margin flex flex-col md:flex-row justify-between items-center">
+function renderFooter() {
+  return `<footer class="ml-64 border-t border-outline-variant bg-inverse-surface text-primary-fixed py-lg px-margin flex flex-col md:flex-row justify-between items-center">
     <div>
       <h5 class="text-headline-md font-headline-md italic font-black uppercase">I Muli Stracchi</h5>
       <p class="font-body-md text-tertiary-fixed-dim text-sm">© 2026 I Muli Stracchi ASD. Built for Endurance.</p>
     </div>
     <div class="flex gap-lg mt-md md:mt-0 font-label-bold text-sm">
+      <a class="text-tertiary-fixed-dim hover:text-primary-fixed transition-colors" href="${_base()}regolamento.html">Regolamento</a>
       <a class="text-tertiary-fixed-dim hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
-      <a class="text-tertiary-fixed-dim hover:text-primary-fixed transition-colors" href="#">Contatti</a>
     </div>
   </footer>`;
-}
-
-function mountLayout(sidebarHtml, topbarHtml) {
-  document.getElementById('sidebar-mount').outerHTML = sidebarHtml;
-  document.getElementById('topbar-mount').outerHTML = topbarHtml;
-  document.getElementById('footer-mount').outerHTML = renderFooter();
-}
-
-function mountAdminLayout(sidebarHtml, topbarHtml) {
-  document.getElementById('sidebar-mount').outerHTML = sidebarHtml;
-  document.getElementById('topbar-mount').outerHTML = topbarHtml;
-  document.getElementById('footer-mount').outerHTML = renderFooter();
 }

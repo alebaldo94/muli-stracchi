@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tessere | I Muli Stracchi Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}] }
+      }}
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin space-y-gutter">
+    <header>
+      <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Tessere & Assicurazioni</h2>
+      <div class="h-1 w-24 bg-secondary mt-xs"></div>
+    </header>
+
+    <!-- Statistiche veloci -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter">
+      <div id="s-valid"   class="bg-white border-t-4 border-green-500 shadow-sm p-md"><p class="font-label-bold text-on-surface-variant uppercase text-xs">Tessere Valide</p><p class="font-headline-lg text-green-600">—</p></div>
+      <div id="s-expiring" class="bg-white border-t-4 border-yellow-400 shadow-sm p-md"><p class="font-label-bold text-on-surface-variant uppercase text-xs">In Scadenza (30gg)</p><p class="font-headline-lg text-yellow-700">—</p></div>
+      <div id="s-expired" class="bg-white border-t-4 border-red-500 shadow-sm p-md"><p class="font-label-bold text-on-surface-variant uppercase text-xs">Scadute</p><p class="font-headline-lg text-red-600">—</p></div>
+      <div id="s-insured" class="bg-white border-t-4 border-blue-500 shadow-sm p-md"><p class="font-label-bold text-on-surface-variant uppercase text-xs">Assicurati</p><p class="font-headline-lg text-blue-600">—</p></div>
+    </div>
+
+    <!-- Filtri -->
+    <div class="flex items-center gap-sm flex-wrap">
+      <button onclick="setFilter('all')"      data-f="all"      class="filter-btn px-md py-xs font-label-bold uppercase text-sm border-b-4 border-primary bg-primary-container text-on-primary-container">Tutti</button>
+      <button onclick="setFilter('expiring')" data-f="expiring" class="filter-btn px-md py-xs font-label-bold uppercase text-sm border-b-4 border-transparent hover:bg-surface-container transition-colors">In Scadenza</button>
+      <button onclick="setFilter('expired')"  data-f="expired"  class="filter-btn px-md py-xs font-label-bold uppercase text-sm border-b-4 border-transparent hover:bg-surface-container transition-colors">Scadute</button>
+      <button onclick="setFilter('no-ins')"   data-f="no-ins"   class="filter-btn px-md py-xs font-label-bold uppercase text-sm border-b-4 border-transparent hover:bg-surface-container transition-colors">Senza Assicurazione</button>
+    </div>
+
+    <!-- Tabella -->
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-inverse-surface text-primary-fixed">
+          <tr>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Socio</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Nr. Tessera</th>
+            <th class="text-left px-md py-sm font-label-bold uppercase text-xs">Tipo</th>
+            <th class="text-center px-md py-sm font-label-bold uppercase text-xs">Stato Tessera</th>
+            <th class="text-center px-md py-sm font-label-bold uppercase text-xs">Scadenza</th>
+            <th class="text-center px-md py-sm font-label-bold uppercase text-xs">Assicurazione</th>
+            <th class="px-md py-sm"></th>
+          </tr>
+        </thead>
+        <tbody id="tessere-tbody" class="divide-y divide-outline-variant"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <!-- Modal Rinnovo Tessera -->
+  <div id="modal-rinnovo" class="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-md hidden">
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-md">
+      <div class="border-t-4 border-primary p-md border-b border-outline-variant flex justify-between items-center">
+        <h3 class="font-headline-md">Rinnova Tessera</h3>
+        <button onclick="closeModal('modal-rinnovo')"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="p-md space-y-md">
+        <p id="rinnovo-name" class="font-label-bold text-on-surface"></p>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nuova scadenza tessera</label>
+          <input id="rinnovo-date" type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+        </div>
+        <div class="flex gap-sm">
+          <button onclick="saveRinnovo()" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">SALVA</button>
+          <button onclick="closeModal('modal-rinnovo')" class="flex-1 border-2 border-outline font-label-bold py-sm hover:bg-surface-container transition-all">ANNULLA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Assicurazione -->
+  <div id="modal-assicurazione" class="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-md hidden">
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-2xl w-full max-w-md">
+      <div class="border-t-4 border-secondary p-md border-b border-outline-variant flex justify-between items-center">
+        <h3 class="font-headline-md">Assicurazione</h3>
+        <button onclick="closeModal('modal-assicurazione')"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="p-md space-y-md">
+        <p id="ins-name" class="font-label-bold text-on-surface"></p>
+        <input type="hidden" id="ins-member-id"/>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Ente assicurativo</label>
+          <select id="ins-type" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all">
+            <option value="FCI">FCI — Federazione Ciclistica Italiana</option>
+            <option value="UISP">UISP — Unione Italiana Sport Per tutti</option>
+            <option value="ASC">ASC — Associazioni Sportive e Sociali</option>
+            <option value="altra">Altra polizza</option>
+          </select>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Numero polizza</label>
+          <input id="ins-number" type="text" placeholder="FCI-2026-XXXXX" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+        </div>
+        <div class="space-y-xs">
+          <label class="font-label-bold uppercase text-xs text-on-surface-variant">Scadenza assicurazione</label>
+          <input id="ins-expiry" type="date" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all"/>
+        </div>
+        <div class="flex gap-sm">
+          <button onclick="saveInsurance()" class="flex-1 bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">SALVA</button>
+          <button onclick="removeInsurance()" class="flex-1 border-2 border-secondary text-secondary font-label-bold py-sm hover:bg-red-50 transition-all">RIMUOVI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    initStorage();
+    Auth.require('admin');
+    document.getElementById('sidebar-mount').outerHTML = renderAdminSidebar('tessere');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Tessere & Assicurazioni');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    let currentFilter = 'all';
+    let rinnovoId = null;
+
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const a = btn.dataset.f === f;
+        btn.classList.toggle('bg-primary-container', a);
+        btn.classList.toggle('text-on-primary-container', a);
+        btn.classList.toggle('border-primary', a);
+        btn.classList.toggle('border-transparent', !a);
+      });
+      renderTable();
+    }
+
+    function renderStats() {
+      const members = DB.getMembers();
+      let valid = 0, expiring = 0, expired = 0, insured = 0;
+      members.forEach(m => {
+        const s = membershipStatus(m.membershipExpiry);
+        if (s.status === 'valid') valid++;
+        else if (s.status === 'expiring') expiring++;
+        else if (s.status === 'expired') expired++;
+        if (m.insurance) insured++;
+      });
+      document.getElementById('s-valid').querySelector('.font-headline-lg').textContent = valid;
+      document.getElementById('s-expiring').querySelector('.font-headline-lg').textContent = expiring;
+      document.getElementById('s-expired').querySelector('.font-headline-lg').textContent = expired;
+      document.getElementById('s-insured').querySelector('.font-headline-lg').textContent = `${insured}/${members.length}`;
+    }
+
+    function renderTable() {
+      let members = DB.getMembers();
+      if (currentFilter === 'expiring') members = members.filter(m => membershipStatus(m.membershipExpiry).status === 'expiring');
+      else if (currentFilter === 'expired') members = members.filter(m => membershipStatus(m.membershipExpiry).status === 'expired');
+      else if (currentFilter === 'no-ins') members = members.filter(m => !m.insurance);
+
+      members.sort((a, b) => (a.membershipExpiry || '').localeCompare(b.membershipExpiry || ''));
+
+      const ins_status = m => insuranceStatus(m);
+
+      document.getElementById('tessere-tbody').innerHTML = members.map(m => {
+        const ms = membershipStatus(m.membershipExpiry);
+        const is = ins_status(m);
+        return `<tr class="hover:bg-surface-container transition-colors">
+          <td class="px-md py-sm">
+            <div class="flex items-center gap-sm">
+              <div class="w-8 h-8 rounded-full ${avatarBg(m.id)} flex items-center justify-center text-xs font-label-bold flex-shrink-0">${initials(m.name)}</div>
+              <div><p class="font-label-bold text-sm">${m.name}</p><p class="text-on-surface-variant text-xs">${m.city}</p></div>
+            </div>
+          </td>
+          <td class="px-md py-sm text-sm font-mono">${m.memberNumber || '—'}</td>
+          <td class="px-md py-sm text-sm">${memberTypeLabel(m.memberType)}</td>
+          <td class="px-md py-sm text-center">
+            <span class="px-sm py-xs text-xs font-label-bold rounded-full ${ms.color}">${ms.label}</span>
+          </td>
+          <td class="px-md py-sm text-center text-sm">${formatDate(m.membershipExpiry)}</td>
+          <td class="px-md py-sm text-center">
+            <div class="flex items-center justify-center gap-xs">
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" ${m.insurance ? 'checked' : ''}
+                  onchange="handleInsuranceToggle(${m.id}, this.checked, '${m.name}')"/>
+                <div class="w-10 h-6 bg-gray-200 peer-checked:bg-green-500 rounded-full peer peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+              </label>
+              ${m.insurance ? `<span class="text-xs font-label-bold ${is.color.split(' ')[1]}">${m.insuranceType}</span>` : '<span class="text-xs text-red-600 font-label-bold">Nessuna</span>'}
+            </div>
+          </td>
+          <td class="px-md py-sm">
+            <div class="flex items-center gap-xs justify-end">
+              <button onclick="openRinnovo(${m.id}, '${m.name.replace(/'/g,"\\'")}', '${m.membershipExpiry || ''}')"
+                class="px-sm py-xs text-xs font-label-bold border border-primary text-primary hover:bg-primary-container transition-colors whitespace-nowrap">
+                Rinnova
+              </button>
+              ${m.insurance
+                ? `<button onclick="openInsuranceModal(${m.id}, '${m.name.replace(/'/g,"\\'")}', true)"
+                    class="px-sm py-xs text-xs font-label-bold border border-outline hover:bg-surface-container transition-colors whitespace-nowrap">
+                    Modifica assic.
+                  </button>`
+                : ''}
+            </div>
+          </td>
+        </tr>`;
+      }).join('') || `<tr><td colspan="7" class="px-md py-lg text-center text-on-surface-variant">Nessun socio corrisponde al filtro.</td></tr>`;
+    }
+
+    function handleInsuranceToggle(id, enabled, name) {
+      if (enabled) {
+        openInsuranceModal(id, name, false);
+      } else {
+        if (confirm(`Rimuovere l'assicurazione di ${name}?`)) {
+          DB.setInsurance(id, false, null, null, null);
+          toast('Assicurazione rimossa');
+          renderStats(); renderTable();
+        } else {
+          renderTable(); // ripristina checkbox
+        }
+      }
+    }
+
+    function openRinnovo(id, name, currentExpiry) {
+      rinnovoId = id;
+      document.getElementById('rinnovo-name').textContent = `Socio: ${name}`;
+      document.getElementById('rinnovo-date').value = currentExpiry || new Date().toISOString().split('T')[0];
+      document.getElementById('modal-rinnovo').classList.remove('hidden');
+    }
+
+    function saveRinnovo() {
+      const d = document.getElementById('rinnovo-date').value;
+      if (!d) { toast('Inserisci una data', 'error'); return; }
+      DB.renewMembership(rinnovoId, d);
+      toast('Tessera rinnovata');
+      closeModal('modal-rinnovo');
+      renderStats(); renderTable();
+    }
+
+    function openInsuranceModal(id, name, prefill) {
+      const m = DB.getMember(id);
+      document.getElementById('ins-member-id').value = id;
+      document.getElementById('ins-name').textContent = `Socio: ${name}`;
+      if (prefill && m.insurance) {
+        document.getElementById('ins-type').value = m.insuranceType || 'FCI';
+        document.getElementById('ins-number').value = m.insuranceNumber || '';
+        document.getElementById('ins-expiry').value = m.insuranceExpiry || '';
+      } else {
+        document.getElementById('ins-type').value = 'FCI';
+        document.getElementById('ins-number').value = '';
+        document.getElementById('ins-expiry').value = new Date().getFullYear() + '-12-31';
+      }
+      document.getElementById('modal-assicurazione').classList.remove('hidden');
+    }
+
+    function saveInsurance() {
+      const id = document.getElementById('ins-member-id').value;
+      const type = document.getElementById('ins-type').value;
+      const number = document.getElementById('ins-number').value;
+      const expiry = document.getElementById('ins-expiry').value;
+      if (!expiry) { toast('Inserisci la data di scadenza', 'error'); return; }
+      DB.setInsurance(id, true, type, expiry, number);
+      toast('Assicurazione salvata');
+      closeModal('modal-assicurazione');
+      renderStats(); renderTable();
+    }
+
+    function removeInsurance() {
+      const id = document.getElementById('ins-member-id').value;
+      DB.setInsurance(id, false, null, null, null);
+      toast('Assicurazione rimossa');
+      closeModal('modal-assicurazione');
+      renderStats(); renderTable();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    document.querySelectorAll('[id^="modal-"]').forEach(m => {
+      m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); });
+    });
+
+    renderStats();
+    renderTable();
+  </script>
+</body>
+</html>

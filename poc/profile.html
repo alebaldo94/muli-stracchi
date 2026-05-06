@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Il Mio Profilo | I Muli Stracchi</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","secondary-container":"#e41f16","on-secondary":"#ffffff","on-secondary-container":"#fffbff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5","tertiary-container":"#dcd9d9","tertiary":"#5f5e5e" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"],"body-lg":["Inter"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}],"body-lg":["18px",{"lineHeight":"1.6","fontWeight":"400"}] }
+      }}
+    }
+  </script>
+  <style>
+    .asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.04; }
+    .racing-stripe-yellow { border-top: 4px solid #ffd700; }
+    .racing-stripe-charcoal { border-top: 4px solid #2f3131; }
+    .racing-stripe-red { border-top: 4px solid #bc0003; }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div class="fixed inset-0 asphalt-texture pointer-events-none z-0"></div>
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin relative z-10 space-y-gutter">
+
+    <!-- Hero profilo -->
+    <div class="bg-inverse-surface rounded-xl overflow-hidden relative">
+      <div class="absolute inset-0 opacity-5">
+        <svg width="100%" height="100%"><defs><pattern id="ch" width="60" height="40" patternUnits="userSpaceOnUse"><polyline points="0,20 15,0 30,20 45,0 60,20" fill="none" stroke="#ffd700" stroke-width="2"/><polyline points="0,40 15,20 30,40 45,20 60,40" fill="none" stroke="#ffd700" stroke-width="2"/></pattern></defs><rect width="100%" height="100%" fill="url(#ch)"/></svg>
+      </div>
+      <div class="relative z-10 p-lg flex flex-col md:flex-row items-center md:items-end gap-lg">
+        <div id="profile-avatar" class="w-24 h-24 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-primary-container flex-shrink-0"></div>
+        <div class="text-center md:text-left flex-1">
+          <p id="profile-number" class="text-primary-fixed-dim font-label-bold text-xs uppercase tracking-widest mb-xs"></p>
+          <h2 id="profile-name" class="font-headline-xl text-white uppercase italic leading-none"></h2>
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-sm mt-sm">
+            <span id="profile-type" class="px-sm py-xs text-xs font-label-bold uppercase bg-white/10 text-white rounded-full"></span>
+            <span id="profile-level" class="px-sm py-xs text-xs font-label-bold uppercase rounded-full"></span>
+          </div>
+        </div>
+        <div class="flex gap-gutter text-center flex-shrink-0">
+          <div><p id="ph-km-month" class="font-headline-lg text-primary-container">—</p><p class="text-tertiary-fixed-dim text-xs font-label-bold uppercase">KM Mese</p></div>
+          <div><p id="ph-km-year" class="font-headline-lg text-white">—</p><p class="text-tertiary-fixed-dim text-xs font-label-bold uppercase">KM Anno</p></div>
+          <div><p id="ph-rides" class="font-headline-lg text-white">—</p><p class="text-tertiary-fixed-dim text-xs font-label-bold uppercase">Uscite</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+
+      <!-- Colonna sinistra: tessera + assicurazione -->
+      <div class="space-y-gutter">
+
+        <!-- Stato Tessera -->
+        <div class="bg-white shadow-sm racing-stripe-yellow p-md space-y-sm">
+          <h3 class="font-headline-md flex items-center gap-xs"><span class="material-symbols-outlined text-primary">card_membership</span> Tessera</h3>
+          <div id="tessera-block" class="space-y-xs"></div>
+        </div>
+
+        <!-- Stato Assicurazione -->
+        <div class="bg-white shadow-sm racing-stripe-red p-md space-y-sm">
+          <h3 class="font-headline-md flex items-center gap-xs"><span class="material-symbols-outlined text-secondary">verified_user</span> Assicurazione</h3>
+          <div id="insurance-block" class="space-y-xs"></div>
+        </div>
+
+        <!-- Cambio password -->
+        <div class="bg-white shadow-sm racing-stripe-charcoal p-md">
+          <h3 class="font-headline-md flex items-center gap-xs mb-md"><span class="material-symbols-outlined text-on-surface">lock</span> Password</h3>
+          <form id="pwd-form" class="space-y-sm">
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nuova password</label>
+              <input id="new-pwd" type="password" placeholder="••••••••" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all text-sm"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Conferma</label>
+              <input id="conf-pwd" type="password" placeholder="••••••••" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm transition-all text-sm"/>
+            </div>
+            <button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all">
+              Aggiorna Password
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Colonna destra: dati anagrafici -->
+      <div class="lg:col-span-2 space-y-gutter">
+
+        <!-- Dati personali -->
+        <div class="bg-white shadow-sm racing-stripe-charcoal p-md">
+          <h3 class="font-headline-md flex items-center gap-xs mb-md"><span class="material-symbols-outlined text-primary">person</span> Dati Personali</h3>
+          <div id="personal-data" class="grid grid-cols-1 md:grid-cols-2 gap-md"></div>
+        </div>
+
+        <!-- Recenti uscite -->
+        <div class="bg-white shadow-sm racing-stripe-yellow p-md">
+          <div class="flex items-center justify-between mb-md">
+            <h3 class="font-headline-md flex items-center gap-xs"><span class="material-symbols-outlined text-primary">history</span> Ultime Uscite</h3>
+            <a href="km.html" class="text-primary font-label-bold text-sm hover:underline">+ Aggiungi</a>
+          </div>
+          <div id="recent-rides" class="space-y-xs"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-mount"></div>
+  <script src="js/app.js"></script>
+  <script>
+    initStorage();
+    const user = Auth.require();
+    document.getElementById('sidebar-mount').outerHTML = renderSidebar('profile');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Il Mio Profilo');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    const member = DB.getMember(user.id);
+    if (!member) { window.location.href = 'dashboard.html'; }
+
+    // Avatar
+    const av = document.getElementById('profile-avatar');
+    av.className = `w-24 h-24 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-primary-container flex-shrink-0 ${avatarBg(member.id)}`;
+    av.textContent = initials(member.name);
+
+    // Header
+    document.getElementById('profile-name').textContent = member.name;
+    document.getElementById('profile-number').textContent = member.memberNumber || 'Socio';
+    document.getElementById('profile-type').textContent = memberTypeLabel(member.memberType);
+    const lvlEl = document.getElementById('profile-level');
+    lvlEl.textContent = levelLabel(member.level);
+    lvlEl.className = `px-sm py-xs text-xs font-label-bold uppercase rounded-full ${levelBadge(member.level)}`;
+    document.getElementById('ph-km-month').textContent = member.km_month;
+    document.getElementById('ph-km-year').textContent = member.km_year;
+    document.getElementById('ph-rides').textContent = member.rides_count;
+
+    // Tessera
+    const ms = membershipStatus(member.membershipExpiry);
+    document.getElementById('tessera-block').innerHTML = `
+      <div class="flex items-center gap-sm">
+        <span class="w-3 h-3 rounded-full flex-shrink-0 ${ms.dot}"></span>
+        <span class="font-label-bold text-sm ${ms.status === 'expired' ? 'text-red-700' : ms.status === 'expiring' ? 'text-yellow-800' : 'text-green-700'}">${ms.label}</span>
+      </div>
+      ${[
+        ['Nr. Tessera', member.memberNumber],
+        ['Tipo', memberTypeLabel(member.memberType)],
+        ['Iscritto dal', formatDate(member.joinDate)],
+        ['Scadenza', formatDate(member.membershipExpiry)],
+      ].map(([k,v]) => `<div class="flex justify-between text-sm border-b border-outline-variant pb-xs">
+        <span class="text-on-surface-variant font-label-bold uppercase text-xs">${k}</span>
+        <span class="font-medium">${v}</span>
+      </div>`).join('')}
+      ${ms.status === 'expired' ? '<p class="text-xs text-red-600 font-label-bold mt-xs">Contatta l\'amministrazione per rinnovare la tessera.</p>' : ''}
+      ${ms.status === 'expiring' ? '<p class="text-xs text-yellow-700 font-label-bold mt-xs">La tessera scade presto. Contatta l\'amministrazione.</p>' : ''}`;
+
+    // Assicurazione
+    const ins = insuranceStatus(member);
+    document.getElementById('insurance-block').innerHTML = `
+      <div class="flex items-center gap-sm">
+        <span class="material-symbols-outlined text-sm ${ins.ok ? 'text-green-600' : 'text-red-600'}">${ins.ok ? 'check_circle' : 'cancel'}</span>
+        <span class="font-label-bold text-sm">${ins.label}</span>
+      </div>
+      ${member.insurance ? [
+        ['Ente', member.insuranceType],
+        ['Nr. Polizza', member.insuranceNumber],
+        ['Scadenza', formatDate(member.insuranceExpiry)],
+      ].map(([k,v]) => `<div class="flex justify-between text-sm border-b border-outline-variant pb-xs">
+        <span class="text-on-surface-variant font-label-bold uppercase text-xs">${k}</span>
+        <span class="font-medium">${v}</span>
+      </div>`).join('') : '<p class="text-xs text-red-600 font-label-bold mt-xs">Nessuna assicurazione registrata. Contatta l\'amministrazione.</p>'}`;
+
+    // Dati personali
+    const fields = [
+      ['Data di nascita', member.birthDate ? `${formatDate(member.birthDate)} (${age(member.birthDate)} anni)` : '—'],
+      ['Codice fiscale', member.taxCode || '—'],
+      ['Telefono', member.phone || '—'],
+      ['Email', member.email],
+      ['Indirizzo', member.address ? `${member.address}, ${member.cap} ${member.city} (${member.province})` : '—'],
+      ['Città', `${member.city}${member.province ? ' (' + member.province + ')' : ''}`],
+      ['Note', member.notes || '—'],
+    ];
+    document.getElementById('personal-data').innerHTML = fields.map(([k,v]) => `
+      <div class="bg-surface-container-low p-sm">
+        <p class="font-label-bold uppercase text-xs text-on-surface-variant mb-xs">${k}</p>
+        <p class="text-sm font-medium">${v}</p>
+      </div>`).join('');
+
+    // Ultime uscite
+    const rides = DB.getRides(user.id).reverse().slice(0, 5);
+    document.getElementById('recent-rides').innerHTML = rides.length
+      ? rides.map(r => `<div class="flex items-center justify-between p-sm bg-surface-container-low border border-outline-variant">
+          <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-sm ${r.source === 'strava' ? 'text-orange-500' : 'text-primary'}">${r.source === 'strava' ? 'sync' : 'directions_bike'}</span>
+            <div><p class="font-label-bold text-sm">${r.title}</p><p class="text-on-surface-variant text-xs">${formatDate(r.date)} · ${r.duration}</p></div>
+          </div>
+          <div class="text-right"><p class="font-headline-md text-primary text-lg">${r.km}<span class="text-xs font-body-md"> km</span></p><p class="text-xs text-on-surface-variant">+${r.elevation}m</p></div>
+        </div>`).join('')
+      : '<p class="text-on-surface-variant text-sm">Nessuna uscita. <a href="km.html" class="text-primary underline">Aggiungi la prima!</a></p>';
+
+    // Cambio password
+    document.getElementById('pwd-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const np = document.getElementById('new-pwd').value;
+      const cp = document.getElementById('conf-pwd').value;
+      if (np.length < 6) { toast('La password deve essere di almeno 6 caratteri', 'error'); return; }
+      if (np !== cp) { toast('Le password non coincidono', 'error'); return; }
+      DB.updateMember(user.id, { password: np });
+      toast('Password aggiornata');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
