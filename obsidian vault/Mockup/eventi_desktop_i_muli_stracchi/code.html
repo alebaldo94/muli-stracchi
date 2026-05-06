@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#d0c6ab",
+                        "inverse-surface": "#2f3131",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#e9c400",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-container": "#e41f16",
+                        "primary-fixed": "#ffe16d",
+                        "on-background": "#1a1c1c",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#dcd9d9",
+                        "surface-container-low": "#f3f3f3",
+                        "outline": "#7e775f",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed": "#221b00",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "inverse-primary": "#e9c400",
+                        "on-primary-fixed-variant": "#544600",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#410000",
+                        "surface-bright": "#f9f9f9",
+                        "on-tertiary-container": "#605f5e",
+                        "on-secondary-container": "#fffbff",
+                        "secondary": "#bc0003",
+                        "on-primary-container": "#705e00",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#930002",
+                        "on-surface-variant": "#4d4732",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#ffd700",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#705d00",
+                        "surface-tint": "#705d00",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#ffdad5",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "xl": "4rem",
+                        "lg": "2.5rem",
+                        "unit": "4px",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "gutter": "1.5rem",
+                        "margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Lexend"],
+                        "headline-xl": ["Lexend"],
+                        "label-bold": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .asphalt-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        .skew-btn { transform: skewX(-6deg); }
+        .skew-btn span { transform: skewX(6deg); display: inline-block; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md relative">
+<div class="asphalt-texture fixed inset-0 z-0"></div>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 border-r-2 border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface flex flex-col py-lg z-50">
+<div class="px-md mb-xl">
+<h1 class="text-headline-md font-headline-md font-extrabold uppercase italic text-primary dark:text-primary-fixed-dim leading-none">I Muli Stracchi</h1>
+<p class="text-on-surface-variant font-label-bold text-xs tracking-widest mt-xs uppercase">Endurance &amp; Grit</p>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold">Dashboard</span>
+</a>
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-surface-container-high dark:bg-surface-container-highest px-md py-sm flex items-center gap-xs transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span class="font-label-bold">Events</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-bold">Community</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">directions_bike</span>
+<span class="font-label-bold">Routes</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">card_membership</span>
+<span class="font-label-bold">Membership</span>
+</a>
+</nav>
+<div class="px-md mb-lg">
+<button class="w-full bg-primary-container text-on-primary-container font-headline-md py-sm skew-btn flex items-center justify-center gap-xs border-b-4 border-primary active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-label-bold uppercase tracking-tight">New Ride</span>
+</button>
+</div>
+<div class="border-t border-outline-variant pt-lg space-y-xs">
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold">Settings</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-bold">Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 ml-64 h-16 bg-surface/95 backdrop-blur-md border-b-2 border-outline-variant flex justify-between items-center px-gutter">
+<div class="flex items-center gap-xl">
+<div class="flex items-center gap-lg">
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary hover:underline decoration-2 underline-offset-4 transition-colors" href="#">News</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary hover:underline decoration-2 underline-offset-4 transition-colors" href="#">Gallery</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary hover:underline decoration-2 underline-offset-4 transition-colors" href="#">Shop</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<input class="bg-surface-container-low border border-outline px-sm py-xs w-64 rounded-none focus:border-primary-container focus:ring-0 text-sm" placeholder="Search events..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant text-lg">search</span>
+</div>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-xs pl-md border-l border-outline-variant">
+<img alt="User Profile Avatar" class="w-8 h-8 rounded-full border border-primary" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeoObd2h9BK19SvfsHfExAcpiQNYX37gFHJkU_i59f504e3PMUQNIH7kItD0knnczrCPpL0hdjVqoG_KGZ_jDDPjzWorDFVltlxvZ6LlGh0yrCGRmDa1pTIAhtflE6ol8sADiefWKt4Gd1fspJlJ5RI-ZXnVFbv14Tab6GhiyT3pOYJyyhmVK9eEnBVJjSrgNgeTI1MwY7ztsM5t32kBKv22eKO4NRYS4UT2wURTBwoWO14XXnhKOSKNiSJmzW7UR-ZggIyZKPW0I"/>
+<span class="font-label-bold text-sm hidden lg:block">Profile</span>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-64 p-margin min-h-[calc(100vh-16rem)]">
+<div class="max-w-7xl mx-auto">
+<!-- Hero Header -->
+<div class="mb-lg flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Eventi Al Passo</h2>
+<p class="font-body-lg text-on-surface-variant max-w-xl">Mettiti alla prova sulle strade più iconiche. Dalla fatica del fango alla velocità dell'asfalto.</p>
+</div>
+<!-- Filter Bar -->
+<div class="flex border-2 border-on-background bg-surface overflow-hidden">
+<button class="px-md py-sm font-label-bold uppercase bg-primary-container text-on-primary-container border-r-2 border-on-background">Tutti</button>
+<button class="px-md py-sm font-label-bold uppercase hover:bg-surface-container border-r-2 border-on-background transition-colors">Strada</button>
+<button class="px-md py-sm font-label-bold uppercase hover:bg-surface-container border-r-2 border-on-background transition-colors">MTB</button>
+<button class="px-md py-sm font-label-bold uppercase hover:bg-surface-container transition-colors">Gravel</button>
+</div>
+</div>
+<!-- Events Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Featured Event 1: Gran Fondo del Mulo -->
+<div class="lg:col-span-8 bg-surface-container-lowest border border-outline-variant shadow-sm flex flex-col md:flex-row group overflow-hidden">
+<div class="md:w-1/2 relative overflow-hidden h-64 md:h-auto">
+<img alt="Cyclist climbing steep hill" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida/ADBb0ugn1U7muWQpNFTZCG0UUQVSm_sJeN_8JyfEmoiip-Y9GidyhChN0xFmEMV-4pARMTsQIV5t7lJDsMbLyjV2qVUFWYRtbVnY2aJvD59mEmJvA8mr2HQClVWLWkmpoc9rDISo1dNg_2BQtH4CDX4GrpIvuuUEkPE_MdX9PHq__wc3IYcJ7oUtKnEfQvj2-rVHcnZIVJwmxEEEByEXqREvCUta1PIAIs-blaRzUky9MnITuX0dt7FtaP95872cl5R-jAp0wo35sKeJ"/>
+<div class="absolute top-0 left-0 bg-secondary text-on-secondary px-sm py-xs font-label-bold uppercase italic">Featured Ride</div>
+</div>
+<div class="md:w-1/2 p-lg flex flex-col justify-between border-t-4 border-primary md:border-t-0 md:border-l-4">
+<div>
+<div class="flex items-center gap-xs text-secondary font-label-bold uppercase text-xs mb-xs">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                24 SETTEMBRE 2024
+                            </div>
+<h3 class="font-headline-lg text-headline-lg uppercase mb-sm">Gran Fondo del Mulo</h3>
+<div class="flex items-center gap-xs text-on-surface-variant font-label-bold mb-md">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                                ANCONA, MARCHE
+                            </div>
+<div class="grid grid-cols-2 gap-md mb-lg">
+<div class="bg-surface-container-low p-sm">
+<p class="text-xs font-label-bold text-on-surface-variant uppercase">Distanza</p>
+<p class="font-headline-md text-primary">145<span class="text-sm font-body-md">km</span></p>
+</div>
+<div class="bg-surface-container-low p-sm">
+<p class="text-xs font-label-bold text-on-surface-variant uppercase">Dislivello</p>
+<p class="font-headline-md text-primary">2800<span class="text-sm font-body-md">m</span></p>
+</div>
+</div>
+</div>
+<button class="bg-on-background text-background font-label-bold py-md px-lg uppercase flex items-center justify-center gap-md hover:bg-primary hover:text-on-primary transition-all active:scale-95 group/btn">
+                            JOIN THE PACK
+                            <span class="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Featured Event 2: Notturna in Collina -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-outline-variant shadow-sm flex flex-col">
+<div class="relative h-64 overflow-hidden group">
+<img alt="Mountain biker in sunset" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida/ADBb0ugUZVKjL_Zqzv4h6LiIjcRBHIVl9U9xsgiso3HfIYB8FO0ol4w6-xw97W7R1W5FkxC8Ceb5T-wSfX0uSZ68hoSpO68E7i6WVb0CU1DNvl4R3Q9mf5s3GfiSbT6fYEhagwhUsyXtZIX58c3Rcga1fqH8g_OZyb-nlT7SBM2P1QZOLLV2CVPLkMu4A42HCUyNhWaFYAVdG8ORhLFQqE2DaIUeqb84Z_G4FUytE6KTK0Zutg9D-NRDuWoKpGuWMdK0XsqubPMBbpq92A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/80 to-transparent"></div>
+<div class="absolute bottom-md left-md">
+<span class="bg-primary-container text-on-primary-container px-xs py-1 text-xs font-label-bold uppercase italic">Night Ride</span>
+<h3 class="font-headline-md text-white uppercase mt-xs">Notturna in Collina</h3>
+</div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between border-t-4 border-secondary">
+<div class="space-y-sm">
+<div class="flex justify-between items-center text-sm">
+<span class="font-label-bold uppercase text-on-surface-variant">Data:</span>
+<span class="font-body-md">12 AGOSTO 2024</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-label-bold uppercase text-on-surface-variant">Location:</span>
+<span class="font-body-md">URBINO (PU)</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-label-bold uppercase text-on-surface-variant">Livello:</span>
+<span class="text-secondary font-label-bold">ADVANCED</span>
+</div>
+</div>
+<button class="mt-md w-full border-2 border-on-background py-sm font-label-bold uppercase hover:bg-on-background hover:text-white transition-all active:scale-95">
+                            Join Event
+                        </button>
+</div>
+</div>
+<!-- Bento Style Secondary Events -->
+<div class="lg:col-span-6 bg-surface-container-low p-lg border border-outline-variant flex gap-md items-center group">
+<div class="bg-primary-container w-20 h-20 flex-shrink-0 flex flex-col items-center justify-center border-2 border-on-background shadow-[4px_4px_0px_0px_rgba(26,28,28,1)]">
+<span class="text-xs font-label-bold uppercase">Oct</span>
+<span class="text-headline-md">15</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-md uppercase text-lg">Cronoscalata delle Rocche</h4>
+<p class="text-sm text-on-surface-variant font-label-bold">SAN BENEDETTO DEL TRONTO • 15KM • +450M</p>
+</div>
+<button class="p-sm border border-on-background hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="lg:col-span-6 bg-surface-container-low p-lg border border-outline-variant flex gap-md items-center group">
+<div class="bg-secondary w-20 h-20 flex-shrink-0 flex flex-col items-center justify-center border-2 border-on-background text-white shadow-[4px_4px_0px_0px_rgba(26,28,28,1)]">
+<span class="text-xs font-label-bold uppercase">Nov</span>
+<span class="text-headline-md">03</span>
+</div>
+<div class="flex-1">
+<h4 class="font-headline-md uppercase text-lg">Fango &amp; Gloria Cross</h4>
+<p class="text-sm text-on-surface-variant font-label-bold">MACERATA • 40KM • +900M</p>
+</div>
+<button class="p-sm border border-on-background hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-64 py-lg px-margin border-t border-outline-variant bg-inverse-surface dark:bg-surface-container-low text-primary-fixed dark:text-primary flex flex-col md:flex-row justify-between items-center">
+<div class="mb-sm md:mb-0">
+<span class="text-headline-md font-headline-md text-primary-fixed uppercase italic">I Muli Stracchi</span>
+<p class="text-body-md font-label-bold text-tertiary-fixed-dim mt-xs">© 2024 I Muli Stracchi ASD. Built for Endurance.</p>
+</div>
+<div class="flex gap-lg">
+<a class="text-tertiary-fixed-dim font-label-bold uppercase hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="text-tertiary-fixed-dim font-label-bold uppercase hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="text-tertiary-fixed-dim font-label-bold uppercase hover:text-primary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+</footer>
+<!-- FAB Content Area -->
+<button class="fixed bottom-lg right-lg w-16 h-16 bg-primary-container text-on-primary-container rounded-full shadow-lg flex items-center justify-center border-4 border-on-background hover:rotate-12 transition-transform z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">directions_bike</span>
+</button>
+</body></html>

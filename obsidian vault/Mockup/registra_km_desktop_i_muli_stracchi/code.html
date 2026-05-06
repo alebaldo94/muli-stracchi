@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html class="light" lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Lexend:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.asphalt-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAC0PDrAE8ya56A5DWxcB870IIPDYc9zmvwq5V_HUbyBkrvG38BZX8o6CE_EwKCGEyX9mj7Ruf_9FR8_Q-ZncscuCjlHLxTrfP77nChRJ6lnHzlPlug5nIfXpMsJEvNZCThRhJEK7sgzwLlI2L5eYYEL3yOuHWCo5CHWS2RJhWKygAG2CQDgouyDUp4etkcr41CGnprozLVh_dPQN8OSxNcbcAkb6q2qyVkcgLytrOL3Y7G4JuMBR5-xv6ZFLexeaUP_t8ilEVaAy4);
+    opacity: 0.05
+    }</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#d0c6ab",
+                        "inverse-surface": "#2f3131",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#e9c400",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-container": "#e41f16",
+                        "primary-fixed": "#ffe16d",
+                        "on-background": "#1a1c1c",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#dcd9d9",
+                        "surface-container-low": "#f3f3f3",
+                        "outline": "#7e775f",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed": "#221b00",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "inverse-primary": "#e9c400",
+                        "on-primary-fixed-variant": "#544600",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#410000",
+                        "surface-bright": "#f9f9f9",
+                        "on-tertiary-container": "#605f5e",
+                        "on-secondary-container": "#fffbff",
+                        "secondary": "#bc0003",
+                        "on-primary-container": "#705e00",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#930002",
+                        "on-surface-variant": "#4d4732",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#ffd700",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#705d00",
+                        "surface-tint": "#705d00",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#ffdad5",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "xl": "4rem",
+                        "lg": "2.5rem",
+                        "unit": "4px",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "gutter": "1.5rem",
+                        "margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Lexend"],
+                        "headline-xl": ["Lexend"],
+                        "label-bold": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 border-r-2 border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface flex flex-col py-lg shadow-sm z-40">
+<div class="px-md mb-xl">
+<h1 class="text-headline-md font-headline-md font-extrabold uppercase italic text-primary dark:text-primary-fixed-dim">I Muli Stracchi</h1>
+<p class="text-label-bold font-label-bold text-on-surface-variant">Endurance &amp; Grit</p>
+</div>
+<nav class="flex-grow flex flex-col gap-xs">
+<!-- Active Tab: Dashboard -->
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-surface-container-high dark:bg-surface-container-highest px-md py-sm flex items-center gap-xs transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span>Events</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Community</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="directions_bike">directions_bike</span>
+<span>Routes</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined" data-icon="card_membership">card_membership</span>
+<span>Membership</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-xs border-t border-outline-variant pt-md">
+<button class="mx-md mb-md bg-primary-container text-on-primary-container font-label-bold py-sm rounded px-md flex items-center justify-center gap-xs hover:brightness-95 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Ride
+            </button>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="sticky top-0 z-30 ml-64 h-16 bg-surface/95 backdrop-blur-md border-b-2 border-outline-variant flex justify-between items-center px-gutter shadow-sm">
+<div class="flex items-center gap-lg">
+<span class="text-headline-md font-headline-md font-black italic text-primary dark:text-primary-fixed-dim">I Muli Stracchi</span>
+<nav class="hidden md:flex gap-md">
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200 hover:underline decoration-2 underline-offset-4" href="#">News</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200 hover:underline decoration-2 underline-offset-4" href="#">Gallery</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200 hover:underline decoration-2 underline-offset-4" href="#">Shop</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-outline-variant overflow-hidden border border-outline">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfVtRDwJ496BCGpv1gqpVYII-2ALCRtrZWTBFzoK3Z4NfVRhk4mazO4_PzGR08Xhmg8xDcGekSN-XhAnxHoj3RPY1cee792DfbESQaJZKLhEZYqWUlMqgIBL494qDonnU98iwqKhEwWneNKH8bDdR4pYZRK82wEVrVP6DAn0wS8AdSPb_Jjbgkp3GWSs2lWvGni4eYJE8esz0X75lJ5NUJQGQ3xkH0HEFj_4yppzSX-XmuKvp17SZeV6_TX-qq3o4nm_-XPSAe3DI"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-margin relative min-h-[calc(100vh-64px-120px)]">
+<div class="absolute inset-0 asphalt-texture pointer-events-none"></div>
+<header class="mb-lg relative">
+<h2 class="text-headline-xl font-headline-xl text-on-background uppercase italic tracking-tighter">Registra Attività</h2>
+<div class="h-1 w-24 bg-primary-container mt-xs"></div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter relative z-10">
+<!-- Integrazione Veloce Section -->
+<section class="lg:col-span-5 flex flex-col gap-gutter">
+<div class="bg-surface-container-lowest p-lg border-2 border-outline-variant shadow-sm relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-2 h-full bg-secondary"></div>
+<h3 class="text-headline-md font-headline-md mb-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="sync">sync</span>
+                        Integrazione Veloce
+                    </h3>
+<p class="text-body-md text-on-surface-variant mb-lg">Sincronizza istantaneamente i tuoi dati da Strava per mantenere aggiornato il tuo profilo mule.</p>
+<button class="w-full py-md px-lg bg-[#FC4C02] text-white font-headline-md flex items-center justify-center gap-md rounded shadow-lg hover:shadow-xl hover:translate-y-[-2px] active:translate-y-[1px] transition-all duration-200 group">
+<span class="material-symbols-outlined text-3xl" data-icon="directions_run">directions_run</span>
+<span>CONNETTI STRAVA</span>
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm overflow-hidden aspect-[2.23] relative">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" data-alt="A cinematic, low-angle shot of a group of cyclists climbing a steep, asphalt road through a misty mountain pass. The mood is gritty and determined, captured with high-contrast lighting that emphasizes the sweat and effort on the riders' faces. The colors are muted, with the occasional pop of a bright yellow cycling jersey. The atmosphere is professional yet adventurous, embodying the relentless spirit of endurance cycling." src="https://lh3.googleusercontent.com/aida/ADBb0ugn1U7muWQpNFTZCG0UUQVSm_sJeN_8JyfEmoiip-Y9GidyhChN0xFmEMV-4pARMTsQIV5t7lJDsMbLyjV2qVUFWYRtbVnY2aJvD59mEmJvA8mr2HQClVWLWkmpoc9rDISo1dNg_2BQtH4CDX4GrpIvuuUEkPE_MdX9PHq__wc3IYcJ7oUtKnEfQvj2-rVHcnZIVJwmxEEEByEXqREvCUta1PIAIs-blaRzUky9MnITuX0dt7FtaP95872cl5R-jAp0wo35sKeJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-end items-end p-md">
+<p class="text-white font-label-bold italic">La fatica è il nostro carburante.</p>
+</div>
+</div>
+</section>
+<!-- Inserimento Manuale Section -->
+<section class="lg:col-span-7">
+<div class="bg-surface-container-lowest p-lg border-2 border-outline-variant shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-2 h-full bg-primary-container"></div>
+<h3 class="text-headline-md font-headline-md mb-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" data-icon="edit_note">edit_note</span>
+                        Inserimento Manuale
+                    </h3>
+<form class="space-y-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Titolo Attività</label>
+<input class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-body-md transition-all" placeholder="Es. Giro del Lago" type="text"/>
+</div>
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Data</label>
+<input class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-body-md transition-all" type="date"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Distanza (KM)</label>
+<div class="relative">
+<input class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-headline-md transition-all" placeholder="0.0" step="0.1" type="number"/>
+<span class="absolute right-md top-1/2 -translate-y-1/2 text-outline font-label-bold">KM</span>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Durata</label>
+<div class="relative">
+<input class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-headline-md transition-all" placeholder="00:00:00" type="text"/>
+<span class="absolute right-md top-1/2 -translate-y-1/2 text-outline font-label-bold">HH:MM</span>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Dislivello (+m)</label>
+<div class="relative">
+<input class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-headline-md transition-all" placeholder="0" type="number"/>
+<span class="absolute right-md top-1/2 -translate-y-1/2 text-outline font-label-bold">M</span>
+</div>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="text-label-bold uppercase text-outline">Note / Racconto</label>
+<textarea class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm font-body-md transition-all" placeholder="Com'è andata la pedalata?" rows="4"></textarea>
+</div>
+<div class="pt-md">
+<button class="w-full md:w-auto px-xl py-md bg-primary-container text-on-primary-fixed font-headline-md flex items-center justify-center gap-md border-b-4 border-primary hover:brightness-95 hover:translate-y-[-2px] active:translate-y-[1px] active:border-b-0 transition-all duration-200" type="submit">
+<span>SALVA PEDALATA</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+<div class="mt-gutter flex items-center gap-md p-md bg-tertiary-container/30 border-l-4 border-tertiary">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="info">info</span>
+<p class="text-label-bold text-on-surface-variant italic">Assicurati di inserire i dati correttamente per le classifiche sociali.</p>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-64 border-t-2 border-outline-variant bg-inverse-surface dark:bg-surface-container-lowest py-lg flex flex-col md:flex-row justify-between items-center px-margin gap-md">
+<div class="flex flex-col items-center md:items-start">
+<span class="text-headline-md font-headline-md text-primary-fixed mb-xs">I Muli Stracchi</span>
+<p class="text-tertiary-fixed-dim font-label-bold uppercase tracking-widest text-center md:text-left">Non fermarti mai. I Muli non mollano.</p>
+</div>
+<div class="flex flex-col md:flex-row items-center gap-lg">
+<nav class="flex gap-md">
+<a class="text-tertiary-fixed-dim hover:text-primary-fixed font-label-bold transition-colors" href="#">Privacy Policy</a>
+<a class="text-tertiary-fixed-dim hover:text-primary-fixed font-label-bold transition-colors" href="#">Terms of Service</a>
+<a class="text-tertiary-fixed-dim hover:text-primary-fixed font-label-bold transition-colors" href="#">Contact Us</a>
+</nav>
+<p class="text-on-tertiary-fixed-variant text-body-md font-label-bold opacity-60">© 2024 I Muli Stracchi ASD.</p>
+</div>
+</footer>
+</body></html>

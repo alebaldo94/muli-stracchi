@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="light" lang="it"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-surface": "#2f3131",
+                    "secondary": "#bc0003",
+                    "primary-fixed-dim": "#e9c400",
+                    "surface-bright": "#f9f9f9",
+                    "outline": "#7e775f",
+                    "on-primary-fixed": "#221b00",
+                    "secondary-fixed-dim": "#ffb4a8",
+                    "background": "#f9f9f9",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-container": "#dcd9d9",
+                    "on-primary-fixed-variant": "#544600",
+                    "secondary-fixed": "#ffdad5",
+                    "primary": "#705d00",
+                    "on-secondary-fixed": "#410000",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "secondary-container": "#e41f16",
+                    "surface": "#f9f9f9",
+                    "on-background": "#1a1c1c",
+                    "tertiary-fixed": "#e5e2e1",
+                    "surface-dim": "#dadada",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#fffbff",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "error-container": "#ffdad6",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f1f1f1",
+                    "surface-container-low": "#f3f3f3",
+                    "tertiary": "#5f5e5e",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed-variant": "#930002",
+                    "surface-variant": "#e2e2e2",
+                    "surface-container": "#eeeeee",
+                    "primary-fixed": "#ffe16d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#d0c6ab",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-container": "#605f5e",
+                    "primary-container": "#ffd700",
+                    "on-secondary": "#ffffff",
+                    "surface-container-high": "#e8e8e8",
+                    "on-surface-variant": "#4d4732",
+                    "surface-tint": "#705d00",
+                    "on-surface": "#1a1c1c",
+                    "on-primary-container": "#705e00",
+                    "inverse-primary": "#e9c400"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "1.5rem",
+                    "margin": "2rem",
+                    "md": "1.5rem",
+                    "xs": "0.5rem",
+                    "sm": "1rem",
+                    "unit": "4px",
+                    "lg": "2.5rem",
+                    "xl": "4rem"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Lexend"],
+                    "label-bold": ["Lexend"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Lexend"],
+                    "headline-lg": ["Lexend"]
+            },
+            "fontSize": {
+                    "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-bold": ["14px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .asphalt-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+        }
+        .racing-skew {
+            transform: skewX(-6deg);
+        }
+        .inner-skew {
+            transform: skewX(6deg);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface border-b-2 border-primary shadow-sm flex items-center justify-between px-gutter h-16">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+<h1 class="font-headline-lg text-headline-lg font-black italic tracking-tighter text-primary">I MULI STRACCHI</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden hover:opacity-80 transition-opacity active:scale-95 transition-transform cursor-pointer">
+<img alt="Member Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0ugUZVKjL_Zqzv4h6LiIjcRBHIVl9U9xsgiso3HfIYB8FO0ol4w6-xw97W7R1W5FkxC8Ceb5T-wSfX0uSZ68hoSpO68E7i6WVb0CU1DNvl4R3Q9mf5s3GfiSbT6fYEhagwhUsyXtZIX58c3Rcga1fqH8g_OZyb-nlT7SBM2P1QZOLLV2CVPLkMu4A42HCUyNhWaFYAVdG8ORhLFQqE2DaIUeqb84Z_G4FUytE6KTK0Zutg9D-NRDuWoKpGuWMdK0XsqubPMBbpq92A"/>
+</div>
+</header>
+<main class="pt-24 px-gutter max-w-5xl mx-auto space-y-lg relative">
+<div class="absolute inset-0 asphalt-texture pointer-events-none -z-10"></div>
+<!-- Welcome Section -->
+<section class="flex flex-col gap-xs">
+<h2 class="font-headline-xl text-headline-xl text-inverse-surface">Ciao, Marco!</h2>
+<p class="font-body-lg text-tertiary">Bentornato in squadra. Ecco le novità.</p>
+</section>
+<!-- Hero Section: Featured Event / News -->
+<section class="relative bg-inverse-surface rounded-xl overflow-hidden shadow-xl border-l-8 border-secondary-container group">
+<div class="absolute inset-0 z-0">
+<img alt="Ciclismo di gruppo" class="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ugn1U7muWQpNFTZCG0UUQVSm_sJeN_8JyfEmoiip-Y9GidyhChN0xFmEMV-4pARMTsQIV5t7lJDsMbLyjV2qVUFWYRtbVnY2aJvD59mEmJvA8mr2HQClVWLWkmpoc9rDISo1dNg_2BQtH4CDX4GrpIvuuUEkPE_MdX9PHq__wc3IYcJ7oUtKnEfQvj2-rVHcnZIVJwmxEEEByEXqREvCUta1PIAIs-blaRzUky9MnITuX0dt7FtaP95872cl5R-jAp0wo35sKeJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 p-lg flex flex-col justify-end min-h-[300px]">
+<div class="flex items-center gap-xs mb-sm">
+<span class="bg-secondary-container text-on-secondary px-sm py-unit font-label-bold text-label-bold racing-skew uppercase"><span class="inner-skew inline-block">Prossimo Evento</span></span>
+<span class="text-surface-container-lowest font-label-bold text-label-bold">12 SET • 08:30</span>
+</div>
+<h3 class="font-headline-xl text-headline-xl text-surface-container-lowest uppercase italic tracking-tighter mb-sm">Giro dei Tre Laghi</h3>
+<p class="text-surface-variant font-body-md max-w-xl mb-md">La sfida più attesa della stagione. 85km tra panorami mozzafiato e salite che metteranno alla prova i tuoi muscoli.</p>
+<div class="flex flex-wrap gap-sm">
+<button class="bg-primary-container text-on-primary-fixed font-label-bold text-label-bold px-lg py-md racing-skew hover:brightness-110 active:scale-95 transition-all">
+<span class="inner-skew inline-block">PARTECIPA ORA</span>
+</button>
+<button class="bg-white/10 backdrop-blur-md text-surface-container-lowest border border-white/20 font-label-bold text-label-bold px-lg py-md racing-skew hover:bg-white/20 transition-all">
+<span class="inner-skew inline-block">MAGGIORI INFO</span>
+</button>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Association News Section -->
+<section class="md:col-span-8 space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md uppercase italic tracking-tight border-l-4 border-primary pl-xs">News Associazione</h3>
+<a class="font-label-bold text-label-bold text-primary hover:underline" href="#">Tutte le news</a>
+</div>
+<div class="space-y-sm">
+<!-- News Item 1 -->
+<article class="bg-surface-container-lowest border-2 border-surface-container-highest p-md rounded-xl flex gap-md hover:border-primary/30 transition-colors cursor-pointer group">
+<div class="flex-1">
+<span class="text-tertiary font-label-bold text-label-bold uppercase text-[10px]">10 Settembre 2023</span>
+<h4 class="font-headline-md text-[20px] text-inverse-surface group-hover:text-primary transition-colors">Kit Sociale 2024: Disponibile il pre-ordine</h4>
+<p class="text-body-md text-tertiary line-clamp-2 mt-xs">Presentata la nuova divisa ufficiale. Materiali traspiranti e design aggressivo per i nuovi traguardi...</p>
+</div>
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<img alt="Jersey" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/ADBb0ugn1U7muWQpNFTZCG0UUQVSm_sJeN_8JyfEmoiip-Y9GidyhChN0xFmEMV-4pARMTsQIV5t7lJDsMbLyjV2qVUFWYRtbVnY2aJvD59mEmJvA8mr2HQClVWLWkmpoc9rDISo1dNg_2BQtH4CDX4GrpIvuuUEkPE_MdX9PHq__wc3IYcJ7oUtKnEfQvj2-rVHcnZIVJwmxEEEByEXqREvCUta1PIAIs-blaRzUky9MnITuX0dt7FtaP95872cl5R-jAp0wo35sKeJ"/>
+</div>
+</article>
+<!-- News Item 2 -->
+<article class="bg-surface-container-lowest border-2 border-surface-container-highest p-md rounded-xl flex gap-md hover:border-primary/30 transition-colors cursor-pointer group">
+<div class="flex-1">
+<span class="text-tertiary font-label-bold text-label-bold uppercase text-[10px]">05 Settembre 2023</span>
+<h4 class="font-headline-md text-[20px] text-inverse-surface group-hover:text-primary transition-colors">Nuova convenzione officina "Cicli Veloci"</h4>
+<p class="text-body-md text-tertiary line-clamp-2 mt-xs">Sconto del 15% sulla manutenzione ordinaria per tutti i soci in regola con il tesseramento 2023.</p>
+</div>
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<span class="material-symbols-outlined text-4xl text-outline-variant flex items-center justify-center h-full" data-icon="build">build</span>
+</div>
+</article>
+</div>
+</section>
+<!-- Stats & Goals (Secondary) -->
+<aside class="md:col-span-4 space-y-md">
+<h3 class="font-headline-md text-headline-md uppercase italic tracking-tight border-l-4 border-secondary pl-xs">I Tuoi Obiettivi</h3>
+<!-- Compact Monthly Goal Card -->
+<div class="bg-inverse-surface rounded-xl p-md text-on-primary-fixed relative overflow-hidden shadow-md">
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-sm">
+<p class="font-label-bold text-label-bold uppercase tracking-widest text-primary-fixed">Settembre</p>
+<span class="font-headline-md text-primary-container">75%</span>
+</div>
+<div class="w-full bg-white/10 h-2 rounded-full mb-md">
+<div class="bg-primary-container h-full rounded-full" style="width: 75%"></div>
+</div>
+<div class="space-y-unit">
+<p class="font-headline-md text-surface-container-lowest">450 <span class="text-body-md opacity-60">/ 600 km</span></p>
+<p class="font-body-md text-[13px] text-surface-variant">Mancano 150 km al traguardo!</p>
+</div>
+<button class="mt-md w-full bg-primary-container/10 border border-primary-container text-primary-container font-label-bold text-[12px] py-xs racing-skew hover:bg-primary-container hover:text-on-primary-fixed transition-all">
+<span class="inner-skew inline-block">TUTTI I DATI</span>
+</button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-sm flex flex-col justify-between shadow-sm relative overflow-hidden">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="directions_bike">directions_bike</span>
+<div>
+<p class="font-label-bold text-[10px] text-tertiary uppercase">Rides</p>
+<p class="font-headline-md text-inverse-surface">12</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-sm flex flex-col justify-between shadow-sm relative overflow-hidden">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="trending_up">trending_up</span>
+<div>
+<p class="font-label-bold text-[10px] text-tertiary uppercase">Gain</p>
+<p class="font-headline-md text-inverse-surface">3.4k<span class="text-body-md">m</span></p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Upcoming Quick List -->
+<section class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md uppercase italic tracking-tight border-l-4 border-primary pl-xs">Prossime Uscite</h3>
+<a class="font-label-bold text-label-bold text-primary hover:underline" href="#">Vedi Calendario</a>
+</div>
+<div class="bg-surface-container-lowest border-2 border-inverse-surface rounded-xl overflow-hidden shadow-lg flex flex-col md:flex-row">
+<div class="p-md md:w-full flex flex-col md:flex-row items-center justify-between gap-md">
+<div class="flex items-center gap-md">
+<div class="bg-secondary-container text-on-secondary w-16 h-16 flex flex-col items-center justify-center racing-skew">
+<span class="inner-skew font-black text-xl">18</span>
+<span class="inner-skew font-label-bold text-[10px] uppercase">SET</span>
+</div>
+<div>
+<h4 class="font-headline-md text-inverse-surface leading-tight">Crono Scalata Val d'Orcia</h4>
+<p class="text-tertiary font-body-md">Partenza ore 09:00 • 42 km • Hard</p>
+</div>
+</div>
+<div class="flex gap-sm w-full md:w-auto">
+<button class="flex-1 md:px-lg bg-inverse-surface text-surface-container-lowest font-label-bold text-label-bold py-md racing-skew hover:bg-primary transition-colors">
+<span class="inner-skew inline-block uppercase">Partecipa</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-inverse-surface flex justify-around items-center py-xs px-sm shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] rounded-t-xl">
+<!-- Dashboard (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary text-on-primary rounded-lg px-3 py-1.5 active:scale-90 transition-all duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-bold text-label-bold">Dashboard</span>
+</a>
+<!-- Events -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary-fixed-dim transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-bold text-label-bold">Events</span>
+</a>
+<!-- Log Ride -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary-fixed-dim transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-label-bold text-label-bold">Log Ride</span>
+</a>
+<!-- Rankings -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1.5 hover:text-primary-fixed-dim transition-colors active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-bold text-label-bold">Rankings</span>
+</a>
+</nav>
+</body></html>

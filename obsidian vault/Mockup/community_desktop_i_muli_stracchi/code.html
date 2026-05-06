@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#d0c6ab",
+                        "inverse-surface": "#2f3131",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb4a8",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#e9c400",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e8e8e8",
+                        "secondary-container": "#e41f16",
+                        "primary-fixed": "#ffe16d",
+                        "on-background": "#1a1c1c",
+                        "background": "#f9f9f9",
+                        "tertiary-container": "#dcd9d9",
+                        "surface-container-low": "#f3f3f3",
+                        "outline": "#7e775f",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-container": "#eeeeee",
+                        "on-primary-fixed": "#221b00",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "inverse-primary": "#e9c400",
+                        "on-primary-fixed-variant": "#544600",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#410000",
+                        "surface-bright": "#f9f9f9",
+                        "on-tertiary-container": "#605f5e",
+                        "on-secondary-container": "#fffbff",
+                        "secondary": "#bc0003",
+                        "on-primary-container": "#705e00",
+                        "surface": "#f9f9f9",
+                        "on-secondary-fixed-variant": "#930002",
+                        "on-surface-variant": "#4d4732",
+                        "surface-container-highest": "#e2e2e2",
+                        "primary-container": "#ffd700",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-variant": "#e2e2e2",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#705d00",
+                        "surface-tint": "#705d00",
+                        "surface-dim": "#dadada",
+                        "secondary-fixed": "#ffdad5",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-surface": "#1a1c1c",
+                        "tertiary": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "0.5rem",
+                        "xl": "4rem",
+                        "lg": "2.5rem",
+                        "unit": "4px",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "gutter": "1.5rem",
+                        "margin": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Lexend"],
+                        "headline-xl": ["Lexend"],
+                        "label-bold": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-bold": ["14px", {"lineHeight": "1.0", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .texture-asphalt {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        .racing-stripe-yellow { border-top: 4px solid #705d00; }
+        .racing-stripe-red { border-top: 4px solid #bc0003; }
+        .skew-button { transform: skewX(-10deg); }
+        .skew-button-inner { transform: skewX(10deg); display: inline-block; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<div class="texture-asphalt fixed inset-0 z-0"></div>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-64 border-r-2 border-outline-variant bg-surface-container-lowest dark:bg-inverse-surface shadow-sm flex flex-col py-lg z-40">
+<div class="px-md mb-xl">
+<div class="text-headline-md font-headline-md font-extrabold uppercase italic text-primary dark:text-primary-fixed-dim tracking-tight">I Muli Stracchi</div>
+<div class="font-body-md text-body-md text-on-surface-variant opacity-70">Endurance &amp; Grit</div>
+</div>
+<div class="flex-grow space-y-xs">
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-bold text-label-bold">Dashboard</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">event</span>
+<span class="font-label-bold text-label-bold">Events</span>
+</a>
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-r-4 border-primary dark:border-primary-fixed-dim bg-surface-container-high dark:bg-surface-container-highest px-md py-sm flex items-center gap-xs" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-bold text-label-bold">Community</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">directions_bike</span>
+<span class="font-label-bold text-label-bold">Routes</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium px-md py-sm flex items-center gap-xs hover:bg-surface-container dark:hover:bg-surface-container-high transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined">card_membership</span>
+<span class="font-label-bold text-label-bold">Membership</span>
+</a>
+</div>
+<div class="px-md mt-auto pt-lg border-t border-outline-variant/30 space-y-xs">
+<button class="w-full bg-primary-container text-on-primary-container py-xs skew-button font-label-bold text-label-bold mb-md hover:bg-primary transition-colors">
+<span class="skew-button-inner">New Ride</span>
+</button>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium py-xs flex items-center gap-xs hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-bold text-label-bold">Settings</span>
+</a>
+<a class="text-on-surface-variant dark:text-tertiary-fixed-dim font-medium py-xs flex items-center gap-xs hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-bold text-label-bold">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="ml-64 relative min-h-screen">
+<!-- Top Header -->
+<header class="sticky top-0 z-30 w-full border-b-2 border-outline-variant bg-surface/95 backdrop-blur-md px-gutter h-16 flex justify-between items-center">
+<h1 class="text-headline-md font-headline-md font-black italic text-primary">Community Muli Stracchi</h1>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border border-outline-variant rounded-none focus:border-primary outline-none text-body-md w-64 transition-all" placeholder="Search members..." type="text"/>
+</div>
+<div class="flex gap-sm">
+<button class="material-symbols-outlined p-2 hover:bg-surface-container-high transition-colors">notifications</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional cyclist wearing a aerodynamic helmet and reflective sunglasses. The background is a blurred landscape of a mountain road under a clear sky. The lighting is bright and energetic, reflecting the high-performance endurance brand identity of I Muli Stracchi." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB6u0JNAOhy4rAmmeqCOD_pbNiLuUG2hLUicKtukNhpOioWO3lKNIYta_nuI9YEu88mAq7r5fIM7Kjd175mWzRI1ISTAbmMxBHbgl2nICFIsMCvY0O78rGYsDZMvXpBd60NP8UxrCKEN9wDt4VUwU3eTG50_XbBMP3_EImjfK5szxEPAM2HtsALEUc3b80_JEfXQpnazI7pPKZGNKqASQEznoZxKmAvpzu0k0z7Tlrf2cspdx95x-tWa1S57AOc7GJ-4Ao13ffoRs"/>
+</div>
+</div>
+</div>
+</header>
+<div class="p-gutter max-w-7xl mx-auto space-y-gutter">
+<!-- Hero / CTA Section -->
+<section class="relative h-[300px] bg-inverse-surface overflow-hidden shadow-xl border-l-8 border-primary-container group">
+<img alt="Community Hero" class="absolute inset-0 w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/ADBb0ugn1U7muWQpNFTZCG0UUQVSm_sJeN_8JyfEmoiip-Y9GidyhChN0xFmEMV-4pARMTsQIV5t7lJDsMbLyjV2qVUFWYRtbVnY2aJvD59mEmJvA8mr2HQClVWLWkmpoc9rDISo1dNg_2BQtH4CDX4GrpIvuuUEkPE_MdX9PHq__wc3IYcJ7oUtKnEfQvj2-rVHcnZIVJwmxEEEByEXqREvCUta1PIAIs-blaRzUky9MnITuX0dt7FtaP95872cl5R-jAp0wo35sKeJ"/>
+<div class="absolute inset-0 bg-gradient-to-r from-inverse-surface via-transparent to-transparent flex items-center px-xl">
+<div class="max-w-xl">
+<span class="inline-block bg-primary text-on-primary px-sm py-1 font-label-bold text-label-bold uppercase mb-sm">Road Connection</span>
+<h2 class="text-headline-xl font-headline-xl text-white mb-md">Grit is Better Shared.</h2>
+<button class="bg-primary text-on-primary px-lg py-sm font-headline-md skew-button shadow-lg hover:bg-primary-fixed transition-transform active:scale-95">
+<span class="skew-button-inner italic">Registra Ora</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left: Recent Feed (Social Aspect) -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="flex justify-between items-end pb-xs border-b-2 border-outline-variant">
+<h3 class="font-headline-md text-headline-md uppercase italic text-on-surface">Recent Rides</h3>
+<div class="flex gap-xs">
+<button class="px-sm py-1 bg-primary-container text-on-primary-container font-label-bold text-label-bold uppercase">Feed</button>
+<button class="px-sm py-1 hover:bg-surface-container font-label-bold text-label-bold uppercase transition-colors">Directory</button>
+</div>
+</div>
+<!-- Feed Items -->
+<div class="space-y-sm">
+<!-- Feed Item 1 -->
+<div class="bg-surface-container-lowest border-l-4 border-primary p-md shadow-sm racing-stripe-yellow flex gap-md">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 rounded-none bg-surface-container-high border-2 border-outline">
+<img alt="Member" class="w-full h-full object-cover" data-alt="A profile photo of a determined female cyclist with sweat on her brow, capturing a moment of intense endurance effort. She wears a branded black and yellow jersey of I Muli Stracchi. The background is a soft-focus forest path. The image is high-contrast with sharp details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHxzMl9YeFukIciFlhjbT3SEdVlvLfyyCTgWmzSmKkOIlzEYKnmrp1_usB5yvTmWCal01_VZDrx5zg17-GrptldTpoc4XWYHypoSd2E7DQLnXuQr7wPc1nFzJWb7oMdkx8pCBAQ-gZL0jknSpirNhaZ1IlOF_dilSyTZomHwLhoEqYFaYDrmdSol_bfFhR9XZkiCXR3uxsAYIlkayvaGR-AZcMP4NMFrE1muoRKTSaOGJqSW5JFAw-ol8ZE5gF9s6xMFFHXN7UObM"/>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-label-bold text-body-md text-on-surface">Elena "La Mula" Rossi</h4>
+<p class="text-on-surface-variant text-sm">Conquered the Passo dello Stelvio • 2h ago</p>
+</div>
+<div class="text-right">
+<div class="font-headline-md text-primary">1,842m</div>
+<div class="text-[10px] uppercase font-bold text-outline">Elevation Gain</div>
+</div>
+</div>
+<p class="mt-sm text-body-md line-clamp-2">The last 3km were pure mental grit. Legs like lead but the view from the top is worth every pedal stroke. Stracchi power!</p>
+<div class="mt-md flex gap-md items-center text-on-surface-variant">
+<button class="flex items-center gap-1 hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-md">favorite</span> <span class="text-xs font-bold">24 Kudos</span>
+</button>
+<button class="flex items-center gap-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-md">chat_bubble</span> <span class="text-xs font-bold">5 Comments</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="bg-surface-container-lowest border-l-4 border-secondary p-md shadow-sm racing-stripe-red flex flex-col gap-sm">
+<div class="flex gap-md">
+<div class="flex-shrink-0">
+<div class="w-12 h-12 rounded-none bg-surface-container-high border-2 border-outline">
+<img alt="Member" class="w-full h-full object-cover" data-alt="A portrait of a male cyclist smiling despite being covered in mud from a recent gravel ride. He is wearing high-visibility red gear and a helmet with a light. The setting is a sunset in a rural landscape, creating warm, dramatic lighting that highlights the rugged textures of his face and gear." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMdaRpSsVBxXSvfyycgqpJeUl2KPFx0NBOoNhL5-GidtxI86xNjOwwPOLT2EcmDada79hcMhVa_PH3XK5l2uhBkEBiwoBGx8adj1qPfU0cprNJjzd7gveQVaeD0bm-MQViXUpysfBzQ8vKcAqS_6i_xALfdkK1cJVa01ERPUDeZCuh4TiPF4Gywt4Dpf0R21cRfO7U_aiEVNpM4SJbOmH2POSEKQKSlAT0m7_rAIB02sJkMa4FmKsTc8ikKehe_CHAt5gAvh_rTsk"/>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-label-bold text-body-md text-on-surface">Marco B.</h4>
+<p class="text-on-surface-variant text-sm">Sunrise Gravel Loop • 5h ago</p>
+</div>
+<div class="text-right">
+<div class="font-headline-md text-secondary">42.5 km/h</div>
+<div class="text-[10px] uppercase font-bold text-outline">Avg Speed</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full h-48 bg-surface-container-high overflow-hidden">
+<img alt="Ride Route" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida/ADBb0ugUZVKjL_Zqzv4h6LiIjcRBHIVl9U9xsgiso3HfIYB8FO0ol4w6-xw97W7R1W5FkxC8Ceb5T-wSfX0uSZ68hoSpO68E7i6WVb0CU1DNvl4R3Q9mf5s3GfiSbT6fYEhagwhUsyXtZIX58c3Rcga1fqH8g_OZyb-nlT7SBM2P1QZOLLV2CVPLkMu4A42HCUyNhWaFYAVdG8ORhLFQqE2DaIUeqb84Z_G4FUytE6KTK0Zutg9D-NRDuWoKpGuWMdK0XsqubPMBbpq92A"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Stats / Leaderboard (Secondary) -->
+<div class="col-span-12 lg:col-span-4 space-y-gutter">
+<div class="bg-surface-container p-md border-2 border-outline-variant racing-stripe-yellow relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-headline-md text-headline-md uppercase italic text-on-surface mb-md">Leaderboard</h3>
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant mb-md">
+<button class="flex-1 pb-2 border-b-2 border-primary font-label-bold text-label-bold text-primary">MESE</button>
+<button class="flex-1 pb-2 font-label-bold text-label-bold text-on-surface-variant hover:text-on-surface">ANNO</button>
+</div>
+<!-- List -->
+<div class="space-y-sm">
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest shadow-sm border border-outline-variant/30">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-primary italic">01</span>
+<span class="font-label-bold text-body-md">Matteo Riva</span>
+</div>
+<span class="font-body-md text-on-surface-variant">1,204 km</span>
+</div>
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest shadow-sm border border-outline-variant/30 opacity-90">
+<div class="flex items-center gap-sm">
+<span class="font-headline-md text-outline italic">02</span>
+<span class="font-label-bold text-body-md">S. De Luca</span>
+</div>
+<span class="font-body-md text-on-surface-variant">1,180 km</span>
+</div>
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest shadow-sm border border-outline-variant/30 opacity-80">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+<span class="font-label-bold text-body-md">You (12th)</span>
+</div>
+<span class="font-body-md text-on-surface-variant">450 km</span>
+</div>
+</div>
+<a class="block text-center mt-md font-label-bold text-label-bold text-secondary uppercase hover:underline" href="#">View Full Standings</a>
+</div>
+</div>
+<!-- Featured Members -->
+<div class="bg-inverse-surface text-white p-md border-l-4 border-secondary shadow-lg">
+<h3 class="font-headline-md text-headline-md uppercase italic mb-md">New Members</h3>
+<div class="grid grid-cols-4 gap-sm">
+<div class="aspect-square bg-surface-container-high border border-outline-variant grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img alt="New Member" class="w-full h-full object-cover" data-alt="A portrait of a professional female cyclist looking intensely at the camera, wearing reflective glasses. The lighting is cold and clinical, evoking a high-performance athletic environment. The style is bold and aggressive, fitting the I Muli Stracchi brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjYmpFvmROJTWmTWfdu76xgyZhN1C8uh1x8uMVXf6JenZQr_J-51xMXCY3EWaeSypHS2dG3YGkEbK8QFIZggVEvh6E2sipcbb2OmCOK6M85uyfEpgWML2sJb0UDOLhQuZN6GWDqb-dqT1MaIMOML4oyEJ5Difr6EOWOvYWwi9T8b0C_attskHA0T21omyp49Uo1N3YacW6s1gPGuhEYNH2eCKvtojdOjLhMy5EProtiO5M-GpB9-a6HQhXSIMjNI20LSxwFim80kQ"/>
+</div>
+<div class="aspect-square bg-surface-container-high border border-outline-variant grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img alt="New Member" class="w-full h-full object-cover" data-alt="A high-contrast black and white portrait of a cyclist with a weathered, gritty face, embodying the spirit of 'The Tired Mules'. The lighting is dramatic, casting deep shadows. The cyclist wears a branded cap and the image feels raw and adventurous." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2_mBeLxNXAV3Xv-ziYZtmfvRu41HqnhJOZSG-Yrtn9zSiSW0ZEnLO_aFT2Gv9u2SqnxcC4Bp_xl9V8bDKgaXUllGQ9YaDAKxLXlmMx_fqC_0TcX6hi-Mg9sMU2PCNvFXOgP-yXHbcMjY-1GYNKbzN8s1Nxxwj57XKoTn0lGT9ytZ7jlG4xLZXjATFQFqzq9ZDRTvBspYteDkGYUd6nC9mO_Qy3kM99F4Wo8UufE-HsUuR8vuR9hGMLnvyQ4gg_PuCCALem_dt09w"/>
+</div>
+<div class="aspect-square bg-surface-container-high border border-outline-variant grayscale hover:grayscale-0 transition-all cursor-pointer">
+<img alt="New Member" class="w-full h-full object-cover" data-alt="A portrait of a male athlete in the golden hour light, wearing cycling gear and a helmet. The lighting is warm and emphasizes the texture of his skin and the sleek materials of his gear. The overall aesthetic is professional, modern, and high-contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9aBgRAyDSvczqKGR3ymbk9iqA4BtPsp6NlAPw-TUbCw-vYfAtOxM6lW1XdkFEQaQbpZipUM3ZDuPJ-dQNPmdg4_uh2QyEiVdZDL0pimIPRUSQXaeCA-uCcyukXeiPW47HCPC_ZRxSwLjbwVxhgdAeQTf3JUJKvnHSiTbW4SjHdFc3nhECLqhWRJQ7Krhk26uCYEufqdLoL4JiyeNMYGpwdKzzQ8MQGvX6aBfB5pjk1myHBX0bcAOzpFV9HkvgzsWg5vRuNZ1N8Oo"/>
+</div>
+<div class="aspect-square flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface-variant font-bold text-xs">+12</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-lg mt-xl border-t border-outline-variant bg-inverse-surface dark:bg-surface-container-low text-tertiary-fixed-dim">
+<div class="px-margin flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="text-headline-md font-headline-md text-primary-fixed italic">I Muli Stracchi</div>
+<div class="flex gap-lg font-label-bold text-label-bold uppercase">
+<a class="hover:text-primary-fixed transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary-fixed transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary-fixed transition-colors" href="#">Contact Us</a>
+</div>
+<div class="font-body-md text-body-md opacity-60">© 2024 I Muli Stracchi ASD. Built for Endurance.</div>
+</div>
+</footer>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-gutter right-gutter w-16 h-16 bg-secondary text-on-secondary rounded-none shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>
