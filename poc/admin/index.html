@@ -41,6 +41,9 @@
       </div>
     </header>
 
+    <!-- Alert urgenti -->
+    <div id="alert-block"></div>
+
     <!-- Stats cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter">
       <div class="bg-white border-t-4 border-primary shadow-sm p-md">
@@ -154,6 +157,42 @@
         </div>`).join('');
     }
 
+    function renderAlerts() {
+      const pending = getPendingReminders();
+      const urgent  = pending.filter(p => p.urgent);
+      const el = document.getElementById('alert-block');
+      if (!urgent.length) { el.innerHTML = ''; return; }
+
+      const expired      = urgent.filter(p => p.type === 'tessera_expired').length;
+      const noInsurance  = urgent.filter(p => p.type === 'insurance_missing' || p.type === 'insurance_expired').length;
+      const expiring     = pending.filter(p => p.type === 'tessera_expiring').length;
+
+      const items = [];
+      if (expired)     items.push(`<strong>${expired}</strong> tessera/e scaduta/e`);
+      if (noInsurance) items.push(`<strong>${noInsurance}</strong> soci senza assicurazione valida`);
+      if (expiring)    items.push(`<strong>${expiring}</strong> tessera/e in scadenza entro 30gg`);
+
+      el.innerHTML = `
+        <div class="bg-red-50 border-2 border-red-300 border-l-4 border-l-red-600 p-md flex flex-col md:flex-row items-start md:items-center justify-between gap-sm">
+          <div class="flex items-start gap-sm">
+            <span class="material-symbols-outlined text-red-600 flex-shrink-0">warning</span>
+            <div>
+              <p class="font-label-bold text-red-700 uppercase text-xs tracking-wide mb-xs">Azioni richieste (${urgent.length} urgenti)</p>
+              <p class="text-sm text-red-800">${items.join(' · ')}</p>
+            </div>
+          </div>
+          <div class="flex gap-sm flex-shrink-0">
+            <a href="tessere.html" class="bg-red-600 text-white font-label-bold px-md py-xs text-sm hover:bg-red-700 transition-all border-b-2 border-red-900 flex items-center gap-xs">
+              <span class="material-symbols-outlined text-sm">card_membership</span> Gestisci Tessere
+            </a>
+            <a href="notifiche.html" class="bg-inverse-surface text-primary-fixed font-label-bold px-md py-xs text-sm hover:bg-gray-700 transition-all border-b-2 border-gray-600 flex items-center gap-xs">
+              <span class="material-symbols-outlined text-sm">send</span> Invia Promemoria
+            </a>
+          </div>
+        </div>`;
+    }
+
+    renderAlerts();
     initPage();
   </script>
 </body>

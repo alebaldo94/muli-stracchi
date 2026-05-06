@@ -24,9 +24,15 @@
   <div id="topbar-mount"></div>
 
   <main class="ml-64 p-margin space-y-gutter">
-    <header>
-      <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Tessere & Assicurazioni</h2>
-      <div class="h-1 w-24 bg-secondary mt-xs"></div>
+    <header class="flex items-center justify-between">
+      <div>
+        <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Tessere & Assicurazioni</h2>
+        <div class="h-1 w-24 bg-secondary mt-xs"></div>
+      </div>
+      <button onclick="sendAllReminders()"
+        class="bg-inverse-surface text-primary-fixed font-label-bold px-md py-sm flex items-center gap-xs hover:bg-gray-700 transition-all border-b-4 border-gray-600 uppercase text-sm">
+        <span class="material-symbols-outlined text-sm">send</span> Invia Promemoria
+      </button>
     </header>
 
     <!-- Statistiche veloci -->
@@ -62,6 +68,17 @@
         <tbody id="tessere-tbody" class="divide-y divide-outline-variant"></tbody>
       </table>
     </div>
+    <!-- Log ultime notifiche -->
+    <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+      <div class="border-t-4 border-primary p-md border-b border-outline-variant flex justify-between items-center">
+        <h3 class="font-headline-md flex items-center gap-xs">
+          <span class="material-symbols-outlined text-primary">notifications</span> Ultime Notifiche Inviate
+        </h3>
+        <a href="notifiche.html" class="text-primary font-label-bold text-sm hover:underline">Gestisci →</a>
+      </div>
+      <div id="notif-log" class="divide-y divide-outline-variant"></div>
+    </div>
+
   </main>
 
   <div id="footer-mount"></div>
@@ -198,7 +215,7 @@
             </div>
           </td>
           <td class="px-md py-sm">
-            <div class="flex items-center gap-xs justify-end">
+            <div class="flex items-center gap-xs justify-end flex-wrap">
               <button onclick="openRinnovo(${m.id}, '${m.name.replace(/'/g,"\\'")}', '${m.membershipExpiry || ''}')"
                 class="px-sm py-xs text-xs font-label-bold border border-primary text-primary hover:bg-primary-container transition-colors whitespace-nowrap">
                 Rinnova
@@ -207,6 +224,12 @@
                 ? `<button onclick="openInsuranceModal(${m.id}, '${m.name.replace(/'/g,"\\'")}', true)"
                     class="px-sm py-xs text-xs font-label-bold border border-outline hover:bg-surface-container transition-colors whitespace-nowrap">
                     Modifica assic.
+                  </button>`
+                : ''}
+              ${(ms.status === 'expiring' || ms.status === 'expired' || !m.insurance)
+                ? `<button onclick="sendReminderFromTessere(${m.id}, '${!m.insurance ? 'insurance_missing' : ms.status === 'expired' ? 'tessera_expired' : 'tessera_expiring'}')"
+                    class="px-sm py-xs text-xs font-label-bold bg-inverse-surface text-primary-fixed border-b-2 border-gray-600 hover:bg-gray-700 transition-colors whitespace-nowrap flex items-center gap-xs">
+                    <span class="material-symbols-outlined text-xs">send</span>Email
                   </button>`
                 : ''}
             </div>
@@ -289,8 +312,52 @@
       m.addEventListener('click', e => { if (e.target === m) m.classList.add('hidden'); });
     });
 
+    function sendReminderFromTessere(memberId, type) {
+      sendReminder(memberId, type);
+      renderNotifLog();
+    }
+
+    function sendAllReminders() {
+      const pending = getPendingReminders();
+      if (!pending.length) { toast('Nessun promemoria da inviare', 'error'); return; }
+      pending.forEach(p => {
+        DB.addNotification({
+          memberId: p.member.id,
+          memberName: p.member.name,
+          email: p.member.email,
+          type: p.type,
+          typeLabel: REMINDER_LABELS[p.type] || p.type,
+          status: 'sent'
+        });
+      });
+      toast(`${pending.length} promemoria inviati`);
+      renderNotifLog();
+    }
+
+    function renderNotifLog() {
+      const history = DB.getNotifications().slice(0, 5);
+      const el = document.getElementById('notif-log');
+      if (!history.length) {
+        el.innerHTML = '<p class="px-md py-sm text-on-surface-variant text-sm">Nessuna notifica inviata ancora. <a href="notifiche.html" class="text-primary underline">Vai al centro notifiche</a>.</p>';
+        return;
+      }
+      el.innerHTML = history.map(n => `
+        <div class="flex items-center gap-md px-md py-sm hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined text-sm ${n.type.includes('tessera') ? 'text-primary' : 'text-blue-600'}">
+            ${n.type.includes('tessera') ? 'card_membership' : 'verified_user'}
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="font-label-bold text-sm">${n.memberName}</p>
+            <p class="text-xs text-on-surface-variant">${n.typeLabel}</p>
+          </div>
+          <span class="text-xs text-on-surface-variant font-mono">${new Date(n.sentAt).toLocaleDateString('it-IT')} ${new Date(n.sentAt).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})}</span>
+          <span class="px-xs py-0.5 bg-green-100 text-green-700 font-label-bold text-xs rounded-full">inviata</span>
+        </div>`).join('');
+    }
+
     renderStats();
     renderTable();
+    renderNotifLog();
   </script>
 </body>
 </html>

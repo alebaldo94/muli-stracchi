@@ -1,6 +1,6 @@
 'use strict';
 
-const SEED_VERSION = '2';
+const SEED_VERSION = '3';
 
 // ── SEED DATA ────────────────────────────────────────────────────────────────
 
@@ -114,6 +114,8 @@ function initStorage() {
     localStorage.setItem('ms_members', JSON.stringify(SEED_MEMBERS));
     localStorage.setItem('ms_events', JSON.stringify(SEED_EVENTS));
     localStorage.setItem('ms_rides', JSON.stringify(SEED_RIDES));
+    localStorage.removeItem('ms_notifications');
+    localStorage.removeItem('ms_email_settings');
     localStorage.setItem('ms_version', SEED_VERSION);
   }
 }
@@ -207,8 +209,73 @@ const DB = {
       return e;
     });
     this._set('ms_events', events);
-  }
+  },
+
+  getNotifications() { return JSON.parse(localStorage.getItem('ms_notifications') || '[]'); },
+  addNotification(entry) {
+    const list = this.getNotifications();
+    list.unshift({ ...entry, id: Date.now(), sentAt: new Date().toISOString() });
+    if (list.length > 200) list.splice(200);
+    localStorage.setItem('ms_notifications', JSON.stringify(list));
+  },
+  clearNotifications() { localStorage.removeItem('ms_notifications'); },
+
+  getEmailSettings() {
+    return JSON.parse(localStorage.getItem('ms_email_settings') || JSON.stringify({
+      senderName: 'I Muli Stracchi ASD',
+      senderEmail: 'segreteria@muliastracchi.it',
+      remindDays: [30, 15, 7],
+      autoSend: false
+    }));
+  },
+  saveEmailSettings(s) { localStorage.setItem('ms_email_settings', JSON.stringify(s)); }
 };
+
+// ── NOTIFICATIONS ────────────────────────────────────────────────────────────
+
+const REMINDER_LABELS = {
+  tessera_expiring:   'Scadenza tessera imminente',
+  tessera_expired:    'Tessera scaduta — rinnovo urgente',
+  insurance_missing:  'Nessuna assicurazione registrata',
+  insurance_expiring: 'Scadenza assicurazione imminente',
+  insurance_expired:  'Assicurazione scaduta'
+};
+
+function sendReminder(memberId, type) {
+  const m = DB.getMember(memberId);
+  if (!m) return;
+  DB.addNotification({
+    memberId: m.id,
+    memberName: m.name,
+    email: m.email,
+    type,
+    typeLabel: REMINDER_LABELS[type] || type,
+    status: 'sent'
+  });
+  toast(`Email inviata a ${m.name}`);
+}
+
+function getPendingReminders() {
+  const members = DB.getMembers();
+  const pending = [];
+  members.forEach(m => {
+    const ms = membershipStatus(m.membershipExpiry);
+    if (ms.status === 'expired')
+      pending.push({ member: m, type: 'tessera_expired',    label: 'Tessera scaduta',            urgent: true });
+    else if (ms.status === 'expiring')
+      pending.push({ member: m, type: 'tessera_expiring',   label: `Tessera scade in ${ms.days}g`, urgent: ms.days <= 15 });
+    if (!m.insurance) {
+      pending.push({ member: m, type: 'insurance_missing',  label: 'Nessuna assicurazione',      urgent: true });
+    } else {
+      const is = membershipStatus(m.insuranceExpiry);
+      if (is.status === 'expired')
+        pending.push({ member: m, type: 'insurance_expired',  label: 'Assicurazione scaduta',    urgent: true });
+      else if (is.status === 'expiring')
+        pending.push({ member: m, type: 'insurance_expiring', label: `Assicurazione scade in ${is.days}g`, urgent: is.days <= 15 });
+    }
+  });
+  return pending.sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0));
+}
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 
@@ -344,10 +411,11 @@ function renderSidebar(activePage) {
 function renderAdminSidebar(activePage) {
   const base = _base();
   const nav = [
-    { id:'dashboard', icon:'dashboard',        label:'Dashboard',       href:`${base}admin/index.html` },
-    { id:'members',   icon:'group',            label:'Gestione Soci',   href:`${base}admin/members.html` },
-    { id:'tessere',   icon:'card_membership',  label:'Tessere',         href:`${base}admin/tessere.html` },
-    { id:'events',    icon:'event',            label:'Gestione Eventi', href:`${base}admin/events.html` },
+    { id:'dashboard',  icon:'dashboard',        label:'Dashboard',       href:`${base}admin/index.html` },
+    { id:'members',    icon:'group',           label:'Gestione Soci',   href:`${base}admin/members.html` },
+    { id:'tessere',    icon:'card_membership', label:'Tessere',         href:`${base}admin/tessere.html` },
+    { id:'notifiche',  icon:'notifications',   label:'Notifiche Email', href:`${base}admin/notifiche.html` },
+    { id:'events',     icon:'event',           label:'Gestione Eventi', href:`${base}admin/events.html` },
   ];
   const links = nav.map(item => {
     const a = activePage === item.id;

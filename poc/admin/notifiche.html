@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifiche Email | I Muli Stracchi Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lexend:wght@700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: { "outline-variant":"#d0c6ab","inverse-surface":"#2f3131","surface-container-lowest":"#ffffff","surface-container-high":"#e8e8e8","primary-container":"#ffd700","on-background":"#1a1c1c","background":"#f9f9f9","surface-container-low":"#f3f3f3","outline":"#7e775f","surface-container":"#eeeeee","secondary":"#bc0003","on-secondary":"#ffffff","on-primary-container":"#705e00","surface":"#f9f9f9","on-surface-variant":"#4d4732","surface-container-highest":"#e2e2e2","primary":"#705d00","on-primary":"#ffffff","on-surface":"#1a1c1c","primary-fixed":"#ffe16d","on-primary-fixed":"#221b00","tertiary-fixed-dim":"#c8c6c5" },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" },
+        spacing: { "xs":"0.5rem","xl":"4rem","lg":"2.5rem","unit":"4px","sm":"1rem","md":"1.5rem","gutter":"1.5rem","margin":"2rem" },
+        fontFamily: { "body-md":["Inter"],"headline-md":["Lexend"],"headline-xl":["Lexend"],"label-bold":["Lexend"] },
+        fontSize: { "body-md":["16px",{"lineHeight":"1.5","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"1.3","fontWeight":"700"}],"headline-xl":["48px",{"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],"label-bold":["14px",{"lineHeight":"1.0","fontWeight":"600"}] }
+      }}
+    }
+  </script>
+  <style>.asphalt-texture { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity: 0.04; }</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+  <div class="fixed inset-0 asphalt-texture pointer-events-none z-0"></div>
+  <div id="sidebar-mount"></div>
+  <div id="topbar-mount"></div>
+
+  <main class="ml-64 p-margin relative z-10 space-y-gutter">
+
+    <header class="flex items-center justify-between">
+      <div>
+        <h2 class="font-headline-xl text-headline-xl uppercase italic leading-tight">Notifiche Email</h2>
+        <div class="h-1 w-24 bg-secondary mt-xs"></div>
+      </div>
+      <button id="btn-send-all" onclick="sendAll()"
+        class="bg-primary-container text-on-primary-container font-label-bold px-md py-sm flex items-center gap-xs hover:brightness-95 transition-all border-b-4 border-primary uppercase text-sm">
+        <span class="material-symbols-outlined text-sm">send</span> Invia Tutti i Promemoria
+      </button>
+    </header>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-gutter">
+      <div class="bg-white border-t-4 border-red-500 shadow-sm p-md">
+        <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">Da Inviare</p>
+        <p id="stat-pending" class="font-headline-lg text-red-600">—</p>
+      </div>
+      <div class="bg-white border-t-4 border-yellow-400 shadow-sm p-md">
+        <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">Urgenti</p>
+        <p id="stat-urgent" class="font-headline-lg text-yellow-700">—</p>
+      </div>
+      <div class="bg-white border-t-4 border-green-500 shadow-sm p-md">
+        <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">Inviate Totale</p>
+        <p id="stat-sent" class="font-headline-lg text-green-600">—</p>
+      </div>
+      <div class="bg-white border-t-4 border-primary shadow-sm p-md">
+        <p class="font-label-bold text-on-surface-variant uppercase text-xs mb-xs">Auto-Invio</p>
+        <p id="stat-auto" class="font-headline-lg text-primary">—</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+
+      <!-- Promemoria pendenti -->
+      <div class="lg:col-span-2 space-y-gutter">
+        <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+          <div class="border-t-4 border-red-500 p-md border-b border-outline-variant flex justify-between items-center">
+            <h3 class="font-headline-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-red-500">warning</span> Promemoria da Inviare
+            </h3>
+            <span id="pending-count" class="px-sm py-xs bg-red-100 text-red-700 font-label-bold text-xs rounded-full"></span>
+          </div>
+          <div id="pending-list" class="divide-y divide-outline-variant"></div>
+        </div>
+
+        <!-- Storico notifiche -->
+        <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+          <div class="border-t-4 border-primary p-md border-b border-outline-variant flex justify-between items-center">
+            <h3 class="font-headline-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-primary">history</span> Storico Notifiche Inviate
+            </h3>
+            <button onclick="clearHistory()" class="text-xs text-on-surface-variant hover:text-secondary font-label-bold">Svuota storico</button>
+          </div>
+          <div id="history-list" class="divide-y divide-outline-variant max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="space-y-gutter">
+
+        <!-- Configurazione mittente -->
+        <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+          <div class="border-t-4 border-inverse-surface p-md border-b border-outline-variant">
+            <h3 class="font-headline-md flex items-center gap-xs">
+              <span class="material-symbols-outlined">settings</span> Configurazione
+            </h3>
+          </div>
+          <form id="settings-form" class="p-md space-y-sm" onsubmit="saveSettings(event)">
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Nome mittente</label>
+              <input id="cfg-sender-name" type="text" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm text-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Email mittente</label>
+              <input id="cfg-sender-email" type="email" class="w-full bg-surface border-2 border-outline-variant focus:border-primary-container focus:ring-0 px-md py-sm text-sm transition-all"/>
+            </div>
+            <div class="space-y-xs">
+              <label class="font-label-bold uppercase text-xs text-on-surface-variant">Promemoria anticipato (giorni)</label>
+              <div class="flex gap-sm flex-wrap" id="remind-days">
+                <label class="flex items-center gap-xs text-sm cursor-pointer">
+                  <input type="checkbox" value="60" class="remind-day-cb accent-primary"/> 60gg
+                </label>
+                <label class="flex items-center gap-xs text-sm cursor-pointer">
+                  <input type="checkbox" value="30" class="remind-day-cb accent-primary"/> 30gg
+                </label>
+                <label class="flex items-center gap-xs text-sm cursor-pointer">
+                  <input type="checkbox" value="15" class="remind-day-cb accent-primary"/> 15gg
+                </label>
+                <label class="flex items-center gap-xs text-sm cursor-pointer">
+                  <input type="checkbox" value="7" class="remind-day-cb accent-primary"/> 7gg
+                </label>
+              </div>
+            </div>
+            <div class="flex items-center justify-between py-sm border-t border-outline-variant">
+              <div>
+                <p class="font-label-bold text-sm">Auto-invio</p>
+                <p class="text-xs text-on-surface-variant">Invia automaticamente alla scadenza</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input id="cfg-auto-send" type="checkbox" class="sr-only peer"/>
+                <div class="w-10 h-6 bg-gray-200 peer-checked:bg-primary-container rounded-full peer peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+              </label>
+            </div>
+            <button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-bold py-sm border-b-4 border-primary hover:brightness-95 transition-all uppercase text-sm">
+              Salva Configurazione
+            </button>
+          </form>
+        </div>
+
+        <!-- Anteprima template email -->
+        <div class="bg-surface-container-lowest border-2 border-outline-variant shadow-sm">
+          <div class="border-t-4 border-yellow-400 p-md border-b border-outline-variant">
+            <h3 class="font-headline-md flex items-center gap-xs">
+              <span class="material-symbols-outlined text-yellow-600">mail</span> Template Email
+            </h3>
+          </div>
+          <div class="p-md">
+            <div class="bg-surface-container-low border border-outline-variant p-sm text-sm space-y-sm">
+              <div class="border-b border-outline-variant pb-sm">
+                <p class="font-label-bold uppercase text-xs text-on-surface-variant">Oggetto</p>
+                <p class="text-sm">⚠️ [I Muli Stracchi] La tua tessera scade tra <strong>X giorni</strong></p>
+              </div>
+              <p class="text-on-surface-variant text-xs uppercase font-label-bold">Corpo</p>
+              <div class="text-sm space-y-sm text-on-surface leading-relaxed">
+                <p>Caro/a <strong>[Nome Socio]</strong>,</p>
+                <p>ti informiamo che la tua <strong>tessera ASD I Muli Stracchi</strong> scadrà il <strong>[DATA]</strong>.</p>
+                <p>Per rinnovarla contatta la segreteria all'indirizzo:</p>
+                <p class="font-mono text-xs bg-surface-container-high px-sm py-xs inline-block" id="preview-email">segreteria@muliastracchi.it</p>
+                <p class="text-on-surface-variant text-xs border-t border-outline-variant pt-sm">La quota annuale è di €50 (soci ordinari), €100 (sostenitori), €30 (juniores).</p>
+                <p class="text-xs text-on-surface-variant font-label-bold uppercase">I Muli Stracchi ASD – Endurance &amp; Grit</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-mount"></div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    initStorage();
+    Auth.require('admin');
+    document.getElementById('sidebar-mount').outerHTML = renderAdminSidebar('notifiche');
+    document.getElementById('topbar-mount').outerHTML = renderTopBar('Notifiche Email');
+    document.getElementById('footer-mount').outerHTML = renderFooter();
+
+    function loadSettings() {
+      const s = DB.getEmailSettings();
+      document.getElementById('cfg-sender-name').value  = s.senderName;
+      document.getElementById('cfg-sender-email').value = s.senderEmail;
+      document.getElementById('cfg-auto-send').checked  = s.autoSend;
+      document.getElementById('preview-email').textContent = s.senderEmail;
+      document.querySelectorAll('.remind-day-cb').forEach(cb => {
+        cb.checked = s.remindDays.includes(Number(cb.value));
+      });
+      document.getElementById('stat-auto').textContent = s.autoSend ? 'Attivo' : 'Off';
+    }
+
+    function saveSettings(e) {
+      e.preventDefault();
+      const remindDays = [...document.querySelectorAll('.remind-day-cb:checked')].map(cb => Number(cb.value));
+      DB.saveEmailSettings({
+        senderName:  document.getElementById('cfg-sender-name').value,
+        senderEmail: document.getElementById('cfg-sender-email').value,
+        remindDays,
+        autoSend:    document.getElementById('cfg-auto-send').checked
+      });
+      toast('Configurazione salvata');
+      loadSettings();
+      renderStats();
+    }
+
+    function renderStats() {
+      const pending = getPendingReminders();
+      const urgent  = pending.filter(p => p.urgent).length;
+      const history = DB.getNotifications();
+      const s       = DB.getEmailSettings();
+      document.getElementById('stat-pending').textContent = pending.length;
+      document.getElementById('stat-urgent').textContent  = urgent;
+      document.getElementById('stat-sent').textContent    = history.length;
+      document.getElementById('stat-auto').textContent    = s.autoSend ? 'Attivo' : 'Off';
+      document.getElementById('pending-count').textContent = `${pending.length} in attesa`;
+    }
+
+    const TYPE_ICON = {
+      tessera_expiring:   { icon: 'card_membership', color: 'text-yellow-600' },
+      tessera_expired:    { icon: 'card_membership', color: 'text-red-600' },
+      insurance_missing:  { icon: 'verified_user',   color: 'text-red-600' },
+      insurance_expiring: { icon: 'verified_user',   color: 'text-yellow-600' },
+      insurance_expired:  { icon: 'verified_user',   color: 'text-red-600' }
+    };
+
+    function renderPending() {
+      const pending = getPendingReminders();
+      const el = document.getElementById('pending-list');
+      if (!pending.length) {
+        el.innerHTML = `<div class="flex flex-col items-center py-lg text-center">
+          <span class="material-symbols-outlined text-4xl text-green-500 mb-sm">check_circle</span>
+          <p class="font-label-bold text-green-700">Tutto in ordine — nessun promemoria da inviare</p>
+        </div>`;
+        return;
+      }
+      el.innerHTML = pending.map(p => {
+        const ti = TYPE_ICON[p.type] || { icon: 'notifications', color: 'text-primary' };
+        return `<div class="flex items-center gap-md px-md py-sm hover:bg-surface-container transition-colors ${p.urgent ? 'bg-red-50' : ''}">
+          <div class="w-9 h-9 rounded-full ${avatarBg(p.member.id)} flex items-center justify-center font-label-bold text-xs flex-shrink-0">${initials(p.member.name)}</div>
+          <div class="flex-1 min-w-0">
+            <p class="font-label-bold text-sm">${p.member.name}</p>
+            <p class="text-xs text-on-surface-variant">${p.member.email}</p>
+            <p class="text-xs font-label-bold flex items-center gap-xs mt-0.5">
+              <span class="material-symbols-outlined text-sm ${ti.color}">${ti.icon}</span>
+              <span class="${p.urgent ? 'text-red-700' : 'text-yellow-700'}">${p.label}</span>
+              ${p.urgent ? '<span class="px-xs py-0.5 bg-red-100 text-red-700 text-xs rounded-full">URGENTE</span>' : ''}
+            </p>
+          </div>
+          <button onclick="sendReminder(${p.member.id}, '${p.type}'); renderAll()"
+            class="flex-shrink-0 bg-inverse-surface text-primary-fixed font-label-bold px-sm py-xs text-xs flex items-center gap-xs hover:bg-gray-700 transition-all border-b-2 border-gray-600">
+            <span class="material-symbols-outlined text-sm">send</span> Invia
+          </button>
+        </div>`;
+      }).join('');
+    }
+
+    function renderHistory() {
+      const history = DB.getNotifications();
+      const el = document.getElementById('history-list');
+      if (!history.length) {
+        el.innerHTML = '<p class="px-md py-sm text-on-surface-variant text-sm">Nessuna notifica inviata.</p>';
+        return;
+      }
+      el.innerHTML = history.map(n => `
+        <div class="flex items-center gap-md px-md py-sm hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined text-sm ${n.type.includes('tessera') ? 'text-primary' : 'text-blue-600'}">
+            ${n.type.includes('tessera') ? 'card_membership' : 'verified_user'}
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="font-label-bold text-sm">${n.memberName}</p>
+            <p class="text-xs text-on-surface-variant">${n.typeLabel}</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <p class="text-xs text-on-surface-variant font-mono">${new Date(n.sentAt).toLocaleDateString('it-IT')}</p>
+            <p class="text-xs text-on-surface-variant">${new Date(n.sentAt).toLocaleTimeString('it-IT', { hour:'2-digit', minute:'2-digit' })}</p>
+          </div>
+          <span class="flex-shrink-0 px-xs py-0.5 bg-green-100 text-green-700 font-label-bold text-xs rounded-full">inviata</span>
+        </div>`).join('');
+    }
+
+    function renderAll() {
+      renderStats();
+      renderPending();
+      renderHistory();
+    }
+
+    function sendAll() {
+      const pending = getPendingReminders();
+      if (!pending.length) { toast('Nessun promemoria da inviare', 'error'); return; }
+      pending.forEach(p => {
+        DB.addNotification({
+          memberId: p.member.id,
+          memberName: p.member.name,
+          email: p.member.email,
+          type: p.type,
+          typeLabel: REMINDER_LABELS[p.type] || p.type,
+          status: 'sent'
+        });
+      });
+      toast(`${pending.length} promemoria inviati`);
+      renderAll();
+    }
+
+    function clearHistory() {
+      if (!confirm('Svuotare lo storico delle notifiche?')) return;
+      DB.clearNotifications();
+      toast('Storico svuotato');
+      renderAll();
+    }
+
+    loadSettings();
+    renderAll();
+  </script>
+</body>
+</html>
