@@ -12,7 +12,8 @@
     <div class="main">
       <div class="topbar">
         <h1>I miei chilometri</h1>
-        <div class="topbar-right">
+        <div class="topbar-right" style="gap:8px">
+          <button class="btn btn-sm" style="background:#FC4C02;color:#fff" onclick="syncStrava()" id="syncBtn">↓ Sync Strava</button>
           <button class="btn btn-primary btn-sm" onclick="openModal()">+ Aggiungi uscita</button>
         </div>
       </div>
@@ -133,6 +134,20 @@
       } catch (err) { flash(err.message, 'err'); }
       finally { btn.disabled = false; }
     });
+
+    async function syncStrava() {
+      const btn = document.getElementById('syncBtn');
+      btn.disabled = true; btn.textContent = 'Sync...';
+      try {
+        const data = await apiFetch('/strava/sync', { method: 'POST' });
+        flash(`Strava: ${data.imported} nuove uscite importate, ${data.skipped} già presenti.`, 'ok');
+        load();
+      } catch (err) {
+        flash(err.message, 'err');
+      } finally {
+        btn.disabled = false; btn.textContent = '↓ Sync Strava';
+      }
+    }
 
     load();
   </script>

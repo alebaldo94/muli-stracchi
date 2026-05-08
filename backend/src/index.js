@@ -16,7 +16,8 @@ app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/admin',         require('./routes/admin'));
 
 const { router: cronRouter, runReminders } = require('./routes/cron');
-app.use('/api/cron', cronRouter);
+app.use('/api/cron',   cronRouter);
+app.use('/api/strava', require('./routes/strava'));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, ts: new Date().toISOString() }));
 

@@ -46,6 +46,20 @@
             <div class="loading-overlay"><div class="spinner"></div></div>
           </div>
         </div>
+
+        <!-- Strava -->
+        <div class="card">
+          <div class="card-header">
+            <h3 style="display:flex;align-items:center;gap:8px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#FC4C02"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169"/></svg>
+              Strava
+            </h3>
+            <div id="stravaActions"></div>
+          </div>
+          <div class="card-body" id="stravaBlock">
+            <div class="loading-overlay"><div class="spinner"></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -127,7 +141,67 @@
       } catch (err) { flash(err.message, 'err'); }
     });
 
+    async function loadStrava() {
+      const status = await apiFetch('/strava/status').catch(() => null);
+      const sb = document.getElementById('stravaBlock');
+      const sa = document.getElementById('stravaActions');
+
+      // Leggi parametro URL per feedback post-OAuth
+      const params = new URLSearchParams(window.location.search);
+      const stravaResult = params.get('strava');
+      if (stravaResult === 'connected') flash('Strava connesso con successo!', 'ok');
+      if (stravaResult === 'error')     flash('Errore durante la connessione a Strava.', 'err');
+      if (stravaResult === 'denied')    flash('Autorizzazione Strava negata.', 'warn');
+
+      if (!status?.connected) {
+        sb.innerHTML = '<p class="text-muted">Account Strava non connesso. Collega il tuo account per importare automaticamente le uscite.</p>';
+        sa.innerHTML = `<button class="btn btn-sm" style="background:#FC4C02;color:#fff" onclick="connectStrava()">Connetti Strava</button>`;
+      } else {
+        sb.innerHTML = `
+          <p style="font-size:14px;margin-bottom:12px">Account connesso (Athlete ID: ${status.athlete_id})</p>
+          <button class="btn btn-primary btn-sm" onclick="syncStrava()" id="syncBtn">↓ Sincronizza uscite</button>
+          <span id="syncResult" style="margin-left:12px;font-size:13px"></span>
+        `;
+        sa.innerHTML = `<button class="btn btn-outline btn-sm" onclick="disconnectStrava()">Disconnetti</button>`;
+      }
+    }
+
+    async function connectStrava() {
+      try {
+        const data = await apiFetch('/strava/auth-url');
+        window.location.href = data.url;
+      } catch (err) { flash(err.message, 'err'); }
+    }
+
+    async function syncStrava() {
+      const btn = document.getElementById('syncBtn');
+      const res = document.getElementById('syncResult');
+      btn.disabled = true; btn.textContent = 'Sincronizzazione...';
+      res.textContent = '';
+      try {
+        const data = await apiFetch('/strava/sync', { method: 'POST' });
+        res.textContent = `✓ Importate: ${data.imported}, già presenti: ${data.skipped}`;
+        res.style.color = 'var(--green)';
+        flash(`Sync completato: ${data.imported} nuove uscite importate.`, 'ok');
+      } catch (err) {
+        res.textContent = err.message;
+        res.style.color = 'var(--red)';
+      } finally {
+        btn.disabled = false; btn.textContent = '↓ Sincronizza uscite';
+      }
+    }
+
+    async function disconnectStrava() {
+      if (!confirm('Disconnettere l\'account Strava?')) return;
+      try {
+        await apiFetch('/strava/disconnect', { method: 'DELETE' });
+        flash('Strava disconnesso.', 'ok');
+        loadStrava();
+      } catch (err) { flash(err.message, 'err'); }
+    }
+
     load();
+    loadStrava();
   </script>
 </body>
 </html>

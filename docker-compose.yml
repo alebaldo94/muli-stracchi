@@ -26,8 +26,11 @@ services:
       JWT_SECRET:         ${JWT_SECRET:-dev_secret_change_in_prod}
       RESEND_API_KEY:     ${RESEND_API_KEY:-}
       RESEND_FROM_EMAIL:  ${RESEND_FROM_EMAIL:-segreteria@muliastracchi.it}
-      CRON_SECRET:        ${CRON_SECRET:-}
-      NODE_ENV:           ${NODE_ENV:-development}
+      CRON_SECRET:           ${CRON_SECRET:-}
+      NODE_ENV:              ${NODE_ENV:-development}
+      STRAVA_CLIENT_ID:      ${STRAVA_CLIENT_ID:-}
+      STRAVA_CLIENT_SECRET:  ${STRAVA_CLIENT_SECRET:-}
+      STRAVA_REDIRECT_URI:   ${STRAVA_REDIRECT_URI:-https://asd.appartiene.org/api/strava/callback}
       PORT:               3000
     depends_on:
       - muli-postgres

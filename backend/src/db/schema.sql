@@ -23,9 +23,13 @@ CREATE TABLE IF NOT EXISTS members (
   km_year         INT          DEFAULT 0,
   km_month        INT          DEFAULT 0,
   rides_count     INT          DEFAULT 0,
-  notes           TEXT,
-  created_at      TIMESTAMP    DEFAULT NOW(),
-  updated_at      TIMESTAMP    DEFAULT NOW()
+  notes                   TEXT,
+  strava_athlete_id       BIGINT,
+  strava_access_token     TEXT,
+  strava_refresh_token    TEXT,
+  strava_token_expires_at BIGINT,
+  created_at              TIMESTAMP    DEFAULT NOW(),
+  updated_at              TIMESTAMP    DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS events (
@@ -50,16 +54,17 @@ CREATE TABLE IF NOT EXISTS event_participants (
 );
 
 CREATE TABLE IF NOT EXISTS rides (
-  id         SERIAL PRIMARY KEY,
-  user_id    INT NOT NULL REFERENCES members(id) ON DELETE CASCADE,
-  title      VARCHAR(200) NOT NULL,
-  date       DATE         NOT NULL,
-  km         DECIMAL(8,2) NOT NULL,
-  duration   VARCHAR(10),
-  elevation  INT   DEFAULT 0,
-  source     VARCHAR(20)  DEFAULT 'manual',
-  note       TEXT,
-  created_at TIMESTAMP    DEFAULT NOW()
+  id                  SERIAL PRIMARY KEY,
+  user_id             INT NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+  title               VARCHAR(200) NOT NULL,
+  date                DATE         NOT NULL,
+  km                  DECIMAL(8,2) NOT NULL,
+  duration            VARCHAR(10),
+  elevation           INT          DEFAULT 0,
+  source              VARCHAR(20)  DEFAULT 'manual',
+  note                TEXT,
+  strava_activity_id  BIGINT       UNIQUE,
+  created_at          TIMESTAMP    DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS notifications (
