@@ -47,6 +47,7 @@
     <div class="modal">
       <button class="modal-close" onclick="closeModal()">✕</button>
       <h3 id="modalTitle">Nuovo Socio</h3>
+      <div id="modalFlash" style="display:none;margin-bottom:12px"></div>
       <form id="memberForm">
         <input type="hidden" id="fId">
         <div class="form-row">
@@ -154,6 +155,8 @@
       document.getElementById('fInsuranceExpiry').value  = member?.insurance_expiry  ? member.insurance_expiry.substring(0,10)  : '';
       document.getElementById('fInsuranceNumber').value  = member?.insurance_number  || '';
       document.getElementById('fNotes').value          = member?.notes || '';
+      const mf = document.getElementById('modalFlash');
+      mf.style.display = 'none'; mf.textContent = '';
       document.getElementById('modalOverlay').classList.add('open');
     }
 
@@ -177,6 +180,13 @@
       }
     }
 
+    function modalFlash(msg, type = 'err') {
+      const el = document.getElementById('modalFlash');
+      el.className = `alert alert-${type}`;
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
     document.getElementById('memberForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id  = document.getElementById('fId').value;
@@ -195,23 +205,29 @@
       };
       if (pwd) payload.password = pwd;
 
+      if (!id && !pwd) {
+        modalFlash('Inserire una password per il nuovo socio.');
+        return;
+      }
+
       const btn = document.getElementById('saveBtn');
       btn.disabled = true;
+      btn.textContent = 'Salvataggio...';
       try {
         if (id) {
           await API.updateMember(id, payload);
           flash('Socio aggiornato.', 'ok');
         } else {
-          if (!pwd) { flash('Inserire una password per il nuovo socio.', 'err'); btn.disabled=false; return; }
           await API.createMember(payload);
           flash('Socio creato.', 'ok');
         }
         closeModal();
         load();
       } catch (err) {
-        flash(err.message, 'err');
+        modalFlash(err.message);
       } finally {
         btn.disabled = false;
+        btn.textContent = 'Salva';
       }
     });
 
