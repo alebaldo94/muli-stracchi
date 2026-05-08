@@ -1,0 +1,223 @@
+# 🚴‍♂️ Cycling Association Platform (Prototype)
+
+## 📌 Overview
+
+This project is a **rapid prototype** for a cycling association management platform designed to:
+
+- Manage members of a cycling association
+- Integrate external events from an existing system (“Al Passo”)
+- Track cycling kilometers via manual input or Strava integration
+- Provide personalized event suggestions
+- Prepare a scalable architecture for future expansion
+
+The system is designed as a **modular backend-first platform** with API-driven architecture and future frontend extensibility.
+
+---
+
+# 🧠 Vision
+
+The platform evolves from a simple association management tool into a:
+
+> 📊 Data-driven cycling ecosystem for events, performance tracking, and community engagement.
+
+---
+
+# 🧩 System Architecture
+
+
+[ Al Passo System ]
+↓ (Events API)
+[ Events Integration Layer ]
+↓
+[ Core Backend - Association Platform ]
+↓
+────────────────────────────────────
+│ Users / KM Tracking / Logic │
+│ Suggestion Engine │
+│ Strava Integration Module │
+────────────────────────────────────
+↓
+[ Future Frontend / Dashboard ]
+
+
+---
+
+# 🔌 External Integration: “Al Passo”
+
+The system consumes events from an external platform via REST API.
+
+## 📡 Event API Endpoints
+
+
+GET /api/events
+GET /api/events/{id}
+GET /api/events?category=...
+GET /api/events?date_from=...
+
+
+## 📦 Event Data Model
+
+```json
+{
+  "id": 123,
+  "title": "Cultural Bike Ride",
+  "description": "Scenic ride through historical locations",
+  "date": "2026-06-10",
+  "location": "Ancona",
+  "tags": ["culture", "nature", "bike"],
+  "audience": ["members", "public"]
+}
+👤 Core System (Association Platform)
+Features
+User registration
+Member management
+Role system (admin / member)
+Profile management
+Event browsing
+Personalized suggestions
+Suggested Stack
+Backend: Node.js (Express / NestJS) or Laravel
+Database: PostgreSQL
+Frontend (future): React / Vue
+📊 Cycling KM Tracking Module
+Purpose
+
+Track and aggregate cycling activity for each member.
+
+Data Model
+{
+  "user_id": 1,
+  "total_km": 1240,
+  "rides": [
+    {
+      "date": "2026-05-01",
+      "km": 45,
+      "source": "strava"
+    },
+    {
+      "date": "2026-05-03",
+      "km": 60,
+      "source": "manual"
+    }
+  ]
+}
+Sources
+Manual entry
+Strava API import
+🔗 Strava Integration
+
+The platform integrates with Strava to automatically import cycling activities.
+
+🔐 Authentication Flow (OAuth 2.0)
+User clicks “Connect Strava”
+Redirect to Strava authorization page
+User grants permissions
+Access token is returned to backend
+📥 Fetch Activities
+GET https://www.strava.com/api/v3/athlete/activities
+Example Response
+{
+  "name": "Morning Ride",
+  "distance": 45230,
+  "moving_time": 5400,
+  "type": "Ride",
+  "start_date": "2026-05-01T08:00:00Z"
+}
+
+Distance is returned in meters (conversion to km required)
+
+🔄 Sync Strategy
+Option A — Polling
+periodic sync via cron jobs
+simple to implement
+Option B — Webhooks (recommended)
+real-time updates from Strava
+scalable and efficient
+🧠 Event Recommendation Engine
+Logic (Prototype version)
+score = 0
+
+if (user.interests ∩ event.tags) score += 5
+if (user.city === event.location) score += 3
+if (user.km_level matches event difficulty) score += 4
+API Endpoint
+GET /api/users/{id}/suggested-events
+Response
+[
+  { "event_id": 123, "score": 9 },
+  { "event_id": 87, "score": 7 }
+]
+🏆 Future Features (Scalability Layer)
+Monthly km leaderboard
+Achievement system (badges)
+User levels (beginner / intermediate / advanced)
+Personalized training suggestions
+Mobile app support
+GPS / GPX import
+Integration with Garmin ecosystem
+🔐 Privacy & Compliance
+OAuth consent required for Strava integration
+GDPR-compliant user data management
+Data deletion & export features
+Secure API authentication (JWT / API Keys)
+🧱 Prototype Architecture (MVP)
+Backend Modules
+Users Module
+Events Module (Al Passo API integration)
+KM Tracking Module
+Strava Module
+Suggestion Engine
+Database
+PostgreSQL (relational structure)
+Simple schema for fast MVP
+📁 Repository Structure (Suggested)
+cycling-association-platform/
+│
+├── backend/
+│   ├── modules/
+│   │   ├── users
+│   │   ├── events
+│   │   ├── km
+│   │   ├── strava
+│   │   └── suggestions
+│   │
+│   ├── utils/
+│   ├── config/
+│   ├── app.js
+│   └── server.js
+│
+├── docs/ (Obsidian Vault)
+│   ├── architecture.md
+│   ├── api.md
+│   ├── database.md
+│   └── roadmap.md
+│
+└── README.md
+📌 Development Roadmap
+Phase 1 — Prototype (Current)
+User system
+Event API integration (Al Passo)
+Manual KM tracking
+Phase 2 — Enhancement
+Strava integration
+Automatic KM import
+Basic suggestion engine
+Phase 3 — Platform
+Leaderboards
+Gamification
+Advanced analytics
+🚀 Goal of the Prototype
+
+This prototype is designed to demonstrate:
+
+feasibility of integration between systems
+value of combining events + performance tracking
+scalability toward a full cycling ecosystem platform
+📎 Notes
+
+This repository also contains an Obsidian vault (/docs) used for:
+
+technical documentation
+architecture evolution
+API design
+planning and roadmap tracking
