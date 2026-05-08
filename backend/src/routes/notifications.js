@@ -1,8 +1,9 @@
 'use strict';
-const router    = require('express').Router();
-const db        = require('../db');
-const auth      = require('../middleware/auth');
-const adminOnly = require('../middleware/adminOnly');
+const router       = require('express').Router();
+const db           = require('../db');
+const auth         = require('../middleware/auth');
+const adminOnly    = require('../middleware/adminOnly');
+const { sendEmail } = require('../lib/email');
 
 const TYPE_LABELS = {
   tessera_expiring:   'Scadenza tessera imminente',
@@ -70,18 +71,40 @@ router.post('/send', auth, adminOnly, async (req, res) => {
 
   try {
     const { rows: [member] } = await db.query(
-      'SELECT id, name, email FROM members WHERE id = $1', [member_id]
+      'SELECT id, name, email, membership_expiry, insurance_expiry FROM members WHERE id = $1', [member_id]
     );
     if (!member) return res.status(404).json({ error: 'Socio non trovato' });
 
-    // TODO: integrazione SMTP reale (nodemailer / SendGrid)
+    const today = new Date();
+    const expiryDate = (d) => d ? new Date(d).toLocaleDateString('it-IT') : '';
+    const tDiff = member.membership_expiry
+      ? Math.floor((new Date(member.membership_expiry) - today) / 86400000) : null;
+    const iDiff = member.insurance_expiry
+      ? Math.floor((new Date(member.insurance_expiry) - today) / 86400000) : null;
 
-    const { rows } = await db.query(`
-      INSERT INTO notifications (member_id, member_name, email, type, type_label)
-      VALUES ($1,$2,$3,$4,$5) RETURNING *
-    `, [member.id, member.name, member.email, type, TYPE_LABELS[type] || type]);
+    const dataMap = {
+      tessera_expiring:   { name: member.name, days: tDiff, expiry_date: expiryDate(member.membership_expiry) },
+      tessera_expired:    { name: member.name, expiry_date: expiryDate(member.membership_expiry) },
+      insurance_missing:  { name: member.name },
+      insurance_expiring: { name: member.name, days: iDiff, expiry_date: expiryDate(member.insurance_expiry) },
+      insurance_expired:  { name: member.name, expiry_date: expiryDate(member.insurance_expiry) },
+    };
 
-    res.status(201).json(rows[0]);
+    const result = await sendEmail({
+      memberId: member.id,
+      to:       member.email,
+      template: type,
+      data:     dataMap[type] || { name: member.name },
+      force:    true,
+    });
+
+    // Registra anche nella tabella notifications per la history UI
+    await db.query(
+      'INSERT INTO notifications (member_id, member_name, email, type, type_label, status) VALUES ($1,$2,$3,$4,$5,$6)',
+      [member.id, member.name, member.email, type, TYPE_LABELS[type] || type, result.ok ? 'sent' : 'failed']
+    );
+
+    res.status(201).json({ ok: result.ok, logId: result.logId, type, member: member.name });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Errore del server' });
@@ -113,12 +136,28 @@ router.post('/send-all', auth, adminOnly, async (req, res) => {
         else if (diff <= 30) types.push('insurance_expiring');
       }
 
+      const expiryDate = (d) => d ? new Date(d).toLocaleDateString('it-IT') : '';
+      const tDiff = m.membership_expiry
+        ? Math.floor((new Date(m.membership_expiry) - today) / 86400000) : null;
+      const iDiff = m.insurance_expiry
+        ? Math.floor((new Date(m.insurance_expiry) - today) / 86400000) : null;
+      const dataMap = {
+        tessera_expiring:   { name: m.name, days: tDiff, expiry_date: expiryDate(m.membership_expiry) },
+        tessera_expired:    { name: m.name, expiry_date: expiryDate(m.membership_expiry) },
+        insurance_missing:  { name: m.name },
+        insurance_expiring: { name: m.name, days: iDiff, expiry_date: expiryDate(m.insurance_expiry) },
+        insurance_expired:  { name: m.name, expiry_date: expiryDate(m.insurance_expiry) },
+      };
       for (const type of types) {
+        const result = await sendEmail({
+          memberId: m.id, to: m.email, template: type,
+          data: dataMap[type] || { name: m.name },
+        });
         await db.query(
-          'INSERT INTO notifications (member_id, member_name, email, type, type_label) VALUES ($1,$2,$3,$4,$5)',
-          [m.id, m.name, m.email, type, TYPE_LABELS[type]]
+          'INSERT INTO notifications (member_id, member_name, email, type, type_label, status) VALUES ($1,$2,$3,$4,$5,$6)',
+          [m.id, m.name, m.email, type, TYPE_LABELS[type], result.ok ? 'sent' : (result.reason === 'duplicate' ? 'skipped' : 'failed')]
         );
-        sent.push({ member: m.name, type });
+        sent.push({ member: m.name, type, ok: result.ok });
       }
     }
 

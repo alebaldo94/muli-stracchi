@@ -23,8 +23,12 @@ services:
       DB_NAME:     muli_stracchi
       DB_USER:     muli
       DB_PASSWORD: ${DB_PASSWORD:-muli2024}
-      JWT_SECRET:  ${JWT_SECRET:-dev_secret_change_in_prod}
-      PORT:        3000
+      JWT_SECRET:         ${JWT_SECRET:-dev_secret_change_in_prod}
+      RESEND_API_KEY:     ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL:  ${RESEND_FROM_EMAIL:-segreteria@muliastracchi.it}
+      CRON_SECRET:        ${CRON_SECRET:-}
+      NODE_ENV:           ${NODE_ENV:-development}
+      PORT:               3000
     depends_on:
       - muli-postgres
     restart: unless-stopped

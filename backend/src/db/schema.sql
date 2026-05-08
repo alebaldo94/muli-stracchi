@@ -83,3 +83,15 @@ CREATE TABLE IF NOT EXISTS email_settings (
 );
 
 INSERT INTO email_settings (id) VALUES (1) ON CONFLICT (id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS email_log (
+  id         SERIAL PRIMARY KEY,
+  member_id  INT REFERENCES members(id) ON DELETE SET NULL,
+  email      VARCHAR(100) NOT NULL,
+  template   VARCHAR(50)  NOT NULL,
+  status     VARCHAR(20)  NOT NULL DEFAULT 'queued',
+  resend_id  VARCHAR(100),
+  error_msg  TEXT,
+  sent_at    TIMESTAMP,
+  created_at TIMESTAMP    DEFAULT NOW()
+);
