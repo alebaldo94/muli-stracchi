@@ -110,6 +110,7 @@ router.post('/sync', auth, async (req, res) => {
     const after       = Math.floor(Math.min(startOfYear, joinDate ?? startOfYear).getTime() / 1000);
 
     let page = 1, imported = 0, skipped = 0;
+    console.log(`[strava] sync member=${member.id} after=${after} token_ok=${!!accessToken}`);
 
     while (true) {
       const r = await fetch(
@@ -117,12 +118,15 @@ router.post('/sync', auth, async (req, res) => {
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const activities = await r.json();
+      console.log(`[strava] page=${page} isArray=${Array.isArray(activities)} count=${Array.isArray(activities) ? activities.length : 'N/A'}`);
       if (!Array.isArray(activities)) {
         console.error('[strava] risposta non valida:', JSON.stringify(activities));
         throw new Error(activities?.message || 'Risposta Strava non valida — riconnetti l\'account');
       }
       if (!activities.length) break;
 
+      const rides = activities.filter(a => a.type === 'Ride' || a.sport_type === 'Ride');
+      console.log(`[strava] rides on page=${page}: ${rides.length}/${activities.length}`);
       for (const a of activities) {
         if (a.type !== 'Ride' && a.sport_type !== 'Ride') continue;
         const km = (a.distance / 1000).toFixed(2);
