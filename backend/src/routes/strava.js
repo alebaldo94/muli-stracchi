@@ -105,7 +105,9 @@ router.post('/sync', auth, async (req, res) => {
       return res.status(400).json({ error: 'Account Strava non connesso. Vai al profilo e connetti Strava.' });
 
     const accessToken = await refreshTokenIfNeeded(member);
-    const after = Math.floor(new Date(member.join_date || '2020-01-01').getTime() / 1000);
+    const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+    const joinDate    = member.join_date ? new Date(member.join_date) : null;
+    const after       = Math.floor(Math.min(startOfYear, joinDate ?? startOfYear).getTime() / 1000);
 
     let page = 1, imported = 0, skipped = 0;
 
