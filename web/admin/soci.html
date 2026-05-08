@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soci — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Gestione Soci</h1>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openModal()">+ Nuovo socio</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Elenco soci</h3>
+            <input type="search" id="searchBox" placeholder="Cerca per nome o email..." style="width:220px;padding:6px 10px;font-size:13px">
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table id="membersTable">
+                <thead>
+                  <tr>
+                    <th>#</th><th>Nome</th><th>Email</th><th>Tipo</th><th>Tessera</th><th>Assicurazione</th><th>Livello</th><th>Km mese</th><th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                  <tr><td colspan="9" class="loading-overlay"><div class="spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal crea/modifica -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3 id="modalTitle">Nuovo Socio</h3>
+      <form id="memberForm">
+        <input type="hidden" id="fId">
+        <div class="form-row">
+          <div class="form-group"><label>Nome completo*</label><input type="text" id="fName" required></div>
+          <div class="form-group"><label>Email*</label><input type="email" id="fEmail" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Password <span id="pwdHint" style="color:var(--muted);font-weight:400">(obbligatoria per nuovo socio)</span></label><input type="password" id="fPassword" placeholder="Lascia vuota per non modificare"></div>
+          <div class="form-group"><label>Telefono</label><input type="text" id="fPhone"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Tipo socio</label>
+            <select id="fType">
+              <option value="ordinario">Ordinario</option>
+              <option value="sostenitore">Sostenitore</option>
+              <option value="onorario">Onorario</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Livello</label>
+            <select id="fLevel">
+              <option value="beginner">Principiante</option>
+              <option value="intermediate">Intermedio</option>
+              <option value="advanced">Avanzato</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Scadenza tessera</label><input type="date" id="fMembershipExpiry"></div>
+          <div class="form-group"><label>Numero tessera</label><input type="text" id="fMemberNumber"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Scadenza assicurazione</label><input type="date" id="fInsuranceExpiry"></div>
+          <div class="form-group"><label>Numero polizza</label><input type="text" id="fInsuranceNumber"></div>
+        </div>
+        <div class="form-group"><label>Note</label><textarea id="fNotes" rows="2"></textarea></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Salva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.checkAdmin()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('soci');
+
+    let allMembers = [];
+
+    async function load() {
+      allMembers = await API.getMembers().catch(() => []);
+      renderTable(allMembers);
+    }
+
+    function renderTable(list) {
+      const tbody = document.getElementById('tbody');
+      if (!list.length) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-muted" style="padding:24px;text-align:center">Nessun socio trovato.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = list.map(m => `
+        <tr>
+          <td class="text-muted" style="font-size:12px">${m.member_number || m.id}</td>
+          <td><strong>${m.name}</strong></td>
+          <td style="font-size:13px">${m.email}</td>
+          <td><span class="badge badge-grey">${m.member_type || 'ordinario'}</span></td>
+          <td>${expiryBadge(m.membership_expiry)}</td>
+          <td>
+            ${m.insurance
+              ? expiryBadge(m.insurance_expiry)
+              : '<span class="badge badge-err">No</span>'}
+          </td>
+          <td>${levelBadge(m.level)}</td>
+          <td style="font-weight:600;color:var(--green)">${m.km_month || 0}</td>
+          <td>
+            <div class="gap-1">
+              <button class="btn btn-outline btn-sm" onclick="editMember(${m.id})">Modifica</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteMember(${m.id},'${m.name}')">Elimina</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('searchBox').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderTable(allMembers.filter(m =>
+        m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)
+      ));
+    });
+
+    function openModal(member = null) {
+      document.getElementById('modalTitle').textContent = member ? 'Modifica Socio' : 'Nuovo Socio';
+      document.getElementById('pwdHint').textContent = member ? '(lascia vuota per non modificare)' : '(obbligatoria)';
+      document.getElementById('fId').value             = member?.id || '';
+      document.getElementById('fName').value           = member?.name || '';
+      document.getElementById('fEmail').value          = member?.email || '';
+      document.getElementById('fPassword').value       = '';
+      document.getElementById('fPhone').value          = member?.phone || '';
+      document.getElementById('fType').value           = member?.member_type || 'ordinario';
+      document.getElementById('fLevel').value          = member?.level || 'beginner';
+      document.getElementById('fMemberNumber').value   = member?.member_number || '';
+      document.getElementById('fMembershipExpiry').value = member?.membership_expiry ? member.membership_expiry.substring(0,10) : '';
+      document.getElementById('fInsuranceExpiry').value  = member?.insurance_expiry  ? member.insurance_expiry.substring(0,10)  : '';
+      document.getElementById('fInsuranceNumber').value  = member?.insurance_number  || '';
+      document.getElementById('fNotes').value          = member?.notes || '';
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    async function editMember(id) {
+      const m = await API.getMember(id).catch(() => null);
+      if (m) openModal(m);
+    }
+
+    async function deleteMember(id, name) {
+      if (!confirm(`Eliminare il socio "${name}"? L'operazione è irreversibile.`)) return;
+      try {
+        await API.deleteMember(id);
+        flash(`${name} eliminato.`, 'ok');
+        load();
+      } catch (err) {
+        flash(err.message, 'err');
+      }
+    }
+
+    document.getElementById('memberForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id  = document.getElementById('fId').value;
+      const pwd = document.getElementById('fPassword').value;
+      const payload = {
+        name:               document.getElementById('fName').value,
+        email:              document.getElementById('fEmail').value,
+        phone:              document.getElementById('fPhone').value || null,
+        member_type:        document.getElementById('fType').value,
+        level:              document.getElementById('fLevel').value,
+        member_number:      document.getElementById('fMemberNumber').value || null,
+        membership_expiry:  document.getElementById('fMembershipExpiry').value || null,
+        insurance_expiry:   document.getElementById('fInsuranceExpiry').value || null,
+        insurance_number:   document.getElementById('fInsuranceNumber').value || null,
+        notes:              document.getElementById('fNotes').value || null,
+      };
+      if (pwd) payload.password = pwd;
+
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      try {
+        if (id) {
+          await API.updateMember(id, payload);
+          flash('Socio aggiornato.', 'ok');
+        } else {
+          if (!pwd) { flash('Inserire una password per il nuovo socio.', 'err'); btn.disabled=false; return; }
+          await API.createMember(payload);
+          flash('Socio creato.', 'ok');
+        }
+        closeModal();
+        load();
+      } catch (err) {
+        flash(err.message, 'err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eventi — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar"><h1>Eventi</h1></div>
+      <div class="content">
+        <div id="flash"></div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Data</th><th>Titolo</th><th>Luogo</th><th>Km</th><th>Livello</th><th>Partecipanti</th><th></th></tr></thead>
+                <tbody id="tbody"><tr><td colspan="7" class="loading-overlay"><div class="spinner"></div></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.check()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('eventi');
+
+    async function load() {
+      const events = await API.getEvents().catch(() => []);
+      events.sort((a,b) => new Date(a.date)-new Date(b.date));
+      const tbody = document.getElementById('tbody');
+      if (!events.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-muted" style="padding:24px;text-align:center">Nessun evento.</td></tr>';
+        return;
+      }
+      const userId = Auth.user()?.id;
+      tbody.innerHTML = events.map(e => {
+        const joined = e.participants && e.participants.some(p => p && p.id == userId);
+        const past   = new Date(e.date) < new Date();
+        return `<tr${past ? ' style="opacity:.6"' : ''}>
+          <td>${fmtDate(e.date)}</td>
+          <td><strong>${e.title}</strong>${past ? ' <span class="badge badge-grey" style="font-size:10px">Passato</span>' : ''}</td>
+          <td>${e.location||'—'}</td>
+          <td>${e.distance?e.distance+' km':'—'}</td>
+          <td>${levelBadge(e.level)}</td>
+          <td>${e.participants_count||0}</td>
+          <td>
+            ${!past ? (joined
+              ? `<button class="btn btn-outline btn-sm" onclick="leave(${e.id})">✓ Iscritto</button>`
+              : `<button class="btn btn-primary btn-sm" onclick="join(${e.id})">Partecipa</button>`)
+              : ''}
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function join(id) {
+      try { await API.joinEvent(id); flash('Iscrizione confermata!', 'ok'); load(); }
+      catch (err) { flash(err.message, 'err'); }
+    }
+    async function leave(id) {
+      try { await API.leaveEvent(id); flash('Iscrizione annullata.', 'ok'); load(); }
+      catch (err) { flash(err.message, 'err'); }
+    }
+
+    load();
+  </script>
+</body>
+</html>

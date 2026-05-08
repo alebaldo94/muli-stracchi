@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Area Personale — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Area Personale</h1>
+        <div class="topbar-right" id="topbarUser"></div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <!-- Stato tessera -->
+        <div id="statusBlock" style="margin-bottom:20px"></div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="loading-overlay"><div class="spinner"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <div class="card-header"><h3>Ultime uscite</h3><a href="km.html" class="btn btn-outline btn-sm">Tutte</a></div>
+            <div class="card-body" id="ridesBlock"><div class="loading-overlay"><div class="spinner"></div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Prossimi eventi</h3><a href="eventi.html" class="btn btn-outline btn-sm">Tutti</a></div>
+            <div class="card-body" id="eventsBlock"><div class="loading-overlay"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.check()) { /* redirect */ }
+    const user = Auth.user();
+    document.getElementById('sidebar').innerHTML = renderSidebar('home');
+    document.getElementById('topbarUser').textContent = user?.name || '';
+
+    async function load() {
+      const [me, rides, events] = await Promise.all([
+        API.getMember(user.id).catch(() => null),
+        API.getRides().catch(() => []),
+        API.getEvents().catch(() => []),
+      ]);
+
+      // Status tessera/assicurazione
+      const sb = document.getElementById('statusBlock');
+      const alerts = [];
+      if (me) {
+        const td = me.membership_expiry ? daysUntil(me.membership_expiry) : null;
+        if (td !== null && td < 0) alerts.push(`<span style="color:var(--red)">⚠️ Tessera scaduta il ${fmtDate(me.membership_expiry)}</span>`);
+        else if (td !== null && td <= 30) alerts.push(`<span style="color:var(--orange)">⏳ Tessera in scadenza tra ${td} giorni (${fmtDate(me.membership_expiry)})</span>`);
+        if (!me.insurance) alerts.push('<span style="color:var(--red)">⚠️ Nessuna assicurazione registrata</span>');
+        else if (me.insurance_expiry) {
+          const id = daysUntil(me.insurance_expiry);
+          if (id < 0) alerts.push(`<span style="color:var(--red)">⚠️ Assicurazione scaduta il ${fmtDate(me.insurance_expiry)}</span>`);
+          else if (id <= 30) alerts.push(`<span style="color:var(--orange)">⏳ Assicurazione in scadenza tra ${id} giorni</span>`);
+        }
+      }
+      if (alerts.length) {
+        sb.innerHTML = `<div class="alert alert-warn">${alerts.join(' &nbsp;·&nbsp; ')}</div>`;
+      }
+
+      // Stats personali
+      const sg = document.getElementById('statsGrid');
+      if (me) {
+        sg.innerHTML = `
+          <div class="stat-card">
+            <div class="label">Km questo mese</div>
+            <div class="value">${me.km_month || 0}</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Km totali anno</div>
+            <div class="value">${me.km_year || 0}</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Uscite totali</div>
+            <div class="value">${me.rides_count || 0}</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Livello</div>
+            <div class="value" style="font-size:18px;padding-top:6px">${levelBadge(me.level)}</div>
+          </div>
+        `;
+      }
+
+      // Ultime uscite
+      const rb = document.getElementById('ridesBlock');
+      const recent = [...rides].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,5);
+      if (!recent.length) {
+        rb.innerHTML = '<p class="text-muted">Nessuna uscita registrata. <a href="km.html">Aggiungi</a></p>';
+      } else {
+        rb.innerHTML = recent.map(r => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-weight:500;font-size:14px">${r.title}</div>
+              <div class="text-muted">${fmtDate(r.date)}</div>
+            </div>
+            <span style="font-weight:600;color:var(--green)">${r.km} km</span>
+          </div>
+        `).join('');
+      }
+
+      // Prossimi eventi
+      const eb = document.getElementById('eventsBlock');
+      const upcoming = events.filter(e => new Date(e.date)>=new Date()).sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,5);
+      if (!upcoming.length) {
+        eb.innerHTML = '<p class="text-muted">Nessun evento in programma.</p>';
+      } else {
+        eb.innerHTML = upcoming.map(e => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-weight:500;font-size:14px">${e.title}</div>
+              <div class="text-muted">${fmtDate(e.date)} · ${e.location||'—'}</div>
+            </div>
+            <span class="badge badge-ok">${e.distance?e.distance+'km':'—'}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

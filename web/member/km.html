@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chilometri — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>I miei chilometri</h1>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openModal()">+ Aggiungi uscita</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div class="stats-grid" id="statsRow"></div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Data</th><th>Titolo</th><th>Km</th><th>Durata</th><th>Dislivello</th><th>Note</th></tr></thead>
+                <tbody id="tbody"><tr><td colspan="6" class="loading-overlay"><div class="spinner"></div></td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Nuova uscita</h3>
+      <form id="rideForm">
+        <div class="form-group"><label>Titolo*</label><input type="text" id="fTitle" placeholder="Es. Giro del lago" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Data*</label><input type="date" id="fDate" required></div>
+          <div class="form-group"><label>Km*</label><input type="number" id="fKm" step="0.1" min="0.1" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Durata (hh:mm)</label><input type="text" id="fDuration" placeholder="01:30"></div>
+          <div class="form-group"><label>Dislivello (m)</label><input type="number" id="fElevation" min="0"></div>
+        </div>
+        <div class="form-group"><label>Note</label><textarea id="fNote" rows="2"></textarea></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Salva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.check()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('km');
+
+    // Pre-fill date today
+    document.getElementById('fDate').value = new Date().toISOString().substring(0,10);
+
+    async function load() {
+      const rides = await API.getRides().catch(() => []);
+      rides.sort((a,b) => new Date(b.date)-new Date(a.date));
+
+      const kmMonth = rides.filter(r => {
+        const d = new Date(r.date);
+        const n = new Date();
+        return d.getFullYear()===n.getFullYear() && d.getMonth()===n.getMonth();
+      }).reduce((s,r) => s + parseFloat(r.km), 0);
+
+      const kmYear = rides.filter(r => new Date(r.date).getFullYear() === new Date().getFullYear())
+        .reduce((s,r) => s + parseFloat(r.km), 0);
+
+      document.getElementById('statsRow').innerHTML = `
+        <div class="stat-card">
+          <div class="label">Km questo mese</div>
+          <div class="value">${kmMonth.toFixed(0)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Km anno ${new Date().getFullYear()}</div>
+          <div class="value">${kmYear.toFixed(0)}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Uscite totali</div>
+          <div class="value">${rides.length}</div>
+        </div>
+      `;
+
+      const tbody = document.getElementById('tbody');
+      if (!rides.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-muted" style="padding:24px;text-align:center">Nessuna uscita. Aggiungine una!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rides.map(r => `
+        <tr>
+          <td>${fmtDate(r.date)}</td>
+          <td><strong>${r.title}</strong></td>
+          <td style="font-weight:600;color:var(--green)">${r.km} km</td>
+          <td>${r.duration || '—'}</td>
+          <td>${r.elevation ? r.elevation + ' m' : '—'}</td>
+          <td class="text-muted" style="font-size:12px">${r.note || '—'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+    document.getElementById('rideForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      try {
+        await API.addRide({
+          title:     document.getElementById('fTitle').value,
+          date:      document.getElementById('fDate').value,
+          km:        parseFloat(document.getElementById('fKm').value),
+          duration:  document.getElementById('fDuration').value || null,
+          elevation: parseInt(document.getElementById('fElevation').value) || 0,
+          note:      document.getElementById('fNote').value || null,
+        });
+        flash('Uscita registrata!', 'ok');
+        e.target.reset();
+        document.getElementById('fDate').value = new Date().toISOString().substring(0,10);
+        closeModal();
+        load();
+      } catch (err) { flash(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    });
+
+    load();
+  </script>
+</body>
+</html>

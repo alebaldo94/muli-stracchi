@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profilo — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar"><h1>Il mio profilo</h1></div>
+      <div class="content">
+        <div id="flash"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Info personali -->
+          <div class="card">
+            <div class="card-header"><h3>Informazioni personali</h3></div>
+            <div class="card-body" id="infoBlock">
+              <div class="loading-overlay"><div class="spinner"></div></div>
+            </div>
+          </div>
+
+          <!-- Modifica dati -->
+          <div class="card">
+            <div class="card-header"><h3>Modifica dati</h3></div>
+            <div class="card-body">
+              <form id="profileForm">
+                <div class="form-group"><label>Telefono</label><input type="text" id="fPhone"></div>
+                <div class="form-group"><label>Indirizzo</label><input type="text" id="fAddress"></div>
+                <div class="form-group"><label>Note</label><textarea id="fNotes" rows="3"></textarea></div>
+                <hr>
+                <div class="form-group"><label>Nuova password</label><input type="password" id="fPwd" placeholder="Lascia vuota per non cambiare"></div>
+                <div class="form-group"><label>Conferma password</label><input type="password" id="fPwd2"></div>
+                <button type="submit" class="btn btn-primary">Salva modifiche</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stato tessera -->
+        <div class="card">
+          <div class="card-header"><h3>Stato iscrizione</h3></div>
+          <div class="card-body" id="membershipBlock">
+            <div class="loading-overlay"><div class="spinner"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.check()) { /* redirect */ }
+    const user = Auth.user();
+    document.getElementById('sidebar').innerHTML = renderSidebar('profilo');
+
+    async function load() {
+      const me = await API.getMember(user.id).catch(() => null);
+      if (!me) return;
+
+      // Info block
+      document.getElementById('infoBlock').innerHTML = `
+        <table style="width:100%;font-size:14px;border-collapse:collapse">
+          ${row('Nome', me.name)}
+          ${row('Email', me.email)}
+          ${row('Telefono', me.phone)}
+          ${row('Indirizzo', me.address)}
+          ${row('Tipo socio', me.member_type)}
+          ${row('Numero tessera', me.member_number)}
+          ${row('Data iscrizione', fmtDate(me.join_date))}
+        </table>
+      `;
+
+      // Pre-fill form
+      document.getElementById('fPhone').value   = me.phone   || '';
+      document.getElementById('fAddress').value = me.address || '';
+      document.getElementById('fNotes').value   = me.notes   || '';
+
+      // Membership block
+      const td = me.membership_expiry ? daysUntil(me.membership_expiry) : null;
+      const id = me.insurance_expiry  ? daysUntil(me.insurance_expiry)  : null;
+      document.getElementById('membershipBlock').innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div>
+            <div class="text-muted" style="margin-bottom:4px">Tessera</div>
+            ${expiryBadge(me.membership_expiry)}
+          </div>
+          <div>
+            <div class="text-muted" style="margin-bottom:4px">Assicurazione</div>
+            ${me.insurance ? expiryBadge(me.insurance_expiry) : '<span class="badge badge-err">Non registrata</span>'}
+          </div>
+          <div>
+            <div class="text-muted" style="margin-bottom:4px">Livello</div>
+            ${levelBadge(me.level)}
+          </div>
+        </div>
+      `;
+    }
+
+    function row(label, val) {
+      return `<tr>
+        <td style="padding:7px 0;color:#666;width:40%;border-bottom:1px solid #f0f0f0">${label}</td>
+        <td style="padding:7px 0;border-bottom:1px solid #f0f0f0"><strong>${val || '—'}</strong></td>
+      </tr>`;
+    }
+
+    document.getElementById('profileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pwd  = document.getElementById('fPwd').value;
+      const pwd2 = document.getElementById('fPwd2').value;
+      if (pwd && pwd !== pwd2) { flash('Le password non coincidono.', 'err'); return; }
+
+      const payload = {
+        phone:   document.getElementById('fPhone').value || null,
+        address: document.getElementById('fAddress').value || null,
+        notes:   document.getElementById('fNotes').value || null,
+      };
+      if (pwd) payload.password = pwd;
+
+      try {
+        await API.updateMember(user.id, payload);
+        flash('Profilo aggiornato.', 'ok');
+        document.getElementById('fPwd').value  = '';
+        document.getElementById('fPwd2').value = '';
+        load();
+      } catch (err) { flash(err.message, 'err'); }
+    });
+
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eventi — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Gestione Eventi</h1>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="openModal()">+ Nuovo evento</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Titolo</th><th>Data</th><th>Luogo</th><th>Km</th><th>Dislivello</th><th>Livello</th><th>Partecipanti</th><th></th></tr>
+                </thead>
+                <tbody id="tbody">
+                  <tr><td colspan="8" class="loading-overlay"><div class="spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3 id="modalTitle">Nuovo Evento</h3>
+      <form id="eventForm">
+        <input type="hidden" id="fId">
+        <div class="form-group"><label>Titolo*</label><input type="text" id="fTitle" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Data*</label><input type="date" id="fDate" required></div>
+          <div class="form-group"><label>Luogo</label><input type="text" id="fLocation"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Distanza (km)</label><input type="number" id="fDistance" min="0"></div>
+          <div class="form-group"><label>Dislivello (m)</label><input type="number" id="fElevation" min="0"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Categoria</label>
+            <select id="fCategory">
+              <option value="strada">Strada</option>
+              <option value="mtb">MTB</option>
+              <option value="gravel">Gravel</option>
+              <option value="cicloturismo">Cicloturismo</option>
+              <option value="gara">Gara</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Livello</label>
+            <select id="fLevel">
+              <option value="beginner">Principiante</option>
+              <option value="intermediate">Intermedio</option>
+              <option value="advanced">Avanzato</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Descrizione</label><textarea id="fDesc" rows="3"></textarea></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Salva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.checkAdmin()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('eventi');
+
+    async function load() {
+      const events = await API.getEvents().catch(() => []);
+      const tbody  = document.getElementById('tbody');
+      if (!events.length) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-muted" style="padding:24px;text-align:center">Nessun evento.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = events.map(e => `
+        <tr>
+          <td><strong>${e.title}</strong></td>
+          <td>${fmtDate(e.date)}</td>
+          <td>${e.location || '—'}</td>
+          <td>${e.distance ? e.distance + ' km' : '—'}</td>
+          <td>${e.elevation ? e.elevation + ' m' : '—'}</td>
+          <td>${levelBadge(e.level)}</td>
+          <td>${e.participants_count || 0}</td>
+          <td>
+            <div class="gap-1">
+              <button class="btn btn-outline btn-sm" onclick="editEvent(${e.id})">Modifica</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteEvent(${e.id},'${e.title.replace(/'/g,'')}')">Elimina</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openModal(event = null) {
+      document.getElementById('modalTitle').textContent = event ? 'Modifica Evento' : 'Nuovo Evento';
+      document.getElementById('fId').value       = event?.id || '';
+      document.getElementById('fTitle').value    = event?.title || '';
+      document.getElementById('fDate').value     = event?.date ? event.date.substring(0,10) : '';
+      document.getElementById('fLocation').value = event?.location || '';
+      document.getElementById('fDistance').value = event?.distance || '';
+      document.getElementById('fElevation').value= event?.elevation || '';
+      document.getElementById('fCategory').value = event?.category || 'strada';
+      document.getElementById('fLevel').value    = event?.level || 'intermediate';
+      document.getElementById('fDesc').value     = event?.description || '';
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+    async function editEvent(id) {
+      const e = await API.getEvent(id).catch(() => null);
+      if (e) openModal(e);
+    }
+
+    async function deleteEvent(id, title) {
+      if (!confirm(`Eliminare l'evento "${title}"?`)) return;
+      try { await API.deleteEvent(id); flash('Evento eliminato.', 'ok'); load(); }
+      catch (err) { flash(err.message, 'err'); }
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('fId').value;
+      const payload = {
+        title:       document.getElementById('fTitle').value,
+        date:        document.getElementById('fDate').value,
+        location:    document.getElementById('fLocation').value || null,
+        distance:    parseInt(document.getElementById('fDistance').value) || null,
+        elevation:   parseInt(document.getElementById('fElevation').value) || null,
+        category:    document.getElementById('fCategory').value,
+        level:       document.getElementById('fLevel').value,
+        description: document.getElementById('fDesc').value || null,
+      };
+      const btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      try {
+        if (id) { await API.updateEvent(id, payload); flash('Evento aggiornato.', 'ok'); }
+        else    { await API.createEvent(payload);      flash('Evento creato.', 'ok'); }
+        closeModal(); load();
+      } catch (err) { flash(err.message, 'err'); }
+      finally { btn.disabled = false; }
+    });
+
+    load();
+  </script>
+</body>
+</html>

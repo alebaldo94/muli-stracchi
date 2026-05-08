@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tessere — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Gestione Tessere</h1>
+        <div class="topbar-right">
+          <button class="btn btn-warning btn-sm" onclick="sendAll()">📧 Invia tutti i promemoria</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div class="card">
+          <div class="card-header"><h3>Soci con pendenze</h3></div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Socio</th><th>Email</th><th>Problema</th><th>Urgenza</th><th></th></tr>
+                </thead>
+                <tbody id="tbody">
+                  <tr><td colspan="5" class="loading-overlay"><div class="spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.checkAdmin()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('tessere');
+
+    let pending = [];
+
+    async function load() {
+      pending = await API.getPending().catch(() => []);
+      const tbody = document.getElementById('tbody');
+      if (!pending.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-muted" style="padding:24px;text-align:center">✅ Nessuna pendenza.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = pending.map(p => `
+        <tr>
+          <td><strong>${p.name}</strong></td>
+          <td style="font-size:13px">${p.email}</td>
+          <td>${p.label}</td>
+          <td>${p.urgent
+            ? '<span class="badge badge-err">Urgente</span>'
+            : '<span class="badge badge-warn">In scadenza</span>'}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="sendOne(${p.member_id},'${p.type}','${p.name}')">
+              📧 Invia
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function sendOne(memberId, type, name) {
+      try {
+        await API.sendNotif(memberId, type);
+        flash(`Promemoria inviato a ${name}.`, 'ok');
+      } catch (err) {
+        flash(err.message, 'err');
+      }
+    }
+
+    async function sendAll() {
+      if (!pending.length) { flash('Nessuna pendenza da notificare.', 'ok'); return; }
+      if (!confirm(`Inviare ${pending.length} promemoria email?`)) return;
+      try {
+        const res = await API.sendAll();
+        flash(`Inviati: ${res.sent}, saltati (duplicati): ${res.skipped || 0}, falliti: ${res.failed || 0}.`, 'ok');
+      } catch (err) {
+        flash(err.message, 'err');
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

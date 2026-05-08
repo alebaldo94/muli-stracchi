@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notifiche — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Notifiche Email</h1>
+        <div class="topbar-right">
+          <button class="btn btn-primary btn-sm" onclick="runCron()">▶ Esegui cron ora</button>
+        </div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Promemoria pendenti -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Promemoria pendenti</h3>
+              <button class="btn btn-warning btn-sm" onclick="sendAll()">Invia tutti</button>
+            </div>
+            <div class="card-body" id="pendingList" style="padding:0 20px 12px">
+              <div class="loading-overlay"><div class="spinner"></div></div>
+            </div>
+          </div>
+
+          <!-- Impostazioni -->
+          <div class="card">
+            <div class="card-header"><h3>Impostazioni</h3></div>
+            <div class="card-body">
+              <form id="settingsForm">
+                <div class="form-group">
+                  <label>Nome mittente</label>
+                  <input type="text" id="sSenderName">
+                </div>
+                <div class="form-group">
+                  <label>Email mittente</label>
+                  <input type="email" id="sSenderEmail">
+                </div>
+                <div class="form-group">
+                  <label>Giorni di anticipo promemoria</label>
+                  <div style="display:flex;gap:12px;margin-top:6px">
+                    <label style="font-weight:400;font-size:14px"><input type="checkbox" value="60" id="d60"> 60 giorni</label>
+                    <label style="font-weight:400;font-size:14px"><input type="checkbox" value="30" id="d30"> 30 giorni</label>
+                    <label style="font-weight:400;font-size:14px"><input type="checkbox" value="15" id="d15"> 15 giorni</label>
+                    <label style="font-weight:400;font-size:14px"><input type="checkbox" value="7"  id="d7">  7 giorni</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label style="display:flex;align-items:center;gap:8px;font-weight:400;cursor:pointer">
+                    <input type="checkbox" id="sAutoSend">
+                    Invio automatico giornaliero (09:00)
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Salva impostazioni</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Log -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Storico invii</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadLog()">↻ Aggiorna</button>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Socio</th><th>Email</th><th>Tipo</th><th>Stato</th><th>Data</th></tr></thead>
+                <tbody id="logBody">
+                  <tr><td colspan="5" class="loading-overlay"><div class="spinner"></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.checkAdmin()) { /* redirect */ }
+    document.getElementById('sidebar').innerHTML = renderSidebar('notifiche');
+
+    async function loadPending() {
+      const list = await API.getPending().catch(() => []);
+      const el = document.getElementById('pendingList');
+      if (!list.length) {
+        el.innerHTML = '<p class="text-muted" style="padding:12px 0">✅ Nessuna pendenza.</p>';
+        return list;
+      }
+      el.innerHTML = list.map(p => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+          <div>
+            <div style="font-weight:500;font-size:14px">${p.name}</div>
+            <div class="text-muted">${p.label}</div>
+          </div>
+          <div class="gap-1">
+            ${p.urgent ? '<span class="badge badge-err">Urgente</span>' : '<span class="badge badge-warn">Presto</span>'}
+            <button class="btn btn-outline btn-sm" onclick="sendOne(${p.member_id},'${p.type}','${p.name}')">Invia</button>
+          </div>
+        </div>
+      `).join('');
+      return list;
+    }
+
+    async function loadSettings() {
+      const s = await API.getSettings().catch(() => ({}));
+      document.getElementById('sSenderName').value  = s.sender_name  || '';
+      document.getElementById('sSenderEmail').value = s.sender_email || '';
+      const days = s.remind_days || [30, 15, 7];
+      ['60','30','15','7'].forEach(d => {
+        document.getElementById('d'+d).checked = days.includes(parseInt(d));
+      });
+      document.getElementById('sAutoSend').checked = s.auto_send || false;
+    }
+
+    async function loadLog() {
+      const logs = await API.getNotifLog().catch(() => []);
+      const tbody = document.getElementById('logBody');
+      if (!logs.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-muted" style="padding:20px;text-align:center">Nessun invio registrato.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = logs.slice(0, 100).map(l => {
+        const stCls = l.status === 'sent' ? 'badge-ok' : l.status === 'failed' ? 'badge-err' : 'badge-grey';
+        return `<tr>
+          <td>${l.member_name || '—'}</td>
+          <td style="font-size:12px">${l.email}</td>
+          <td style="font-size:12px">${l.type_label || l.type}</td>
+          <td><span class="badge ${stCls}">${l.status}</span></td>
+          <td class="text-muted" style="font-size:12px">${fmtDate(l.sent_at)}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    async function sendOne(memberId, type, name) {
+      try {
+        await API.sendNotif(memberId, type);
+        flash(`Promemoria inviato a ${name}.`, 'ok');
+        loadLog();
+      } catch (err) { flash(err.message, 'err'); }
+    }
+
+    async function sendAll() {
+      try {
+        const res = await API.sendAll();
+        flash(`Inviati: ${res.sent}, saltati: ${res.skipped || 0}, falliti: ${res.failed || 0}.`, 'ok');
+        loadPending(); loadLog();
+      } catch (err) { flash(err.message, 'err'); }
+    }
+
+    async function runCron() {
+      try {
+        const res = await fetch('/api/cron/reminders', { method: 'POST' });
+        const data = await res.json();
+        flash(`Cron: inviati ${data.sent}, saltati ${data.skipped || 0}, falliti ${data.failed || 0}.`, 'ok');
+        loadPending(); loadLog();
+      } catch (err) { flash(err.message, 'err'); }
+    }
+
+    document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const days = ['60','30','15','7'].filter(d => document.getElementById('d'+d).checked).map(Number);
+      try {
+        await API.saveSettings({
+          sender_name:  document.getElementById('sSenderName').value,
+          sender_email: document.getElementById('sSenderEmail').value,
+          remind_days:  days,
+          auto_send:    document.getElementById('sAutoSend').checked,
+        });
+        flash('Impostazioni salvate.', 'ok');
+      } catch (err) { flash(err.message, 'err'); }
+    });
+
+    loadPending(); loadSettings(); loadLog();
+  </script>
+</body>
+</html>

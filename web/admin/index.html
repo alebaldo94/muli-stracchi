@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — I Muli Stracchi ASD</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <div class="main">
+      <div class="topbar">
+        <h1>Dashboard</h1>
+        <div class="topbar-right" id="topbarUser"></div>
+      </div>
+      <div class="content">
+        <div id="flash"></div>
+        <div id="alertBlock"></div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="loading-overlay"><div class="spinner"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div class="card">
+            <div class="card-header"><h3>Prossimi eventi</h3> <a href="eventi.html" class="btn btn-outline btn-sm">Tutti</a></div>
+            <div class="card-body" id="eventsPreview"><div class="loading-overlay"><div class="spinner"></div></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Classifica km (mese)</h3> <a href="soci.html" class="btn btn-outline btn-sm">Tutti i soci</a></div>
+            <div class="card-body" id="leaderboard"><div class="loading-overlay"><div class="spinner"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../js/api.js"></script>
+  <script>
+    if (!Auth.checkAdmin()) { /* redirect handled */ }
+
+    document.getElementById('sidebar').innerHTML = renderSidebar('dashboard');
+    document.getElementById('topbarUser').textContent = Auth.user()?.name || '';
+
+    async function load() {
+      const [stats, events, board] = await Promise.all([
+        API.getStats().catch(() => ({})),
+        API.getEvents().catch(() => []),
+        API.getLeaderboard().catch(() => []),
+      ]);
+
+      // Stats
+      const sg = document.getElementById('statsGrid');
+      sg.innerHTML = `
+        <div class="stat-card">
+          <div class="label">Soci attivi</div>
+          <div class="value">${stats.total_members ?? '—'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Tessere in scadenza</div>
+          <div class="value" style="color:var(--orange)">${stats.expiring_members ?? '—'}</div>
+          <div class="sub">${stats.expired_members ?? 0} scadute</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Senza assicurazione</div>
+          <div class="value" style="color:var(--red)">${stats.uninsured_members ?? '—'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Eventi totali</div>
+          <div class="value">${stats.total_events ?? '—'}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Km del mese</div>
+          <div class="value">${stats.km_month ?? '—'}</div>
+          <div class="sub">Tutte le uscite</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Uscite totali</div>
+          <div class="value">${stats.total_rides ?? '—'}</div>
+        </div>
+      `;
+
+      // Alert
+      const ab = document.getElementById('alertBlock');
+      const issues = (stats.expiring_members ?? 0) + (stats.expired_members ?? 0) + (stats.uninsured_members ?? 0);
+      if (issues > 0) {
+        ab.innerHTML = `<div class="alert alert-warn">
+          ⚠️ Ci sono <strong>${issues}</strong> posizioni da regolarizzare:
+          ${stats.expired_members ? `<strong>${stats.expired_members}</strong> tessere scadute, ` : ''}
+          ${stats.expiring_members ? `<strong>${stats.expiring_members}</strong> in scadenza, ` : ''}
+          ${stats.uninsured_members ? `<strong>${stats.uninsured_members}</strong> senza assicurazione` : ''}
+          — <a href="notifiche.html">Invia promemoria</a>
+        </div>`;
+      }
+
+      // Events preview
+      const upcoming = events
+        .filter(e => new Date(e.date) >= new Date())
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 5);
+      const ep = document.getElementById('eventsPreview');
+      if (!upcoming.length) {
+        ep.innerHTML = '<p class="text-muted">Nessun evento in programma.</p>';
+      } else {
+        ep.innerHTML = upcoming.map(e => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-weight:500;font-size:14px">${e.title}</div>
+              <div class="text-muted">${fmtDate(e.date)} · ${e.location || '—'}</div>
+            </div>
+            <span class="badge badge-ok">${e.distance ? e.distance + 'km' : '—'}</span>
+          </div>
+        `).join('');
+      }
+
+      // Leaderboard
+      const lb = document.getElementById('leaderboard');
+      if (!board.length) {
+        lb.innerHTML = '<p class="text-muted">Nessuna uscita registrata.</p>';
+      } else {
+        lb.innerHTML = board.slice(0, 8).map((r, i) => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-weight:700;color:var(--muted);width:20px">${i+1}</span>
+              <span style="font-size:14px">${r.name}</span>
+            </div>
+            <span style="font-weight:600;color:var(--green)">${r.km_month} km</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>
