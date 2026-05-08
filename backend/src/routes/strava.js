@@ -107,7 +107,7 @@ router.post('/sync', auth, async (req, res) => {
     const accessToken = await refreshTokenIfNeeded(member);
     const startOfYear = new Date(new Date().getFullYear(), 0, 1);
     const joinDate    = member.join_date ? new Date(member.join_date) : null;
-    const after       = Math.floor(Math.min(startOfYear, joinDate ?? startOfYear).getTime() / 1000);
+    const after       = Math.floor(Math.min(startOfYear.getTime(), (joinDate ?? startOfYear).getTime()) / 1000);
 
     let page = 1, imported = 0, skipped = 0;
     console.log(`[strava] sync member=${member.id} after=${after} token_ok=${!!accessToken}`);
