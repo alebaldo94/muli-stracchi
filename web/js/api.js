@@ -114,25 +114,30 @@ function renderSidebar(activePage) {
   const isAdmin = user && user.role === 'admin';
   const prefix = window.location.pathname.includes('/admin/') || window.location.pathname.includes('/member/') ? '../' : '';
 
+  function navLink(page, icon, label, href) {
+    const a = activePage === page;
+    return `<a href="${href}" class="${a ? 'active' : ''}"><span class="material-symbols-outlined">${icon}</span>${label}</a>`;
+  }
+
   let nav = '';
   if (isAdmin) {
     nav = `
       <div class="nav-section">Admin</div>
-      <a href="${prefix}admin/index.html" class="${activePage==='dashboard'?'active':''}">📊 Dashboard</a>
-      <a href="${prefix}admin/soci.html" class="${activePage==='soci'?'active':''}">👥 Soci</a>
-      <a href="${prefix}admin/tessere.html" class="${activePage==='tessere'?'active':''}">🎫 Tessere</a>
-      <a href="${prefix}admin/eventi.html" class="${activePage==='eventi'?'active':''}">🗓 Eventi</a>
-      <a href="${prefix}admin/notifiche.html" class="${activePage==='notifiche'?'active':''}">📧 Notifiche</a>
+      ${navLink('dashboard',  'dashboard',           'Dashboard',   `${prefix}admin/index.html`)}
+      ${navLink('soci',       'group',               'Soci',        `${prefix}admin/soci.html`)}
+      ${navLink('tessere',    'badge',               'Tessere',     `${prefix}admin/tessere.html`)}
+      ${navLink('eventi',     'event',               'Eventi',      `${prefix}admin/eventi.html`)}
+      ${navLink('notifiche',  'mail',                'Notifiche',   `${prefix}admin/notifiche.html`)}
       <div class="nav-section">Personale</div>
-      <a href="${prefix}member/profilo.html" class="${activePage==='profilo'?'active':''}">👤 Profilo</a>
+      ${navLink('profilo',    'account_circle',      'Profilo',     `${prefix}member/profilo.html`)}
     `;
   } else {
     nav = `
       <div class="nav-section">Area Personale</div>
-      <a href="${prefix}member/index.html" class="${activePage==='home'?'active':''}">🏠 Home</a>
-      <a href="${prefix}member/eventi.html" class="${activePage==='eventi'?'active':''}">🗓 Eventi</a>
-      <a href="${prefix}member/km.html" class="${activePage==='km'?'active':''}">🚴 Chilometri</a>
-      <a href="${prefix}member/profilo.html" class="${activePage==='profilo'?'active':''}">👤 Profilo</a>
+      ${navLink('home',    'home',           'Home',        `${prefix}member/index.html`)}
+      ${navLink('eventi',  'event',          'Eventi',      `${prefix}member/eventi.html`)}
+      ${navLink('km',      'directions_bike','Chilometri',  `${prefix}member/km.html`)}
+      ${navLink('profilo', 'account_circle', 'Profilo',     `${prefix}member/profilo.html`)}
     `;
   }
 
@@ -144,9 +149,9 @@ function renderSidebar(activePage) {
       </div>
       <nav class="sidebar-nav">${nav}</nav>
       <div class="sidebar-footer">
-        <div>${user ? user.name : ''}</div>
+        <div style="font-weight:600;font-size:13px;color:var(--text)">${user ? user.name : ''}</div>
         <div><span class="badge badge-${isAdmin ? 'admin' : 'ok'}" style="margin:4px 0">${isAdmin ? 'Admin' : 'Socio'}</span></div>
-        <button onclick="Auth.logout()">⬅ Esci</button>
+        <button onclick="Auth.logout()"><span class="material-symbols-outlined" style="font-size:14px">logout</span> Esci</button>
       </div>
     </div>
   `;
