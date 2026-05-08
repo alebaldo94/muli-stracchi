@@ -189,11 +189,18 @@
 
     document.getElementById('memberForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const id  = document.getElementById('fId').value;
-      const pwd = document.getElementById('fPassword').value;
+      const id    = document.getElementById('fId').value;
+      const pwd   = document.getElementById('fPassword').value;
+      const name  = document.getElementById('fName').value.trim();
+      const email = document.getElementById('fEmail').value.trim();
+
+      if (!name)  { modalFlash('Inserire il nome completo.'); return; }
+      if (!email || !email.includes('@')) { modalFlash('Inserire un\'email valida (es. nome@dominio.it).'); return; }
+      if (!id && !pwd) { modalFlash('Inserire una password per il nuovo socio.'); return; }
+
       const payload = {
-        name:               document.getElementById('fName').value,
-        email:              document.getElementById('fEmail').value,
+        name,
+        email,
         phone:              document.getElementById('fPhone').value || null,
         member_type:        document.getElementById('fType').value,
         level:              document.getElementById('fLevel').value,
@@ -204,11 +211,6 @@
         notes:              document.getElementById('fNotes').value || null,
       };
       if (pwd) payload.password = pwd;
-
-      if (!id && !pwd) {
-        modalFlash('Inserire una password per il nuovo socio.');
-        return;
-      }
 
       const btn = document.getElementById('saveBtn');
       btn.disabled = true;
