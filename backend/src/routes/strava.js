@@ -117,7 +117,11 @@ router.post('/sync', auth, async (req, res) => {
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const activities = await r.json();
-      if (!Array.isArray(activities) || !activities.length) break;
+      if (!Array.isArray(activities)) {
+        console.error('[strava] risposta non valida:', JSON.stringify(activities));
+        throw new Error(activities?.message || 'Risposta Strava non valida — riconnetti l\'account');
+      }
+      if (!activities.length) break;
 
       for (const a of activities) {
         if (a.type !== 'Ride' && a.sport_type !== 'Ride') continue;
